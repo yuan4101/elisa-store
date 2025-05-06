@@ -4,7 +4,16 @@ const { hostname } = new URL(process.env.NEXT_PUBLIC_SUPABASE_URL || "");
 
 const nextConfig: NextConfig = {
   /* config options here */
-  allowedDevOrigins: ["http://192.168.1.11"],
+  /*
+  allowedDevOrigins: [
+    //"http://localhost",
+    //"http://localhost:3000",
+    //"http://127.0.0.1",
+    //"http://127.0.0.1:3000",
+    //"http://192.168.1.9",
+    //"http://192.168.1.9:3000",
+  ],
+  */
   images: {
     remotePatterns: [
       {

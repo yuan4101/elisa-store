@@ -8,6 +8,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { Badge, IconButton } from '@mui/material';
 import { useCart } from '../context/CartContext';
 import { Notification } from '../components/Notification';
+import { errorMessage } from "../lib/utilities";
 
 export default function Catalogo() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -32,8 +33,8 @@ export default function Catalogo() {
         const data = await response.json();
         const filteredData = data.filter((product: Product) => product.image_path);
         setProducts(filteredData);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Error desconocido");
+      } catch (eventError) {
+        setError(errorMessage(eventError));
         setNotification({
           message: 'Error al cargar el catálogo',
           type: 'error'
