@@ -1,11 +1,3 @@
-/**
- * @file layout.tsx
- * @brief Plantilla principal de la aplicacion
- * @details Estructura base compartida por todas las paginas (Color de fondo, Fuentes, Iconos, Metadata)
- * @author Juan Ante
- * @date 2025
- */
-
 import "./globals.css";
 import { Inter } from 'next/font/google';
 import type { Metadata } from "next";
