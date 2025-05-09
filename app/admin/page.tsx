@@ -3,6 +3,8 @@
 
 import { useState, useEffect } from 'react';
 import { Product } from '../types/product';
+import { errorMessage } from '../lib/utilities';
+import { Notification } from '../components/Notification';
 
 export default function AdminPage() {
   const [password, setPassword] = useState('');
@@ -10,7 +12,11 @@ export default function AdminPage() {
   const [localProducts, setLocalProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [notification, setNotification] = useState('');
+  const [notification, setNotification] = useState<{
+    message: string;
+    type: 'success' | 'warning' | 'error' | 'info';
+    duration?: number;
+  } | null>(null);
 
   // Obtener productos al autenticar
   useEffect(() => {
@@ -21,13 +27,13 @@ export default function AdminPage() {
         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/products`);
         
         if (!response.ok) {
-          throw new Error(`Error: ${response.status}`);
+          throw new Error(errorMessage(response.status));
         }
 
         const data: Product[] = await response.json();
         setLocalProducts(data);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Error al cargar productos');
+      } catch (eventError) {
+        setError(errorMessage(`Error al cargar los productos (${errorMessage(eventError)})`));
       } finally {
         setIsLoading(false);
       }
@@ -37,13 +43,13 @@ export default function AdminPage() {
   }, [isAuthenticated]);
 
   // Verificación básica de contraseña
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleLogin = (formEvent: React.FormEvent) => {
+    formEvent.preventDefault();
     if (password === "camila29") {
       setIsAuthenticated(true);
-      setNotification('');
+      setNotification({message: 'Inicio de sesion con exito', type: 'success'});
     } else {
-      setNotification("Contraseña incorrecta");
+      setNotification({message: "Contraseña incorrecta", type: 'error'});
     }
   };
 
@@ -63,17 +69,16 @@ export default function AdminPage() {
         })
       });
 
-      if (!response.ok) throw new Error('Error al actualizar');
+      if (!response.ok) throw new Error(errorMessage(`Error al actualizar (${response.status})`));
 
       // Actualizar estado local solo si la API responde correctamente
-      setLocalProducts(prev => 
-        prev.map(p => p.id === id ? { ...p, stock: newStock } : p)
+      setLocalProducts(productos => 
+        productos.map(producto => producto.id === id ? { ...producto, stock: newStock } : producto)
       );
       
-      setNotification(`Stock actualizado para ${id}`);
-      setTimeout(() => setNotification(''), 3000);
-    } catch (error) {
-      setNotification(error instanceof Error ? error.message : 'Error desconocido');
+      setNotification({message: `Stock actualizado para ${id}`, type: 'success', duration: 3000});
+    } catch (eventError) {
+      setNotification({message: errorMessage(eventError), type: 'error'});
     }
   };
 
@@ -97,7 +102,11 @@ export default function AdminPage() {
             Ingresar
           </button>
           {notification && (
-            <p className="mt-4 text-red-500 text-center">{notification}</p>
+            <Notification
+              message={notification.message}
+              type={notification.type}
+              onClose={() => setNotification(null)}
+            />
           )}
         </form>
       </div>
@@ -130,9 +139,11 @@ export default function AdminPage() {
         </div>
 
         {notification && (
-          <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6">
-            {notification}
-          </div>
+          <Notification
+            message={notification.message}
+            type={notification.type}
+            onClose={() => setNotification(null)}
+          />
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
