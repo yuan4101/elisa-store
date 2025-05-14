@@ -130,6 +130,7 @@ export default function ProductPage({ params }: { params : Promise<{ id: string 
                 `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/product-images/Productos/lg/${product.image_path}` : 
                 '/icons/file.svg'
               }
+              unoptimized
               alt={product.name}
               fill
               priority={true}

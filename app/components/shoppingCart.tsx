@@ -85,6 +85,7 @@ export default function ShoppingCart() {
                 >
                   <Image
                     src={item.image}
+                    unoptimized
                     alt={item.name}
                     width={64}  // Añade un ancho fijo
                     height={64} // Añade una altura fija
