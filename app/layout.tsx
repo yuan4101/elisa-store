@@ -6,6 +6,7 @@ import Navbar from "./components/navbar";
 import ShoppingCart from "./components/shoppingCart";
 import { CartProvider } from './context/CartContext';
 import Image from "next/image";
+import { Analytics } from "@vercel/analytics/next"
 
 const inter = Inter({
   weight: ['300','500', '700'],
@@ -58,6 +59,7 @@ export default function RootLayout({children,}: {children: React.ReactNode;}) {
           </header>
           <main className="max-w-6xl mx-auto px-5 py-3">{children}</main>
         </CartProvider>
+        <Analytics/>
       </body>
     </html>
   );
