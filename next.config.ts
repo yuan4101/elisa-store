@@ -23,6 +23,8 @@ const nextConfig: NextConfig = {
         pathname: "/storage/v1/object/public/product-images/**", // Asegura que solo imágenes de este path sean permitidas
       },
     ],
+    minimumCacheTTL: 2678400, // 31 días en segundos (máximo permitido)
+    formats: ["image/webp"], // Solo WebP, evita AVIF (más pesado de procesar)
   },
 };
 

@@ -138,6 +138,7 @@ export default function Catalogo() {
                     `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/product-images/Productos/md${product.image_path}` : 
                     '/icons/file.svg'
                   }
+                  unoptimized
                   alt={product.name}
                   fill
                   priority={index < 2}
