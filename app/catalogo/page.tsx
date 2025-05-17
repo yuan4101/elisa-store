@@ -31,8 +31,17 @@ export default function Catalogo() {
         }
         
         const data = await response.json();
-        const filteredData = data.filter((product: Product) => product.image_path);
-        setProducts(filteredData);
+        const filteredDataWithImage = data.filter((product: Product) => product.image_path);
+        const orderedData = filteredDataWithImage.sort((actual: Product, siguiente: Product) => {
+          if(actual.stock == 0 && siguiente.stock != 0){
+            return 1;
+          } else if(actual.stock != 0 && siguiente.stock == 0){
+            return -1;
+          } else{
+            return 0;
+          }
+        });
+        setProducts(orderedData);
       } catch (eventError) {
         setError(errorMessage(eventError));
         setNotification({
