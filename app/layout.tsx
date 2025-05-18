@@ -58,6 +58,29 @@ export default function RootLayout({children,}: {children: React.ReactNode;}) {
             </div>
           </header>
           <main className="max-w-6xl mx-auto px-5 py-3">{children}</main>
+          <footer className="bg-[var(--color-bg)] p-6">
+            <div className="container mx-auto">
+              <div className="flex flex-col md:flex-row items-center">
+                <div className="mb-4 md:mb-0">
+                  <h3 className="font-bold">Elisa&CO Hairclips</h3>
+                </div>
+                <div className="text-lg px-2">
+                  |
+                </div>
+                <div className="mb-4 md:mb-0">
+                  <p>© {new Date().getFullYear()} All rights reserved</p>
+                </div>
+                <div className="text-lg px-2">
+                  |
+                </div>
+                <div className="">
+                  <Link href="/contacto">
+                    Contacto
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </footer>
         </CartProvider>
         <Analytics/>
       </body>
