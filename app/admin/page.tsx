@@ -5,6 +5,9 @@ import { useState, useEffect } from 'react';
 import { Product } from '../types/product';
 import { errorMessage } from '../lib/utilities';
 import { Notification } from '../components/Notification';
+import Image from "next/image";
+//import Button from "next/image";
+import { Button } from '@mui/material';
 
 export default function AdminPage() {
   const [password, setPassword] = useState('');
@@ -147,21 +150,92 @@ export default function AdminPage() {
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {localProducts.map((product) => (
+          {localProducts.map((product, index) => (
             <div key={product.id} className="bg-white p-6 rounded-lg shadow hover:shadow-md transition">
-              <h3 className="font-bold text-xl mb-2">{product.name}</h3>
-              <p className="text-gray-600 mb-1">ID: {product.id}</p>
-              <p className="mb-3">Precio: <span className="font-semibold">${product.price}</span></p>
-              
+              <div className='flex justify-between items-center pb-2'>
+                <div>
+                  <h3 className="font-bold text-xl mb-2">{product.name}</h3>
+                  <p className="text-gray-600 mb-1">ID: {product.id}</p>
+                  <p className="mb-3">Precio: <span className="font-semibold">${product.price}</span></p>
+                </div>
+                <div className="relative w-2/5 rounded-xl aspect-square bg-[var(--color-card-bg)] p-2">
+                  <Image
+                    src={product.image_path ? 
+                      `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/product-images/Productos/sm${product.image_path}` : 
+                      '/icons/file.svg'
+                    }
+                    unoptimized
+                    alt={product.name}
+                    fill
+                    priority={index < 2}
+                    loading={index > 1 ? 'lazy' : 'eager'}
+                    className="object-cover rounded-t-2xl"
+                    onError={(e) => {
+                    // Fallback si la imagen falla al cargar
+                      (e.target as HTMLImageElement).src = "/icons/file.svg";
+                      (e.target as HTMLImageElement).classList.add("p-4", "opacity-70");
+                    }}
+                  />
+                </div>
+              </div>
               <div className="flex items-center justify-between">
                 <label className="font-medium">Stock:</label>
-                <input
-                  type="number"
-                  value={product.stock || 0}
-                  onChange={(e) => updateStock(product.id, parseInt(e.target.value))}
-                  className="w-24 p-2 border rounded focus:ring-2 focus:ring-blue-300"
-                  min="0"
-                />
+                <div className="flex items-center pr-5" style={{ marginLeft: 'auto' }}>
+                  <Button 
+                    size="small" 
+                    onClick={() => updateStock(product.id, product.stock - 1)}
+                    disabled={product.stock == 0}
+                    className='shadow-md'
+                    sx={{
+                      color: 'var(--color-badge)',
+                      fontSize: '1.5rem',
+                      minWidth: '30px',       // Tamaño fijo
+                      width: '30px',          // Ancho exacto
+                      height: '30px',         // Alto exacto
+                      padding: '0',           // Elimina padding interno
+                      margin: '0',            // Elimina margen externo
+                      backgroundColor: 'var(--color-card-bg)',
+                      borderRadius: '8px',    // Bordes ligeramente redondeados (0 para perfecto cuadrado)
+                      '& .MuiButton-label': { // Objetivo al contenido interno
+                        width: '100%',
+                        height: '100%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        lineHeight: '1'       // Elimina espacio vertical extra
+                      },
+                    }}
+                  >
+                    -
+                  </Button>
+                  <span className="font-bold text-lg text-[var(--color-text)] mx-3">{product.stock}</span>
+                  <Button 
+                    size="small" 
+                    onClick={() => updateStock(product.id, product.stock + 1)}
+                    className='shadow-md'
+                    sx={{
+                      color: 'var(--color-badge)',
+                      fontSize: '1.5rem',
+                      minWidth: '30px',       // Tamaño fijo
+                      width: '30px',          // Ancho exacto
+                      height: '30px',         // Alto exacto
+                      padding: '0',           // Elimina padding interno
+                      margin: '0',            // Elimina margen externo
+                      backgroundColor: 'var(--color-card-bg)',
+                      borderRadius: '8px',    // Bordes ligeramente redondeados (0 para perfecto cuadrado)
+                      '& .MuiButton-label': { // Objetivo al contenido interno
+                        width: '100%',
+                        height: '100%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        lineHeight: '1'       // Elimina espacio vertical extra
+                      },
+                    }}
+                  >
+                    +
+                  </Button>
+                </div>
               </div>
             </div>
           ))}
