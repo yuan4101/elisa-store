@@ -316,11 +316,11 @@ const handleDelete = async (product: Product) => {
   );
 
   return (
-    <div className="min-h-screen p-8">
+    <div className="min-h-screen sm:p-4 md:p-8">
       <div className="max-w-6xl mx-auto">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold">Administrar Stock</h1>
-          <div className="flex sm:flex-col md:flex-row justify-right gap-3">
+        <div className="flex flex-col sm:flex-row justify-between items-center mb-5">
+          <h1 className="text-3xl font-bold pb-2">Administrar Stock</h1>
+          <div className="flex justify-right gap-4">
           <button 
             onClick={handleAddProduct}
             className="bg-[var(--color-badge-light)] text-white px-4 py-2 rounded hover:bg-[var(--color-badge)] transition"
