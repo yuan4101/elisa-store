@@ -31,8 +31,8 @@ export default function Catalogo() {
         }
         
         const data = await response.json();
-        const filteredDataWithImage = data.filter((product: Product) => product.image_path);
-        const orderedData = filteredDataWithImage.sort((actual: Product, siguiente: Product) => {
+        const filteredDataWithGrip = data.filter((product: Product) => product.grip != 'No especificado');
+        const orderedData = filteredDataWithGrip.sort((actual: Product, siguiente: Product) => {
           if(actual.stock == 0 && siguiente.stock != 0){
             return 1;
           } else if(actual.stock != 0 && siguiente.stock == 0){

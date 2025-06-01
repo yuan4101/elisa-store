@@ -6,6 +6,7 @@
   --color-navbar-text: #ffffff;
 
   --color-card-bg: #f9f9f9;
+  --color-card-bg-unavailable: #ffd7e4cb;
 
   --color-select: #F7A5C0;
   --color-text: #562230;
@@ -28,4 +29,32 @@ body {
   font-style: normal;
   font-weight: 300;
   color: var(--color-text);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.animate-fade-out {
+  animation: fadeOut 0.5s ease-out;
 }
