@@ -31,16 +31,12 @@ export default function Catalogo() {
         }
         
         const data = await response.json();
-        const filteredDataWithGrip = data.filter((product: Product) => product.grip != 'No especificado');
-        const orderedData = filteredDataWithGrip.sort((actual: Product, siguiente: Product) => {
-          if(actual.stock == 0 && siguiente.stock != 0){
-            return 1;
-          } else if(actual.stock != 0 && siguiente.stock == 0){
-            return -1;
-          } else{
-            return 0;
-          }
+        const showableData = data.filter((product: Product) => product.grip != 'No especificado').sort((actual: Product, siguiente: Product) => {
+          return actual.name.localeCompare(siguiente.name);
         });
+        const productsWithStock = showableData.filter((product: Product) => product.stock != 0);
+        const productsWithoutStock = showableData.filter((product: Product) => product.stock == 0);
+        const orderedData = [...productsWithStock, ...productsWithoutStock];
         setProducts(orderedData);
       } catch (eventError) {
         setError(errorMessage(eventError));

@@ -212,7 +212,8 @@ const handleDelete = async (product: Product) => {
         }
 
         const data: Product[] = await response.json();
-        const orderedData = data.sort((actual: Product, siguiente: Product) => {
+        const alphabeticOrder = data.sort((actual: Product, siguiente: Product) => {return actual.name.localeCompare(siguiente.name)});
+        const orderedData = alphabeticOrder.sort((actual: Product, siguiente: Product) => {
           if(actual.grip == 'No especificado' && siguiente.grip != 'No especificado'){
             return 1;
           } else if(actual.grip != 'No especificado' && siguiente.grip == 'No especificado'){
