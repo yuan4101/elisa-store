@@ -1,16 +1,15 @@
 // src/app/admin/page.tsx
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+//import { Combobox, ComboboxInput } from '@headlessui/react';
 import { Product } from '../types/product';
 import { errorMessage } from '../lib/utilities';
 import { Notification } from '../components/Notification';
 import Image from "next/image";
-//import Button from "next/image";
-import { Button } from '@mui/material';
+import { Button, IconButton } from '@mui/material';
 import TextareaAutosize from "react-textarea-autosize";
 import EditIcon from '@mui/icons-material/Edit';
-import { IconButton } from '@mui/material';
 
 export default function AdminPage() {
   const [password, setPassword] = useState('');
@@ -19,7 +18,23 @@ export default function AdminPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
+  const normalizeString = (str: string) => {
+    return str
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "");
+  };
+
+  // Filtrado de productos
+  const filteredProducts = searchQuery
+  ? localProducts.filter(product => {
+      const normalizedName = normalizeString(product.name || '');
+      const normalizedSearch = normalizeString(searchQuery);
+      return normalizedName.includes(normalizedSearch);
+    })
+  : localProducts;
 
   const formatPriceCOP = (price: number): string => {
     return new Intl.NumberFormat('es-CO', {
@@ -201,6 +216,7 @@ const handleDelete = async (product: Product) => {
 
   // Obtener productos al autenticar
   useEffect(() => {
+    setIsAuthenticated(true); // DELETE *********************************************************************************************
     if (!isAuthenticated) return;
 
     const fetchProducts = async () => {
@@ -273,6 +289,31 @@ const handleDelete = async (product: Product) => {
     }
   };
 
+  // Buscador minimalista
+  const SearchBox = () => {
+    const inputRef = useRef<HTMLInputElement>(null);
+  
+    useEffect(() => {
+      // Mantener el foco en el input
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
+    });
+  
+    return (
+      <div className="w-full max-w-md">
+        <input
+          ref={inputRef}
+          type="text"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full rounded-lg border border-gray-300 py-2 px-4 shadow-sm focus:border-[var(--color-navbar-bg)] focus:outline-none focus:ring-1 focus:ring-[var(--color-navbar-bg)]"
+          placeholder="Buscar por nombre..."
+        />
+      </div>
+    );
+  };
+
   if (!isAuthenticated) {
     return (
       <div className="pt-25 pb-40 flex items-center justify-center">
@@ -321,6 +362,7 @@ const handleDelete = async (product: Product) => {
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col sm:flex-row justify-between items-center mb-5">
           <h1 className="text-3xl font-bold pb-2">Administrar Stock</h1>
+          <SearchBox />
           <div className="flex justify-right gap-4">
           <button 
             onClick={handleAddProduct}
@@ -457,13 +499,13 @@ const handleDelete = async (product: Product) => {
 
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {localProducts.map((product, index) => (
+          {filteredProducts.map((product, index) => (
             <div
               key={product.id}
               className={`rounded-lg shadow-md ${
                 product.grip === 'No especificado' 
-                  ? 'bg-[var(--color-card-bg-unavailable)]'  // Color para "No especificado"
-                  : 'bg-[var(--color-card-bg)]'  // Color normal
+                  ? 'bg-[var(--color-card-bg-unavailable)]'
+                  : 'bg-[var(--color-card-bg)]'
               }`}
             >
               <div className="relative">
