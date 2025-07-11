@@ -362,7 +362,7 @@ const handleDelete = async (product: Product) => {
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col sm:flex-row justify-between items-center mb-5">
           <h1 className="text-3xl font-bold pb-2">Administrar Stock</h1>
-          <SearchBox />
+          <div className="pb-3"><SearchBox /></div>
           <div className="flex justify-right gap-4">
           <button 
             onClick={handleAddProduct}
