@@ -12,11 +12,12 @@
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@fontsource/inter": "^5.2.5",
+    "@headlessui/react": "^2.2.4",
     "@mui/icons-material": "^7.0.2",
     "@mui/material": "^7.0.2",
     "@supabase/supabase-js": "^2.49.4",
     "@vercel/analytics": "^1.5.0",
-    "next": "15.3.1",
+    "next": "^15.3.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-textarea-autosize": "^8.5.9"
