@@ -216,7 +216,7 @@ const handleDelete = async (product: Product) => {
 
   // Obtener productos al autenticar
   useEffect(() => {
-    setIsAuthenticated(true); // DELETE *********************************************************************************************
+    //setIsAuthenticated(true); // DELETE *********************************************************************************************
     if (!isAuthenticated) return;
 
     const fetchProducts = async () => {
