@@ -5,8 +5,8 @@ import { useRouter } from "next/navigation";
 import { Product } from "../types/product";
 import Image from "next/image";
 import { Menu, MenuButton, MenuItems, MenuItem, Transition } from '@headlessui/react';
-import { useCart } from '../context/CartContext';
-import { Notification } from '../components/Notification';
+import { useCart } from '../context/shoppingCartContext';
+import { Notification } from '../components/notification';
 import { errorMessage } from "../lib/utilities";
 
 type GripValue = 'all' | 'mi' | 'ba' | 'me' | 'metoal' | 'al';
