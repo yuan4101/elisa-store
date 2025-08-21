@@ -1,6 +1,18 @@
 @import "tailwindcss";
 
 :root {
+
+  --header-logo-height: 90px;
+  --header-navbar-height: 56px;
+  --header-height: calc(var(--header-logo-height) + var(--header-navbar-height));
+  --footer-height: 100px;
+  --main-min-height: calc(100vh - var(--header-height) - var(--footer-height));
+
+  /* Ajustes para móviles */
+  @media (max-width: 768px) {
+    --footer-height: 160px;
+  }
+  
   --color-bg: #ffffff;
   --color-navbar-bg: #AB0A36;
   --color-navbar-text: #ffffff;
