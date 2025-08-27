@@ -23,6 +23,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     images: [`${process.env.NEXT_PUBLIC_BASE_URL}/preview-contacto.webp`],
+    type: 'website',
   },
 };
 
