@@ -5,7 +5,7 @@ import { useState, useEffect, useRef } from 'react';
 //import { Combobox, ComboboxInput } from '@headlessui/react';
 import { Product } from '../types/product';
 import { errorMessage } from '../lib/utilities';
-import { Notification } from '../components/Notification';
+import { Notification } from '../components/notification';
 import Image from "next/image";
 import { Button, IconButton } from '@mui/material';
 import TextareaAutosize from "react-textarea-autosize";

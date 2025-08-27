@@ -5,8 +5,8 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import React from 'react';
-import { useCart } from '../../context/CartContext';
-import { Notification } from '../../components/Notification';
+import { useCart } from '../../context/shoppingCartContext';
+import { Notification } from '../../components/notification';
 
 export default function ProductPage({ params }: { params : Promise<{ id: string }>}) {
   const [product, setProduct] = useState<Product | null>(null);
