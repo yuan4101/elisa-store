@@ -36,7 +36,7 @@ export default function Navbar() {
   const pathName = usePathname();
   const navItems: NavItem[] = [
     { href: '/catalogo', label: 'Catálogo' },
-    { href: '/about', label: '¿Quién soy?' },
+    { href: '/about', label: 'Nosotros' },
     { href: '/contacto', label: 'Contáctanos' },
   ];
 
