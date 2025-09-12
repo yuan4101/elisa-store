@@ -2,9 +2,10 @@ interface cartFooterProps {
   precioTotal: number;
   whatsappLink: string;
   toggleCart: () => void;
+  clearCart: () => void;
 }
 
-const CartFooter = ({precioTotal, whatsappLink, toggleCart}: cartFooterProps) => {
+const CartFooter = ({precioTotal, whatsappLink, toggleCart, clearCart}: cartFooterProps) => {
   const shadowTop = "shadow-[0_-2px_6px_0_rgba(0,0,0,0.1)]";
   return (
     <div className={`${shadowTop} border-t border-gray-200 px-4 pt-3 pb-4 sm:px-6`}>
@@ -27,6 +28,15 @@ const CartFooter = ({precioTotal, whatsappLink, toggleCart}: cartFooterProps) =>
           onClick={toggleCart}
         >
           Continuar comprando
+        </button>
+      </div>
+            <div className="mt-3 flex justify-center text-center text-sm text-gray-500">
+        <button
+          type="button"
+          className="font-medium text-[var(--color-navbar-bg)] hover:text-[var(--color-badge)]"
+          onClick={clearCart}
+        >
+          Limpiar carrito
         </button>
       </div>
     </div>
