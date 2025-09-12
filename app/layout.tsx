@@ -30,10 +30,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es" className={`${interFont.variable}`}>
-      <body>
+      <body className="min-h-screen flex flex-col">
         <CartProvider>
           <Header />
-          <main className="max-w-6xl mx-auto px-5 py-3">{children}</main>
+          <main className="max-w-6xl mx-auto px-5 py-3 flex-grow w-full">{children}</main>
           <Footer />
         </CartProvider>
         <Analytics />
