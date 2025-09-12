@@ -11,9 +11,10 @@ interface cartDrawerProps {
   whatsappLink: string;
   updateQuantity: (id: string, quantity: number) => void;
   toggleCart: () => void;
+  clearCart: () => void;
 }
 
-const CartDrawer = ({ cartItems, precioTotal, whatsappLink, updateQuantity, toggleCart}: cartDrawerProps) => {
+const CartDrawer = ({ cartItems, precioTotal, whatsappLink, updateQuantity, toggleCart, clearCart}: cartDrawerProps) => {
   return (
     <Dialog as="div" className="relative z-50" onClose={toggleCart}>
       <TransitionChild as="div" {...fadeTransition}>
@@ -35,6 +36,7 @@ const CartDrawer = ({ cartItems, precioTotal, whatsappLink, updateQuantity, togg
                       precioTotal={precioTotal}
                       whatsappLink={whatsappLink}
                       toggleCart={toggleCart}
+                      clearCart={clearCart}
                     />
                   )}
                 </div>

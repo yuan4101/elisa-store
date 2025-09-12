@@ -10,7 +10,8 @@ export default function ShoppingCart() {
     cartItems,
     isCartOpen,
     toggleCart,
-    updateQuantity
+    updateQuantity,
+    clearCart
   } = useCart();
 
   const precioTotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
@@ -36,6 +37,7 @@ Aquí están los detalles de mi carrito, ¿me confirmas mi pedido? 🌸\n\n${pro
           whatsappLink={whatsappLink}
           updateQuantity={updateQuantity}
           toggleCart={toggleCart}
+          clearCart={clearCart}
         />
       </Transition>
     </div>
