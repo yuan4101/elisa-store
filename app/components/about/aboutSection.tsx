@@ -6,8 +6,8 @@ interface AboutSectionProps {
 
 export default function AboutSection({ content }: AboutSectionProps) {
   return (
-    <div className="py-2 md:pt-5">
-      <div className="flex flex-col md:flex-row md:items-start gap-30">
+    <div className="pb-8 py-2 md:pt-5">
+      <div className="flex flex-col md:flex-row md:items-start gap-7 md:gap-30">
         <div className="flex flex-col items-center gap-3">
           <div>
             <Image
@@ -32,8 +32,7 @@ export default function AboutSection({ content }: AboutSectionProps) {
             height={500}
             className="object-contain relative z-10"
           />
-          <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-3/4 h-32 blur-xl -z-10"
-            style={{background: `linear-gradient(to top, var(--color-gradient-about, #3b82f6), transparent)`}}/>
+          <div className="glow-effect"/>
         </div>
       </div>
     </div>
