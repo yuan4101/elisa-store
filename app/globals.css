@@ -26,7 +26,18 @@
   --color-badge-light: #f0773f;
   --color-button-pink: #ff1764;
   --color-button-pink-light: #ff368a;
-  --color-gradient-about: #562230;
+}
+
+.glow-effect {
+  position: absolute;
+  bottom: 0;
+  left: 48.8%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 128px;
+  filter: blur(15px);
+  z-index: -10;
+  background: linear-gradient(to top, var(--color-text), transparent);
 }
 
 h2 {
