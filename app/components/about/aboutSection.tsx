@@ -6,10 +6,10 @@ interface AboutSectionProps {
 
 export default function AboutSection({ content }: AboutSectionProps) {
   return (
-    <div className="py-2 lg:py-2">
-      <div className="flex flex-col md:flex-row md:items-center gap-10">
-        <div>
-          <div className="flex flex-row justify-center pb-3">
+    <div className="py-2 md:pt-5">
+      <div className="flex flex-col md:flex-row md:items-start gap-30">
+        <div className="flex flex-col items-center gap-3">
+          <div>
             <Image
               src={'/aboutTitle.webp'}
               alt="About Title"
@@ -24,14 +24,16 @@ export default function AboutSection({ content }: AboutSectionProps) {
             ))}
           </div>
         </div>
-        <div className="relative md:h-[600px] md:w-[1800px] h-[400px] pt-6 flex justify-end">
+        <div className="relative">
           <Image
             src={'/about.webp'}
             alt="About us"
-            width={400}
-            height={600}
-            className="object-contain"
+            width={1600}
+            height={500}
+            className="object-contain relative z-10"
           />
+          <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-3/4 h-32 blur-xl -z-10"
+            style={{background: `linear-gradient(to top, var(--color-gradient-about, #3b82f6), transparent)`}}/>
         </div>
       </div>
     </div>
