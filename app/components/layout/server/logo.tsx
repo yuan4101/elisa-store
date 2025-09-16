@@ -4,14 +4,15 @@ import Image from "next/image";
 export default function Logo() {
   return (
     <div className="pb-2">
-      <div className="flex justify-center h-[70px]">
-        <Link href="/catalogo" className="relative block w-full h-full">
+      <div className="flex justify-center">
+        <Link href="/" className="relative block">
           <Image
             src="/elisalogoweb.webp"
             alt="Logo Elisa & Co"
-            fill
+            width={800}
+            height={170}
             priority={true}
-            className="object-contain"
+            className="object-contain h-[70px] w-auto"
           />
         </Link>
       </div>
