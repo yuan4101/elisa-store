@@ -116,7 +116,7 @@ const handleSave = async () => {
       image_path: `/${editedId}.webp`,
     };
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/products`, {
+    const response = await fetch('/api/products', {
       method: isNew ? 'POST' : 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(
@@ -164,7 +164,7 @@ const handleDelete = async (product: Product) => {
   }
 
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/products`, {
+    const response = await fetch('/api/products', {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -221,7 +221,7 @@ const handleDelete = async (product: Product) => {
 
     const fetchProducts = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/products`);
+        const response = await fetch('/api/products');
         
         if (!response.ok) {
           throw new Error(errorMessage(response.status));
@@ -265,7 +265,7 @@ const handleDelete = async (product: Product) => {
     if (isNaN(newStock)) return;
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/products`, {
+      const response = await fetch('/api/products', {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

@@ -7,14 +7,32 @@ import Header from './components/layout/server/header';
 import Footer from './components/layout/server/footer';
 
 const interFont = Inter({
-  weight: ['300','500', '700'],
+  weight: ['300', '500'],
   style:['normal', 'italic'],
-  subsets: ['latin-ext'],
+  subsets: ['latin'],
   variable: '--font-inter',
   display: 'swap',
 });
 
+function getBaseUrl(): string {
+  // 1. Si tienes un dominio personalizado en producción
+  if (process.env.NEXT_PUBLIC_SITE_URL) {
+    return process.env.NEXT_PUBLIC_SITE_URL;
+  }
+  
+  // 2. Ip de red local
+  if (process.env.IP && process.env.PORT) {
+    return `http://${process.env.IP}:${process.env.PORT}`
+  }
+
+  // 3. Fallback para desarrollo local
+  return 'http://localhost:3000';
+}
+
+
 export const metadata: Metadata = {
+  metadataBase: new URL(getBaseUrl()),
+
   title: "Elisa & CO - HAIRCLIPS",
   description: "Hairclips, hairclaws y estilo según tu mood 🧡",
   icons: {
@@ -22,7 +40,7 @@ export const metadata: Metadata = {
     apple: "/apple-touch-icon.png",
   },
   openGraph: {
-    images: [`${process.env.NEXT_PUBLIC_BASE_URL}/preview-contacto.webp`],
+    images: ['/preview-contacto.webp'],
     type: 'website',
   },
 };

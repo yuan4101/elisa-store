@@ -89,7 +89,7 @@ export default function Catalogo() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/products`);
+        const response = await fetch('/api/products');
         
         if (!response.ok) {
           throw new Error('Error al cargar productos');

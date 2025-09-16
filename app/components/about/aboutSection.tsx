@@ -1,21 +1,30 @@
+'use client'
 import Image from "next/image";
+import { useState } from "react";
 
 interface AboutSectionProps {
   content: string[];
 }
 
 export default function AboutSection({ content }: AboutSectionProps) {
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
+
+  const handleImageLoad = () => {
+    setIsImageLoaded(true);
+  }
+
   return (
     <div className="pb-8 py-2 md:pt-5">
-      <div className="flex flex-col md:flex-row md:items-start gap-7 md:gap-30">
+      <div className="flex flex-col lg:flex-row md:items-start gap-7 lg:gap-30">
         <div className="flex flex-col items-center gap-3">
           <div>
             <Image
               src={'/aboutTitle.webp'}
               alt="About Title"
-              width={350}
-              height={130}
-              className="object-contain"
+              width={700}
+              height={260}
+              priority={true}
+              className="object-contain w-auto max-h-[130px]"
             />
           </div>
           <div className="text-lg space-y-4">
@@ -28,11 +37,13 @@ export default function AboutSection({ content }: AboutSectionProps) {
           <Image
             src={'/about.webp'}
             alt="About us"
-            width={1600}
-            height={500}
-            className="object-contain relative z-10"
+            width={990}
+            height={1400}
+            priority={true}
+            onLoad={handleImageLoad}
+            className="object-contain max-h-[1000px] w-[1600px] relative z-10"
           />
-          <div className="glow-effect"/>
+          {isImageLoaded && <div className="glow-effect"/>}
         </div>
       </div>
     </div>
