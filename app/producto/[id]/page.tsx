@@ -2,9 +2,25 @@ import { Metadata } from "next";
 import ProductPage from "./productPage";
 import { Product } from "../../types/product";
 
+function getBaseUrl(): string {
+  // 1. Si tienes un dominio personalizado en producción
+  if (process.env.NEXT_PUBLIC_SITE_URL) {
+    return process.env.NEXT_PUBLIC_SITE_URL;
+  }
+  
+  // 2. Ip de red local
+  if (process.env.IP && process.env.PORT) {
+    return `http://${process.env.IP}:${process.env.PORT}`
+  }
+
+  // 3. Fallback para desarrollo local
+  return 'http://localhost:3000';
+}
+
 async function getProduct(id: string): Promise<Product | null> {
   try {
-    const res = await fetch('/api/products', {
+    const baseUrl = getBaseUrl();
+    const res = await fetch(`${baseUrl}/api/products`, {
       cache: "no-store",
     });
     if (!res.ok) return null;
