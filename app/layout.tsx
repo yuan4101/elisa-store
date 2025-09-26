@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Inter } from 'next/font/google';
 import { Analytics } from "@vercel/analytics/next";
 import { CartProvider } from './context/shoppingCartContext';
+import NotificationProvider from "./context/notificationContext";
 import Header from './components/layout/server/header';
 import Footer from './components/layout/server/footer';
 
@@ -49,11 +50,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="es" className={`${interFont.variable}`}>
       <body className="min-h-screen flex flex-col">
-        <CartProvider>
-          <Header />
-          <main className="max-w-6xl mx-auto px-5 py-3 flex-grow w-full">{children}</main>
-          <Footer />
-        </CartProvider>
+        <NotificationProvider>
+          <CartProvider>
+            <Header />
+            <main className="max-w-6xl mx-auto px-5 py-3 flex-grow w-full">{children}</main>
+            <Footer />
+          </CartProvider>
+        </NotificationProvider>
         <Analytics />
       </body>
     </html>

@@ -1,4 +1,3 @@
-// components/Notification.tsx
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -8,23 +7,22 @@ import {
   Warning as WarningIcon,
   Info as InfoIcon,
 } from '@mui/icons-material';
-import { Snackbar, Alert, AlertColor } from '@mui/material';
+import { Snackbar, Alert } from '@mui/material';
+import { NotificationType } from '@/app/types/notification';
 
-type NotificationType = AlertColor; // 'success' | 'error' | 'warning' | 'info'
-
-interface NotificationProps {
-  message: string;
+interface NotifyProps {
+  message?: string;
   type?: NotificationType;
   duration?: number;
   onClose?: () => void;
 }
 
-export const Notification = ({
+export default function Notify({
   message,
-  type = 'success',
+  type = NotificationType.Success,
   duration = 2000,
   onClose,
-}: NotificationProps) => {
+}: NotifyProps) {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -45,6 +43,8 @@ export const Notification = ({
     info: <InfoIcon fontSize="inherit" />,
   };
 
+  if (!message) return null;
+
   return (
     <Snackbar
       open={open}
@@ -53,10 +53,11 @@ export const Notification = ({
       anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       sx={{
         mt: {
-          xs: '28px',
-          md: '125px',
+          xs: '145px',
+          md: '130px',
         },
         '& .MuiAlert-root': {
+          borderRadius: '6px',
           alignItems: 'center',
         },
       }}
@@ -65,10 +66,10 @@ export const Notification = ({
         severity={type}
         icon={iconMap[type]}
         onClose={() => setOpen(false)}
-        sx={{ width: '100%' }}
+        sx={{ width: '100%', borderRadius: '6px',}}
       >
         {message}
       </Alert>
     </Snackbar>
   );
-};
+}

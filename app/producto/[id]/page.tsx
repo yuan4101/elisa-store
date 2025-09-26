@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import ProductPage from "./productPage";
-import { Product } from "../../types/product";
+import Product from "../../types/product";
 
 function getBaseUrl(): string {
   // 1. Si tienes un dominio personalizado en producción
@@ -49,8 +49,8 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     };
   }
 
-  const imageUrl = product.image_path
-    ? `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/product-images/Productos/md/${product.image_path}`
+  const imageUrl = product.imagePath
+    ? `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/product-images/Productos/md/${product.imagePath}`
     : "/icons/file.svg";
 
   return {
