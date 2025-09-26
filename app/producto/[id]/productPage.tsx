@@ -1,77 +1,27 @@
 "use client";
 
-import { Product } from "../../types/product";
+import Product from "../../types/product";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useCart } from "../../context/shoppingCartContext";
-import { Notification } from "../../components/notification";
+import useProductActions from "@/app/components/catalogo/hooks/useProductActions";
+import useNavigation from "@/app/components/utils/useNavigation";
 
 export default function ProductPage({ productData }: { productData: Product | null }) {
   const [product, setProduct] = useState<Product | null>(productData);
-  const [notification, setNotification] = useState<{
-    message: string;
-    type: "success" | "error" | "warning" | "info";
-  } | null>(null);
 
-  const { addToCart, getProductQuantity } = useCart();
-  const router = useRouter();
+  const { handleAddToCart } = useProductActions();
+  const { goCatalog } = useNavigation();
 
-  // Efecto para sincronizar props con estado
   useEffect(() => {
     setProduct(productData);
   }, [productData]);
-
-  const handleAddToCart = () => {
-    if (!product) return;
-
-    if (product.stock <= 0) {
-      setNotification({
-        message: "Este producto está agotado.",
-        type: "error",
-      });
-      return;
-    }
-
-    const completeImageRoute = product.image_path
-      ? `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/product-images/Productos/sm/${product.image_path}`
-      : "/icons/file.svg";
-
-    const currentQuantity = getProductQuantity(product.id);
-
-    if (currentQuantity >= product.stock) {
-      setNotification({
-        message: `Límite de stock alcanzado (${product.stock} unidades)`,
-        type: "warning",
-      });
-      return;
-    }
-
-    addToCart({
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      image: completeImageRoute,
-      stock: product.stock,
-      quantity: 1,
-    });
-
-    setNotification({
-      message: `"${product.name}" añadido al carrito`,
-      type: "success",
-    });
-  };
-
-  const handleBackToCatalog = () => {
-    router.push("/catalogo");
-  };
 
   if (!product) {
     return (
       <div className="max-w-7xl mx-auto px-3 py-10">
         <div className="text-center">Producto no disponible</div>
         <button
-          onClick={handleBackToCatalog}
+          onClick={goCatalog}
           className="mt-4 inline-block text-pink-600 hover:underline cursor-pointer shadow-sm"
         >
           ← Volver al catálogo
@@ -88,8 +38,8 @@ export default function ProductPage({ productData }: { productData: Product | nu
           <div className="relative w-full aspect-square">
             <Image
               src={
-                product.image_path
-                  ? `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/product-images/Productos/lg/${product.image_path}`
+                product.imagePath
+                  ? `${process.env.NEXT_PUBLIC_SUPABASE_STORAGE_LARGE_IMAGES}${product.imagePath}`
                   : "/icons/file.svg"
               }
               unoptimized
@@ -138,22 +88,14 @@ export default function ProductPage({ productData }: { productData: Product | nu
             ) : (
               <button
                 className="shadow-sm bg-[var(--color-badge-light)] text-white px-6 py-3 rounded-lg hover:bg-[var(--color-badge)] transition cursor-pointer"
-                onClick={handleAddToCart}
+                onClick={(e) => handleAddToCart(e, product)}
               >
                 Agregar al carrito
               </button>
             )}
 
-            {notification && (
-              <Notification
-                message={notification.message}
-                type={notification.type}
-                onClose={() => setNotification(null)}
-              />
-            )}
-
             <button
-              onClick={handleBackToCatalog}
+              onClick={goCatalog}
               className="shadow-sm bg-[var(--color-button-pink-light)] text-white px-3 py-3 rounded-lg hover:bg-[var(--color-button-pink)] transition cursor-pointer"
             >
               ← Volver al catálogo

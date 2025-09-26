@@ -2,9 +2,30 @@ import { NextRequest, NextResponse } from "next/server";
 import { supabaseServer } from "../../lib/supabase-server";
 import { errorMessage } from "@/app/lib/utilities";
 
+// PRODUCTION
+const TABLE = "products";
+
+// TEST
+//const TABLE = "products_duplicate";
+
+/**
+ * Obtiene todos los productos desde la base de datos
+ * @summary Endpoint GET para obtener la lista completa de productos
+ * @description Recupera todos los registros de la tabla de productos desde Supabase
+ * @returns {Promise<NextResponse>} JSON con array de productos o error
+ * @throws {Error} Si hay un error en la consulta a la base de datos
+ * @example
+ * // Response exitosa:
+ * // HTTP 200
+ * // [{ id: "1", name: "Producto 1", price: 100 }]
+ * 
+ * // Response de error:
+ * // HTTP 500  
+ * // { error: "Mensaje de error descriptivo" }
+ */
 export async function GET() {
   try {
-    const { data, error } = await supabaseServer.from("products").select("*");
+    const { data, error } = await supabaseServer.from(TABLE).select("*");
     if (error) throw error;
     return NextResponse.json(data);
   } catch (error) {
@@ -36,7 +57,7 @@ export async function PATCH(request: NextRequest) {
 
       // Verificar que el nuevo ID no esté en uso
       const { count } = await supabaseServer
-        .from("products")
+        .from(TABLE)
         .select("*", { count: "exact" })
         .eq("id", newId);
 
@@ -67,7 +88,7 @@ export async function PATCH(request: NextRequest) {
 
     // Actualizar el producto en Supabase
     const { data: updatedProduct, error: updateError } = await supabaseServer
-      .from("products")
+      .from(TABLE)
       .update(updateData)
       .eq("id", oldId) // Buscar por ID original
       .select()
@@ -104,7 +125,7 @@ export async function POST(request: NextRequest) {
 
     // Verificar unicidad del ID
     const { count } = await supabaseServer
-      .from("products")
+      .from(TABLE)
       .select("*", { count: "exact" })
       .eq("id", id);
 
@@ -123,12 +144,12 @@ export async function POST(request: NextRequest) {
       description,
       grip,
       stock: 0,
-      image_path: "",
+      imagePath: "",
       ...rest,
     };
 
     const { data, error } = await supabaseServer
-      .from("products")
+      .from(TABLE)
       .insert([newProduct])
       .select()
       .single();
@@ -153,7 +174,7 @@ export async function DELETE(request: NextRequest) {
     }
 
     const { error } = await supabaseServer
-      .from("products")
+      .from(TABLE)
       .delete()
       .eq("id", id);
 

@@ -1,13 +1,11 @@
 "use client";
 
 import { useCallback, useEffect, useState, Fragment } from "react";
-import { useRouter } from "next/navigation";
-import { Product } from "../types/product";
-import Image from "next/image";
+import Product, { SeasonType } from "../types/product";
 import { Menu, MenuButton, MenuItems, MenuItem, Transition } from '@headlessui/react';
-import { useCart } from '../context/shoppingCartContext';
-import { Notification } from '../components/notification';
 import { errorMessage } from "../lib/utilities";
+import DropdownProducts from "../components/catalogo/dropdownProducts";
+import ProductCard from "../components/catalogo/productCard";
 
 type GripValue = 'all' | 'mi' | 'ba' | 'me' | 'metoal' | 'al';
 type PriceValue = 'all' | 'metoma' | 'matome';
@@ -19,15 +17,15 @@ interface Filters {
 
 export default function Catalogo() {
   const [products, setProducts] = useState<Product[]>([]);
+  const [loveProducts, setLoveProducts] = useState<Product[]>([]);
+  const [halloweenProducts, setHalloweenProducts] = useState<Product[]>([]);
+  const [christmasProducts, setChristmasProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+  const [filteredLoveProducts, setFilteredLoveProducts] = useState<Product[]>([]);
+  const [filteredHalloweenProducts, setFilteredHalloweenProducts] = useState<Product[]>([]);
+  const [filteredChristmasProducts, setFilteredChristmasProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { addToCart, getProductQuantity } = useCart();
-  const router = useRouter();
-  const [notification, setNotification] = useState<{
-    message: string;
-    type: 'success' | 'error' | 'warning' | 'info';
-  } | null>(null);
   
   const [filters, setFilters] = useState<Filters>({
     grip: 'all',
@@ -49,8 +47,8 @@ export default function Catalogo() {
     matome: 'Mayor a menor',
   };
 
-  const applyFilters = useCallback(() => {
-    let result = [...products];
+  const applyFilters = useCallback((productsArray: Product[]) => {
+    let result = [...productsArray];
     
     if (filters.grip !== 'all') {
       switch(filters.grip) {
@@ -83,8 +81,8 @@ export default function Catalogo() {
       }
     }
     
-    setFilteredProducts(result);
-  }, [products, filters]);
+    return result;
+  }, [filters]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -96,20 +94,30 @@ export default function Catalogo() {
         }
         
         const data = await response.json();
-        const showableData = data.filter((product: Product) => product.grip != 'No especificado').sort((actual: Product, siguiente: Product) => {
+        const visibleProducts = data.filter((product: Product) => product.visible == true).sort((actual: Product, siguiente: Product) => {
           return actual.name.localeCompare(siguiente.name);
         });
-        const productsWithStock = showableData.filter((product: Product) => product.stock != 0);
-        const productsWithoutStock = showableData.filter((product: Product) => product.stock == 0);
+        const productsLove = visibleProducts.filter((product: Product) => product.season == SeasonType.AmorAmistad);
+        const productsHalloween = visibleProducts.filter((product: Product) => product.season == SeasonType.Halloween);
+        const productsChristmas = visibleProducts.filter((product: Product) => product.season == SeasonType.Navidad);
+        const visibleProductsNoSeason = visibleProducts.filter((product: Product) => product.season == SeasonType.NoEspecificado)
+        const productsWithStock = visibleProductsNoSeason.filter((product: Product) => product.stock > 0);
+        const productsWithoutStock = visibleProductsNoSeason.filter((product: Product) => product.stock == 0); 
         const orderedData = [...productsWithStock, ...productsWithoutStock];
+
+        // Setear los productos originales
         setProducts(orderedData);
+        setLoveProducts(productsLove);
+        setHalloweenProducts(productsHalloween);
+        setChristmasProducts(productsChristmas);
+        
+        // Inicializar los productos filtrados
         setFilteredProducts(orderedData);
+        setFilteredLoveProducts(productsLove);
+        setFilteredHalloweenProducts(productsHalloween);
+        setFilteredChristmasProducts(productsChristmas);
       } catch (eventError) {
         setError(errorMessage(eventError));
-        setNotification({
-          message: 'Error al cargar el catálogo',
-          type: 'error'
-        });
       } finally {
         setLoading(false);
       }
@@ -119,8 +127,12 @@ export default function Catalogo() {
   }, []);
 
   useEffect(() => {
-    applyFilters();
-  }, [applyFilters]);
+    // Aplicar filtros a cada sección
+    setFilteredProducts(applyFilters(products));
+    setFilteredLoveProducts(applyFilters(loveProducts));
+    setFilteredHalloweenProducts(applyFilters(halloweenProducts));
+    setFilteredChristmasProducts(applyFilters(christmasProducts));
+  }, [applyFilters, products, loveProducts, halloweenProducts, christmasProducts]);
 
   const handleGripFilter = (filterType: GripValue) => {
     setFilters(prev => ({...prev, grip: filterType}));
@@ -129,54 +141,7 @@ export default function Catalogo() {
   const handlePriceFilter = (filterType: PriceValue) => {
     setFilters(prev => ({...prev, price: filterType}));
   };
-
-  const handleProductClick = (productName: string) => {
-    router.push(`/producto/${productName}`);
-  };
-
-  const handleAddToCart = (e: React.MouseEvent, product: Product) => {
-    e.stopPropagation();
-    
-    if (product.stock <= 0) {
-      setNotification({
-        message: 'Este producto está agotado.',
-        type: 'error',
-      });
-      return;
-    }
-
-    const completeImageRoute = product.image_path ? 
-      `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/product-images/Productos/sm${product.image_path}` : 
-      '/icons/file.svg';
-
-    const currentQuantity = getProductQuantity(product.id);
-    const availableStock = product.stock - currentQuantity;
-    
-    if (availableStock <= 0) {
-      setNotification({
-        message: availableStock === 0 
-          ? 'Producto agotado' 
-          : `Solo ${product.stock} disponible(s)`,
-        type: 'warning',
-      });
-      return;
-    }
-
-    addToCart({
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      image: completeImageRoute,
-      stock: product.stock,
-      quantity: 1,
-    });
-
-    setNotification({
-      message: `"${product.name}" añadido al carrito (${availableStock - 1} restantes)`,
-      type: 'success',
-    });
-  };
-
+  
   if (loading) {
     return (
       <div className="max-w-7xl mx-auto px-3 py-10">
@@ -321,81 +286,22 @@ export default function Catalogo() {
         </div>
       )}
       
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-x-3 gap-y-5 pb-5">
         {filteredProducts.map((product, index) => (
-          <div
+          <ProductCard
             key={product.id}
-            onClick={() => handleProductClick(product.id)}
-            className="lg:w-[200px] group bg-[var(--color-card-bg)] rounded-2xl overflow-hidden shadow-md hover:shadow-xl hover:text-[var(--color-navbar-bg)] transition transform hover:-translate-y-1 cursor-pointer flex flex-col h-full"
-          >
-            <div className="flex-1">
-              <div className="relative w-full aspect-square bg-[var(--color-card-bg)]">
-                <Image
-                  src={product.image_path ? 
-                    `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/product-images/Productos/md${product.image_path}` : 
-                    '/icons/file.svg'
-                  }
-                  unoptimized
-                  alt={product.name}
-                  fill
-                  priority={index < 2}
-                  loading={index > 1 ? 'lazy' : 'eager'}
-                  className="object-cover rounded-t-2xl"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src = "/icons/file.svg";
-                    (e.target as HTMLImageElement).classList.add("p-4", "opacity-70");
-                  }}
-                />
-              </div>
-              <div className="pt-2 px-4">
-                <h2 className="text-md font-normal text-[var(--color-text)] group-hover:text-[var(--color-navbar-bg)] text-left">
-                  {product.name}
-                </h2>
-              </div>
-            </div>
-            <div className="pl-4 pr-2 mt-auto">
-              <div className="flex items-center justify-between gap-2">
-                {product.stock <= 0 ? (
-                  <span className="pr-4 text-[var(--color-badge)] text-md flex items-center h-[40px]">Agotado</span>
-                ) : (
-                  <>
-                    <span>$ {product.price.toLocaleString()}</span>
-                    <button 
-                      onClick={(e) => handleAddToCart(e, product)}
-                      className="p-2 rounded-full hover:bg-[var(--color-select)]"
-                    >
-                      <div className="relative">
-                        {getProductQuantity(product.id) > 0 && (
-                          <span className="absolute -top-2 -right-2 bg-[var(--color-badge)] text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                            {getProductQuantity(product.id)}
-                          </span>
-                        )}
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-6 w-6 text-[var(--color-navbar-bg)]"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                        </svg>
-                      </div>
-                    </button>
-                  </>
-                )}
-              </div>
-            </div>
-          </div>
+            product={product}
+            index={index}
+          />
         ))}
       </div>
+
+      <DropdownProducts products={filteredLoveProducts} title="Amor y amistad"/>
+
+      <DropdownProducts products={filteredHalloweenProducts} title="Halloween"/>
+
+      <DropdownProducts products={filteredChristmasProducts} title="Navidad"/>
       
-      {notification && (
-        <Notification
-          message={notification.message}
-          type={notification.type}
-          onClose={() => setNotification(null)}
-        />
-      )}
     </div>
   );
 }
