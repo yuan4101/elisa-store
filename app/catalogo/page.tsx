@@ -298,9 +298,10 @@ export default function Catalogo() {
 
       <DropdownProducts products={filteredLoveProducts} title="Amor y amistad"/>
 
+      {/*
       <DropdownProducts products={filteredHalloweenProducts} title="Halloween"/>
-
       <DropdownProducts products={filteredChristmasProducts} title="Navidad"/>
+      */}
       
     </div>
   );
