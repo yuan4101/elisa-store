@@ -22,8 +22,8 @@ export default function Catalogo() {
   const [christmasProducts, setChristmasProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [filteredLoveProducts, setFilteredLoveProducts] = useState<Product[]>([]);
-  const [filteredHalloweenProducts, setFilteredHalloweenProducts] = useState<Product[]>([]);
-  const [filteredChristmasProducts, setFilteredChristmasProducts] = useState<Product[]>([]);
+  const [/*filteredHalloweenProducts*/, setFilteredHalloweenProducts] = useState<Product[]>([]);
+  const [/*filteredChristmasProducts*/, setFilteredChristmasProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   
