@@ -1,4 +1,4 @@
-import AboutSection from "../components/about/aboutSection";
+import AboutSection from "../../Features/about/components/AboutSection";
 
 export default function About() {
   const content = [

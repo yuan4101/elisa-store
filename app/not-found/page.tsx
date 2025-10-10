@@ -1,11 +1,11 @@
-import { Metadata } from 'next';
-import Link from 'next/link';
-import ErrorIcon from '@mui/icons-material/Error';
+import { Metadata } from "next";
+import Link from "next/link";
+import ErrorIcon from "@mui/icons-material/Error";
 
 export const metadata: Metadata = {
-  title: 'Página no encontrada - 404 | Elisa & CO',
-  description: 'La página que buscas no existe o fue movida.',
-  robots: 'noindex, nofollow', // Evita indexación
+  title: "Página no encontrada - 404 | Elisa & CO",
+  description: "La página que buscas no existe o fue movida.",
+  robots: "noindex, nofollow",
 };
 
 export default function NotFound() {

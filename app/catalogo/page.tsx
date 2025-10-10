@@ -2,13 +2,19 @@
 
 import { useCallback, useEffect, useState, Fragment } from "react";
 import Product, { SeasonType } from "../types/product";
-import { Menu, MenuButton, MenuItems, MenuItem, Transition } from '@headlessui/react';
-import { errorMessage } from "../lib/utilities";
-import DropdownProducts from "../components/catalogo/dropdownProducts";
-import ProductCard from "../components/catalogo/productCard";
+import {
+  Menu,
+  MenuButton,
+  MenuItems,
+  MenuItem,
+  Transition,
+} from "@headlessui/react";
+import { errorMessage } from "../../utils/errorMessage";
+import DropdownProducts from "../../Features/catalogo/components/dropdownProducts";
+import ProductCard from "../../Features/catalogo/components/productCard";
 
-type GripValue = 'all' | 'mi' | 'ba' | 'me' | 'metoal' | 'al';
-type PriceValue = 'all' | 'metoma' | 'matome';
+type GripValue = "all" | "mi" | "ba" | "me" | "metoal" | "al";
+type PriceValue = "all" | "metoma" | "matome";
 
 interface Filters {
   grip: GripValue;
@@ -21,88 +27,111 @@ export default function Catalogo() {
   const [halloweenProducts, setHalloweenProducts] = useState<Product[]>([]);
   const [christmasProducts, setChristmasProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
-  const [filteredLoveProducts, setFilteredLoveProducts] = useState<Product[]>([]);
-  const [/*filteredHalloweenProducts*/, setFilteredHalloweenProducts] = useState<Product[]>([]);
-  const [/*filteredChristmasProducts*/, setFilteredChristmasProducts] = useState<Product[]>([]);
+  const [filteredLoveProducts, setFilteredLoveProducts] = useState<Product[]>(
+    []
+  );
+  const [, /*filteredHalloweenProducts*/ setFilteredHalloweenProducts] =
+    useState<Product[]>([]);
+  const [, /*filteredChristmasProducts*/ setFilteredChristmasProducts] =
+    useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  
+
   const [filters, setFilters] = useState<Filters>({
-    grip: 'all',
-    price: 'all'
+    grip: "all",
+    price: "all",
   });
 
   const gripLabels: Record<GripValue, string> = {
-    all: 'Agarre',
-    mi: 'Micro',
-    ba: 'Bajo',
-    me: 'Medio',
-    metoal: 'Medio a alto',
-    al: 'Alto'
+    all: "Agarre",
+    mi: "Micro",
+    ba: "Bajo",
+    me: "Medio",
+    metoal: "Medio a alto",
+    al: "Alto",
   };
 
   const priceLabels: Record<PriceValue, string> = {
-    all: 'Precio',
-    metoma: 'Menor a mayor',
-    matome: 'Mayor a menor',
+    all: "Precio",
+    metoma: "Menor a mayor",
+    matome: "Mayor a menor",
   };
 
-  const applyFilters = useCallback((productsArray: Product[]) => {
-    let result = [...productsArray];
-    
-    if (filters.grip !== 'all') {
-      switch(filters.grip) {
-        case 'mi':
-          result = result.filter(product => product.grip === 'Micro');
-          break;
-        case 'ba':
-          result = result.filter(product => product.grip === 'Bajo');
-          break;
-        case 'me':
-          result = result.filter(product => product.grip === 'Medio');
-          break;
-        case 'metoal':
-          result = result.filter(product => product.grip === 'Medio a alto');
-          break;
-        case 'al':
-          result = result.filter(product => product.grip === 'Alto');
-          break;
+  const applyFilters = useCallback(
+    (productsArray: Product[]) => {
+      let result = [...productsArray];
+
+      if (filters.grip !== "all") {
+        switch (filters.grip) {
+          case "mi":
+            result = result.filter((product) => product.grip === "Micro");
+            break;
+          case "ba":
+            result = result.filter((product) => product.grip === "Bajo");
+            break;
+          case "me":
+            result = result.filter((product) => product.grip === "Medio");
+            break;
+          case "metoal":
+            result = result.filter(
+              (product) => product.grip === "Medio a alto"
+            );
+            break;
+          case "al":
+            result = result.filter((product) => product.grip === "Alto");
+            break;
+        }
       }
-    }
-    
-    if (filters.price !== 'all') {
-      switch(filters.price) {
-        case 'metoma':
-          result = [...result].sort((a, b) => a.price - b.price);
-          break;
-        case 'matome':
-          result = [...result].sort((a, b) => b.price - a.price);
-          break;
+
+      if (filters.price !== "all") {
+        switch (filters.price) {
+          case "metoma":
+            result = [...result].sort((a, b) => a.price - b.price);
+            break;
+          case "matome":
+            result = [...result].sort((a, b) => b.price - a.price);
+            break;
+        }
       }
-    }
-    
-    return result;
-  }, [filters]);
+
+      return result;
+    },
+    [filters]
+  );
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch('/api/products');
-        
+        const response = await fetch("/api/products");
+
         if (!response.ok) {
-          throw new Error('Error al cargar productos');
+          throw new Error("Error al cargar productos");
         }
-        
+
         const data = await response.json();
-        const visibleProducts = data.filter((product: Product) => product.visible == true).sort((actual: Product, siguiente: Product) => {
-          return actual.name.localeCompare(siguiente.name);
-        });
-        const productsLove = visibleProducts.filter((product: Product) => product.season == SeasonType.AmorAmistad);
-        const productsHalloween = visibleProducts.filter((product: Product) => product.season == SeasonType.Halloween);
-        const productsChristmas = visibleProducts.filter((product: Product) => product.season == SeasonType.Navidad);
-        const visibleProductsNoSeason = visibleProducts.filter((product: Product) => product.season == SeasonType.NoEspecificado)
-        const productsWithStock = visibleProductsNoSeason.filter((product: Product) => product.stock > 0);
-        const productsWithoutStock = visibleProductsNoSeason.filter((product: Product) => product.stock == 0); 
+        const visibleProducts = data
+          .filter((product: Product) => product.visible == true)
+          .sort((actual: Product, siguiente: Product) => {
+            return actual.name.localeCompare(siguiente.name);
+          });
+        const productsLove = visibleProducts.filter(
+          (product: Product) => product.season == SeasonType.AmorAmistad
+        );
+        const productsHalloween = visibleProducts.filter(
+          (product: Product) => product.season == SeasonType.Halloween
+        );
+        const productsChristmas = visibleProducts.filter(
+          (product: Product) => product.season == SeasonType.Navidad
+        );
+        const visibleProductsNoSeason = visibleProducts.filter(
+          (product: Product) => product.season == SeasonType.NoEspecificado
+        );
+        const productsWithStock = visibleProductsNoSeason.filter(
+          (product: Product) => product.stock > 0
+        );
+        const productsWithoutStock = visibleProductsNoSeason.filter(
+          (product: Product) => product.stock == 0
+        );
         const orderedData = [...productsWithStock, ...productsWithoutStock];
 
         // Setear los productos originales
@@ -110,7 +139,7 @@ export default function Catalogo() {
         setLoveProducts(productsLove);
         setHalloweenProducts(productsHalloween);
         setChristmasProducts(productsChristmas);
-        
+
         // Inicializar los productos filtrados
         setFilteredProducts(orderedData);
         setFilteredLoveProducts(productsLove);
@@ -132,16 +161,22 @@ export default function Catalogo() {
     setFilteredLoveProducts(applyFilters(loveProducts));
     setFilteredHalloweenProducts(applyFilters(halloweenProducts));
     setFilteredChristmasProducts(applyFilters(christmasProducts));
-  }, [applyFilters, products, loveProducts, halloweenProducts, christmasProducts]);
+  }, [
+    applyFilters,
+    products,
+    loveProducts,
+    halloweenProducts,
+    christmasProducts,
+  ]);
 
   const handleGripFilter = (filterType: GripValue) => {
-    setFilters(prev => ({...prev, grip: filterType}));
+    setFilters((prev) => ({ ...prev, grip: filterType }));
   };
 
   const handlePriceFilter = (filterType: PriceValue) => {
-    setFilters(prev => ({...prev, price: filterType}));
+    setFilters((prev) => ({ ...prev, price: filterType }));
   };
-  
+
   if (loading) {
     return (
       <div className="max-w-7xl mx-auto px-3 py-10">
@@ -154,7 +189,7 @@ export default function Catalogo() {
     return (
       <div className="max-w-7xl mx-auto px-3 py-10">
         <div className="text-center text-red-500">{error}</div>
-        <button 
+        <button
           onClick={() => window.location.reload()}
           className="mt-4 px-4 py-2 bg-pink-600 text-white rounded-lg mx-auto block"
         >
@@ -167,10 +202,8 @@ export default function Catalogo() {
   return (
     <div className="max-w-7xl mx-auto px-3">
       <div className="flex flex-col sm:flex-row items-start sm:items-center mb-4 gap-2">
-        <div className="whitespace-nowrap">
-          Filtrar por: 
-        </div>
-        
+        <div className="whitespace-nowrap">Filtrar por:</div>
+
         <div className="flex flex-wrap gap-2 w-full sm:w-auto">
           {/* Dropdown de Agarre */}
           <Menu as="div" className="relative flex-1 min-w-[150px]">
@@ -203,10 +236,12 @@ export default function Catalogo() {
                         <button
                           onClick={() => handleGripFilter(value as GripValue)}
                           className={`${
-                            focus ? 'bg-[var(--color-select)] text-white' : 'text-gray-900'
+                            focus
+                              ? "bg-[var(--color-select)] text-white"
+                              : "text-gray-900"
                           } block w-full px-4 py-2 text-left text-sm`}
                         >
-                          {value === 'all' ? 'Todos los agarres' : label}
+                          {value === "all" ? "Todos los agarres" : label}
                         </button>
                       )}
                     </MenuItem>
@@ -247,10 +282,12 @@ export default function Catalogo() {
                         <button
                           onClick={() => handlePriceFilter(value as PriceValue)}
                           className={`${
-                            focus ? 'bg-[var(--color-select)] text-white' : 'text-gray-900'
+                            focus
+                              ? "bg-[var(--color-select)] text-white"
+                              : "text-gray-900"
                           } block w-full px-4 py-2 text-left text-sm`}
                         >
-                          {value === 'all' ? 'Sin orden' : label}
+                          {value === "all" ? "Sin orden" : label}
                         </button>
                       )}
                     </MenuItem>
@@ -261,11 +298,11 @@ export default function Catalogo() {
           </Menu>
 
           {/* Botón Limpiar filtros */}
-          {(filters.grip !== 'all' || filters.price !== 'all') && (
+          {(filters.grip !== "all" || filters.price !== "all") && (
             <div className="flex items-center gap-2 flex-1 min-w-[150px]">
               <div className="w-0.5 bg-[var(--color-navbar-bg)] self-stretch hidden sm:block"></div>
               <button
-                onClick={() => setFilters({ grip: 'all', price: 'all' })}
+                onClick={() => setFilters({ grip: "all", price: "all" })}
                 className={`
                   w-full px-4 py-2 border rounded
                   text-[var(--color-navbar-bg)] border-[var(--color-navbar-bg)]
@@ -279,30 +316,28 @@ export default function Catalogo() {
           )}
         </div>
       </div>
-      
+
       {filteredProducts.length === 0 && !loading && (
         <div className="text-center py-10">
           <p>No se encontraron productos con los filtros seleccionados</p>
         </div>
       )}
-      
+
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-x-3 gap-y-5 pb-5">
         {filteredProducts.map((product, index) => (
-          <ProductCard
-            key={product.id}
-            product={product}
-            index={index}
-          />
+          <ProductCard key={product.id} product={product} index={index} />
         ))}
       </div>
 
-      <DropdownProducts products={filteredLoveProducts} title="Amor y amistad"/>
+      <DropdownProducts
+        products={filteredLoveProducts}
+        title="Amor y amistad"
+      />
 
       {/*
       <DropdownProducts products={filteredHalloweenProducts} title="Halloween"/>
       <DropdownProducts products={filteredChristmasProducts} title="Navidad"/>
       */}
-      
     </div>
   );
 }

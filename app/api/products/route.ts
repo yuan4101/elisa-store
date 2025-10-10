@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { supabaseServer } from "../../lib/supabase-server";
-import { errorMessage } from "@/app/lib/utilities";
+import { supabaseServer } from "../supabase-server";
+import { errorMessage } from "@/utils/errorMessage";
 
 // PRODUCTION
-const TABLE = "products";
+//const TABLE = "products";
 
 // TEST
-//const TABLE = "products_duplicate";
+const TABLE = "products_duplicate";
 
 /**
  * Obtiene todos los productos desde la base de datos
@@ -18,9 +18,9 @@ const TABLE = "products";
  * // Response exitosa:
  * // HTTP 200
  * // [{ id: "1", name: "Producto 1", price: 100 }]
- * 
+ *
  * // Response de error:
- * // HTTP 500  
+ * // HTTP 500
  * // { error: "Mensaje de error descriptivo" }
  */
 export async function GET() {
@@ -35,7 +35,8 @@ export async function GET() {
 
 export async function PATCH(request: NextRequest) {
   try {
-    const { oldId, newId, name, price, description, grip, ...rest } = await request.json();
+    const { oldId, newId, name, price, description, grip, ...rest } =
+      await request.json();
 
     // Validación: Campos requeridos
     if (!oldId) {
@@ -80,11 +81,11 @@ export async function PATCH(request: NextRequest) {
     };
 
     if (Object.keys(updateData).length === 0) {
-  return NextResponse.json(
-    { error: "No se proporcionaron datos para actualizar" },
-    { status: 400 }
-  );
-}
+      return NextResponse.json(
+        { error: "No se proporcionaron datos para actualizar" },
+        { status: 400 }
+      );
+    }
 
     // Actualizar el producto en Supabase
     const { data: updatedProduct, error: updateError } = await supabaseServer
@@ -173,10 +174,7 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    const { error } = await supabaseServer
-      .from(TABLE)
-      .delete()
-      .eq("id", id);
+    const { error } = await supabaseServer.from(TABLE).delete().eq("id", id);
 
     if (error) throw error;
 

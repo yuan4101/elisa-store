@@ -3,10 +3,14 @@
 import Product from "../../types/product";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import useProductActions from "@/app/components/catalogo/hooks/useProductActions";
-import useNavigation from "@/app/components/utils/useNavigation";
+import useProductActions from "@/Features/catalogo/hooks/useProductActions";
+import useNavigation from "@/hooks/useNavigation";
 
-export default function ProductPage({ productData }: { productData: Product | null }) {
+export default function ProductPage({
+  productData,
+}: {
+  productData: Product | null;
+}) {
   const [product, setProduct] = useState<Product | null>(productData);
 
   const { handleAddToCart } = useProductActions();

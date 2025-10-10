@@ -7,14 +7,14 @@ function getBaseUrl(): string {
   if (process.env.NEXT_PUBLIC_SITE_URL) {
     return process.env.NEXT_PUBLIC_SITE_URL;
   }
-  
+
   // 2. Ip de red local
   if (process.env.IP && process.env.PORT) {
-    return `http://${process.env.IP}:${process.env.PORT}`
+    return `http://${process.env.IP}:${process.env.PORT}`;
   }
 
   // 3. Fallback para desarrollo local
-  return 'http://localhost:3000';
+  return "http://localhost:3000";
 }
 
 async function getProduct(id: string): Promise<Product | null> {
@@ -39,7 +39,11 @@ async function getProductData(params: Promise<{ id: string }>) {
   return { product, id };
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
   const { product } = await getProductData(params);
 
   if (!product) {
@@ -70,7 +74,11 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   };
 }
 
-export default async function Page({ params }: { params: Promise<{ id: string }> }) {
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const { product } = await getProductData(params);
   return <ProductPage productData={product} />;
 }
