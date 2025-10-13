@@ -1,34 +1,34 @@
 "use client";
 
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 
-export default function useNavigation() {
+export function useNavigation() {
   const router = useRouter();
 
   const goHome = () => {
-    router.push('/');
+    router.push("/");
   };
 
   const goAdmin = () => {
-    router.push('/admin');
-  }
+    router.push("/admin");
+  };
 
   const goCatalog = () => {
-    router.push('/catalogo');
-  }
+    router.push("/catalogo");
+  };
 
   const goAbout = () => {
-    router.push('/about')
-  }
+    router.push("/about");
+  };
 
   const goContact = () => {
-    router.push('/contacto')
-  }
-  
+    router.push("/contacto");
+  };
+
   const goProduct = (productName: string) => {
     router.push(`/producto/${productName}`);
   };
-  
+
   return {
     goHome,
     goAdmin,

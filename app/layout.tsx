@@ -2,10 +2,10 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
-import { CartProvider } from "@/Features/shoppingCart/context/ShoppingCartContext";
-import NotificationProvider from "@/Features/notification/context/NotificationContext";
-import Header from "../Features/header/components/header";
-import Footer from "../Features/footer/components/footer";
+import { CartProvider } from "@/features/shoppingCart/context/ShoppingCartContext";
+import NotificationProvider from "@/features/notification/context/NotificationContext";
+import Header from "../features/header/components/header";
+import Footer from "../features/footer/components/footer";
 
 const interFont = Inter({
   weight: ["300", "500"],
