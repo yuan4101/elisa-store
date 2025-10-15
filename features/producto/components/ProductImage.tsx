@@ -19,6 +19,7 @@ export function ProductImage({
   priority = false,
 }: ProductImageProps) {
   const imageUrl = getProductImageUrl(imagePath, imageSize);
+  console.log(imageUrl);
 
   return (
     <div className="relative w-full aspect-square bg-[var(--color-card-bg)]">

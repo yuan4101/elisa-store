@@ -22,7 +22,7 @@ export function ProductCard({ product, index }: ProductCardProps) {
 
   return (
     <div
-      onClick={() => goProduct(product.id)}
+      onClick={() => goProduct(product.sku)}
       className="lg:w-[190px] group bg-[var(--color-card-bg)] rounded-xl overflow-hidden shadow-md hover:shadow-xl hover:text-[var(--color-navbar-bg)] transition transform hover:-translate-y-1 cursor-pointer flex flex-col h-full"
     >
       <div className="flex-1">

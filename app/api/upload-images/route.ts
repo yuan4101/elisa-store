@@ -2,6 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { errorMessage } from "@/utils/errorMessage";
 
+// PRODUCTION
+const storage = "Productos";
+
+// TEST
+//const storage = "Productos-test";
+
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY! // Esta clave bypassa RLS
@@ -27,7 +33,7 @@ export async function POST(request: NextRequest) {
     // Subir imagen original (lg)
     const { error: errorLg } = await supabase.storage
       .from("product-images")
-      .upload(`Productos-test/lg/${fileName}`, originalImage, {
+      .upload(`${storage}/lg/${fileName}`, originalImage, {
         contentType: "image/webp",
         upsert: true,
       });
@@ -37,7 +43,7 @@ export async function POST(request: NextRequest) {
     // Subir imagen recortada (md)
     const { error: errorMd } = await supabase.storage
       .from("product-images")
-      .upload(`Productos-test/md/${fileName}`, croppedImage, {
+      .upload(`${storage}/md/${fileName}`, croppedImage, {
         contentType: "image/webp",
         upsert: true,
       });
@@ -47,7 +53,7 @@ export async function POST(request: NextRequest) {
     // Subir thumbnail (sm)
     const { error: errorSm } = await supabase.storage
       .from("product-images")
-      .upload(`Productos-test/sm/${fileName}`, thumbnailImage, {
+      .upload(`${storage}/sm/${fileName}`, thumbnailImage, {
         contentType: "image/webp",
         upsert: true,
       });

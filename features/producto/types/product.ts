@@ -15,7 +15,6 @@ export enum GripType {
   Micro = "Micro",
   Bajo = "Bajo",
   Medio = "Medio",
-  MedioAlto = "Medio a alto",
   Alto = "Alto",
   NoEspecificado = "Sin definir",
 }

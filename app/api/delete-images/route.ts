@@ -2,6 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { errorMessage } from "@/utils/errorMessage";
 
+// PRODUCTION
+const storage = "Productos";
+
+// TEST
+//const storage = "Productos-test";
+
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY! // Usa service role para bypasear RLS
@@ -22,7 +28,7 @@ export async function DELETE(request: NextRequest) {
     // Eliminar imagen lg
     const { error: errorLg } = await supabase.storage
       .from("product-images")
-      .remove([`Productos-test/lg/${fileName}`]);
+      .remove([`${storage}/lg/${fileName}`]);
 
     if (errorLg) {
       console.error("Error al eliminar lg:", errorLg);
@@ -32,7 +38,7 @@ export async function DELETE(request: NextRequest) {
     // Eliminar imagen md
     const { error: errorMd } = await supabase.storage
       .from("product-images")
-      .remove([`Productos-test/md/${fileName}`]);
+      .remove([`${storage}/md/${fileName}`]);
 
     if (errorMd) {
       console.error("Error al eliminar md:", errorMd);
@@ -42,7 +48,7 @@ export async function DELETE(request: NextRequest) {
     // Eliminar imagen sm
     const { error: errorSm } = await supabase.storage
       .from("product-images")
-      .remove([`Productos-test/sm/${fileName}`]);
+      .remove([`${storage}/sm/${fileName}`]);
 
     if (errorSm) {
       console.error("Error al eliminar sm:", errorSm);

@@ -21,11 +21,5 @@ export function generateProductMetadata(product: Product | null): Metadata {
       description: product.description,
       images: [imageUrl],
     },
-    twitter: {
-      card: "summary_large_image",
-      title: product.name,
-      description: product.description,
-      images: [imageUrl],
-    },
   };
 }

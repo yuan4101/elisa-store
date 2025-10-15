@@ -36,7 +36,7 @@ export function ProductForm({ formData, onFieldChange }: ProductFormProps) {
         <div className="flex items-center justify-between gap-5">
           <TextInput
             label="SKU"
-            hint="(Código del producto)"
+            hint="(Código)"
             value={formData.sku}
             onChange={(value) => onFieldChange("sku", sanitizeProductId(value))}
           />

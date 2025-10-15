@@ -20,8 +20,15 @@ export function ProductItem({ product, onEdit, onDelete }: ProductItemProps) {
     }).format(price);
   };
 
+  let bg;
+  if (!product.visible) {
+    bg =
+      "bg-red-100 rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow";
+  } else {
+    bg = "bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow";
+  }
   return (
-    <div className="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow">
+    <div className={bg}>
       {/* Contenedor más pequeño con bordes redondeados */}
       <div className="w-32 h-32 mx-auto mb-4 overflow-hidden rounded-xl">
         <ProductImage

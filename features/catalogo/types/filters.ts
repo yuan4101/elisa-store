@@ -5,7 +5,6 @@ export const GripFilter = {
   Micro: GripType.Micro,
   Bajo: GripType.Bajo,
   Medio: GripType.Medio,
-  MedioAlto: GripType.MedioAlto,
   Alto: GripType.Alto,
 } as const;
 

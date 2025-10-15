@@ -11,7 +11,7 @@ import { NotificationType } from "@/features/notification/types/notification";
 
 export default function AdminPage() {
   const [password, setPassword] = useState("");
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const {
     products,

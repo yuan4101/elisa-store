@@ -1,10 +1,10 @@
 import { Product } from "../types/product";
 import { getBaseUrl } from "@/services/baseUrl";
 
-export async function getProductById(id: string): Promise<Product | null> {
+export async function getProductBySku(sku: string): Promise<Product | null> {
   try {
     const baseUrl = getBaseUrl();
-    const res = await fetch(`${baseUrl}/api/products/${id}`, {
+    const res = await fetch(`${baseUrl}/api/products/sku/${sku}`, {
       cache: "no-store",
     });
 

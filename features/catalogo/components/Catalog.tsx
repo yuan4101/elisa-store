@@ -71,8 +71,8 @@ export function Catalog() {
               defaultExpanded={false}
             />
           )}
-
-          {christmas.length > 0 && (
+          {/* Cambiar < por > para mostrar la seccion de navidad*/}
+          {christmas.length < 0 && (
             <ProductSection
               products={christmas}
               title="Navidad"

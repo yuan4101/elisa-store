@@ -1,25 +1,25 @@
 import { notFound } from "next/navigation";
 import { ProductDetails } from "@/features/producto/components/ProductDetails";
-import { getProductById } from "@/features/producto/services/productService";
+import { getProductBySku } from "@/features/producto/services/productService";
 import { generateProductMetadata } from "@/features/producto/utils/productMetadata";
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ sku: string }>;
 }) {
-  const { id } = await params;
-  const product = await getProductById(id);
+  const { sku } = await params;
+  const product = await getProductBySku(sku);
   return generateProductMetadata(product);
 }
 
 export default async function ProductPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ sku: string }>;
 }) {
-  const { id } = await params;
-  const product = await getProductById(id);
+  const { sku } = await params;
+  const product = await getProductBySku(sku);
 
   if (!product) {
     notFound();
