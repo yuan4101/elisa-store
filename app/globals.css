@@ -1,28 +1,28 @@
 @import "tailwindcss";
 
 :root {
-
   --header-logo-height: 90px;
   --header-navbar-height: 56px;
-  --header-height: calc(var(--header-logo-height) + var(--header-navbar-height));
+  --header-height: calc(
+    var(--header-logo-height) + var(--header-navbar-height)
+  );
   --footer-height: 100px;
   --main-min-height: calc(100vh - var(--header-height) - var(--footer-height));
 
-  /* Ajustes para móviles */
   @media (max-width: 768px) {
     --footer-height: 160px;
   }
-  
+
   --color-bg: #ffffff;
-  --color-navbar-bg: #AB0A36;
+  --color-navbar-bg: #ab0a36;
   --color-navbar-text: #ffffff;
 
   --color-card-bg: #f9f9f9;
   --color-card-bg-unavailable: #ffd7e4cb;
 
-  --color-select: #F7A5C0;
+  --color-select: #ffb6c9;
   --color-text: #562230;
-  --color-badge: #F4611E;
+  --color-badge: #f4611e;
   --color-badge-light: #f0773f;
   --color-button-pink: #ff1764;
   --color-button-pink-light: #ff368a;

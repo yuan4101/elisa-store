@@ -21,10 +21,12 @@
     "next": "^15.3.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-image-crop": "^11.0.10",
     "react-textarea-autosize": "^8.5.9"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@playwright/test": "^1.56.0",
     "@tailwindcss/postcss": "^4.1.11",
     "@types/node": "^20",
     "@types/react": "^19",
