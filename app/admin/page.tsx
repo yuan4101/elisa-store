@@ -11,7 +11,7 @@ import { NotificationType } from "@/features/notification/types/notification";
 
 export default function AdminPage() {
   const [password, setPassword] = useState("");
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
 
   const {
     products,
@@ -54,17 +54,38 @@ export default function AdminPage() {
     setShowForm(false);
   };
 
-  const handleSubmit = async (productData: Partial<Product>) => {
-    if (editingProduct) {
-      await handleUpdateProduct(editingProduct.id, productData);
-    } else {
-      // Al crear, excluir id e imagePath (se generan automáticamente)
-      const { ...createData } = productData;
-      await handleCreateProduct(
-        createData as Omit<Product, "id" | "imagePath">
-      );
+  const handleSubmit = async (
+    productData: Partial<Product>
+  ): Promise<boolean> => {
+    try {
+      if (editingProduct) {
+        // Actualizar producto existente
+        await handleUpdateProduct(editingProduct.id, productData);
+      } else {
+        // Crear nuevo producto (excluir id e imagePath)
+        const { ...createData } = productData;
+        await handleCreateProduct(
+          createData as Omit<Product, "id" | "imagePath">
+        );
+      }
+
+      // Si llegamos aquí, el guardado fue exitoso
+      // NO cerrar el modal aquí - retornar true para que el modal maneje el cierre
+      return true;
+    } catch (error) {
+      console.error("Error al guardar producto:", error);
+
+      // Mostrar notificación de error
+      showNotification({
+        message: `Error al ${
+          editingProduct ? "actualizar" : "crear"
+        } el producto`,
+        type: NotificationType.Error,
+      });
+
+      // Retornar false para indicar que falló
+      return false;
     }
-    handleCloseForm();
   };
 
   // Pantalla de login

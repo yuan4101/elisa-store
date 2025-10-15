@@ -48,17 +48,52 @@ export async function updateProduct(
 }
 
 /**
- * Elimina un producto
+ * Elimina un producto y sus imágenes asociadas
  * @param {string} id - ID del producto a eliminar
  * @returns {Promise<void>}
  */
 export async function deleteProduct(id: string): Promise<void> {
-  const response = await fetch(`${getBaseUrl()}/api/products/${id}`, {
+  // Primero obtener el producto para tener el SKU
+  const getResponse = await fetch(`${getBaseUrl()}/api/products/${id}`);
+
+  if (!getResponse.ok) {
+    const errorData = await getResponse.json();
+    throw new Error(errorData.error || "Error al obtener el producto");
+  }
+
+  const product: Product = await getResponse.json();
+
+  // Eliminar el producto de la base de datos
+  const deleteResponse = await fetch(`${getBaseUrl()}/api/products/${id}`, {
     method: "DELETE",
   });
 
-  if (!response.ok) {
-    const errorData = await response.json();
+  if (!deleteResponse.ok) {
+    const errorData = await deleteResponse.json();
     throw new Error(errorData.error || "Error al eliminar el producto");
+  }
+
+  // Eliminar las imágenes del storage (no lanzar error si falla)
+  if (product?.sku) {
+    try {
+      const imageResponse = await fetch(
+        `${getBaseUrl()}/api/delete-images?sku=${product.sku}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      if (!imageResponse.ok) {
+        console.warn(
+          "No se pudieron eliminar todas las imágenes, pero el producto fue eliminado"
+        );
+      } else {
+        const result = await imageResponse.json();
+        console.log("Imágenes eliminadas:", result);
+      }
+    } catch (imageError) {
+      console.warn("Error al eliminar imágenes:", imageError);
+      // No lanzar error aquí, el producto ya fue eliminado exitosamente
+    }
   }
 }
