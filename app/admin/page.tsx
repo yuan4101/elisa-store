@@ -58,7 +58,11 @@ export default function AdminPage() {
     if (editingProduct) {
       await handleUpdateProduct(editingProduct.id, productData);
     } else {
-      await handleCreateProduct(productData as Omit<Product, "id">);
+      // Al crear, excluir id e imagePath (se generan automáticamente)
+      const { ...createData } = productData;
+      await handleCreateProduct(
+        createData as Omit<Product, "id" | "imagePath">
+      );
     }
     handleCloseForm();
   };

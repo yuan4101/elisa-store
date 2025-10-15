@@ -3,11 +3,11 @@ import { getBaseUrl } from "@/services/baseUrl";
 
 /**
  * Crea un nuevo producto
- * @param {Omit<Product, "id">} productData - Datos del producto sin ID
+ * @param {Omit<Product, "id" | "imagePath">} productData - Datos del producto sin ID ni imagePath
  * @returns {Promise<Product>} Producto creado
  */
 export async function createProduct(
-  productData: Omit<Product, "id">
+  productData: Omit<Product, "id" | "imagePath">
 ): Promise<Product> {
   const response = await fetch(`${getBaseUrl()}/api/products`, {
     method: "POST",
@@ -61,26 +61,4 @@ export async function deleteProduct(id: string): Promise<void> {
     const errorData = await response.json();
     throw new Error(errorData.error || "Error al eliminar el producto");
   }
-}
-
-/**
- * Sube una imagen de producto
- * @param {File} file - Archivo de imagen a subir
- * @returns {Promise<string>} Ruta de la imagen subida
- */
-export async function uploadImage(file: File): Promise<string> {
-  const formData = new FormData();
-  formData.append("file", file);
-
-  const response = await fetch(`${getBaseUrl()}/api/upload`, {
-    method: "POST",
-    body: formData,
-  });
-
-  if (!response.ok) {
-    throw new Error("Error al subir la imagen");
-  }
-
-  const data = await response.json();
-  return data.path;
 }

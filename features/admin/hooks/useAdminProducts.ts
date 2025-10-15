@@ -1,51 +1,33 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Product } from "@/features/producto/types/product";
 import {
   createProduct,
   updateProduct,
   deleteProduct,
 } from "../services/adminService";
-import { getBaseUrl } from "@/services/baseUrl";
 import { useNotification } from "@/features/notification/hooks/useNotification";
 import { NotificationType } from "@/features/notification/types/notification";
+import { useProducts } from "@/features/producto/hooks/useProducts";
+import { errorMessage } from "@/utils/errorMessage";
 
 export function useAdminProducts() {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { products, loading, error, refetch } = useProducts();
   const [searchQuery, setSearchQuery] = useState("");
   const { showNotification } = useNotification();
 
-  const fetchProducts = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch(`${getBaseUrl()}/api/products`);
-      if (!response.ok) throw new Error("Error al cargar productos");
-      const data = await response.json();
-      setProducts(data);
-      setError(null);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Error desconocido");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchProducts();
-  }, []);
-
-  const handleCreateProduct = async (productData: Omit<Product, "id">) => {
+  const handleCreateProduct = async (
+    productData: Omit<Product, "id" | "imagePath">
+  ) => {
     try {
       await createProduct(productData);
       showNotification({
         message: "Producto creado con éxito",
         type: NotificationType.Success,
       });
-      await fetchProducts();
+      await refetch();
     } catch (err) {
       showNotification({
-        message: err instanceof Error ? err.message : "Error al crear producto",
+        message: errorMessage(err),
         type: NotificationType.Error,
       });
     }
@@ -61,11 +43,10 @@ export function useAdminProducts() {
         message: "Producto actualizado con éxito",
         type: NotificationType.Success,
       });
-      await fetchProducts();
+      await refetch();
     } catch (err) {
       showNotification({
-        message:
-          err instanceof Error ? err.message : "Error al actualizar producto",
+        message: errorMessage(err),
         type: NotificationType.Error,
       });
     }
@@ -80,17 +61,16 @@ export function useAdminProducts() {
         message: "Producto eliminado con éxito",
         type: NotificationType.Success,
       });
-      await fetchProducts();
+      await refetch();
     } catch (err) {
       showNotification({
-        message:
-          err instanceof Error ? err.message : "Error al eliminar producto",
+        message: errorMessage(err),
         type: NotificationType.Error,
       });
     }
   };
 
-  const filteredProducts = products.filter((product) =>
+  const filteredProducts = products.filter((product: Product) =>
     product.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 

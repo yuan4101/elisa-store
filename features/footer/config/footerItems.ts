@@ -1,4 +1,4 @@
-enum ItemType {
+export enum ItemType {
   Text = "text",
   Link = "link",
 }
@@ -19,8 +19,7 @@ export const footerItems: FooterItem[] = [
   },
   { type: ItemType.Link, href: "/contacto", text: "Contacto" },
   {
-    type: ItemType.Link,
-    href: "/admin",
+    type: ItemType.Text,
     text: `© ${new Date().getFullYear()} All rights reserved`,
   },
 ];

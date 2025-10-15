@@ -16,10 +16,10 @@ import { formatPriceCOP, sanitizeProductId } from "@/utils/formatters";
 import { getStockMessage } from "@/utils/stockMessages";
 
 interface ProductFormProps {
-  formData: Omit<Product, "imagePath">;
-  onFieldChange: <K extends keyof Omit<Product, "imagePath">>(
+  formData: Omit<Product, "id" | "imagePath">;
+  onFieldChange: <K extends keyof Omit<Product, "id" | "imagePath">>(
     field: K,
-    value: Omit<Product, "imagePath">[K]
+    value: Omit<Product, "id" | "imagePath">[K]
   ) => void;
 }
 
@@ -35,14 +35,13 @@ export function ProductForm({ formData, onFieldChange }: ProductFormProps) {
       <div className="flex flex-col gap-4">
         <div className="flex items-center justify-between gap-5">
           <TextInput
-            label="ID"
-            hint="(Identificador unico)"
-            value={formData.id}
-            onChange={(value) => onFieldChange("id", sanitizeProductId(value))}
+            label="SKU"
+            hint="(Código del producto)"
+            value={formData.sku}
+            onChange={(value) => onFieldChange("sku", sanitizeProductId(value))}
           />
           <TextInput
             label="Nombre"
-            hint="(Vista)"
             value={formData.name}
             onChange={(value) => onFieldChange("name", value)}
           />

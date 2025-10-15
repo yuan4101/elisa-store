@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { supabaseServer } from "../supabase-server";
+import { supabaseServer, TABLE } from "../supabase-server";
 import { errorMessage } from "@/utils/errorMessage";
-
-const TABLE = "products_duplicate";
 
 // GET /api/products
 export async function GET() {
@@ -20,37 +18,60 @@ export async function POST(request: NextRequest) {
   try {
     const productData = await request.json();
 
-    // Validaciones
-    if (!productData.id) {
+    // Validar SKU
+    if (!productData.sku) {
       return NextResponse.json(
-        { error: "El ID del producto es obligatorio" },
+        { error: "El SKU del producto es obligatorio" },
         { status: 400 }
       );
     }
 
-    if (productData.id.includes(" ")) {
+    if (productData.sku.includes(" ")) {
       return NextResponse.json(
-        { error: "El ID no puede contener espacios" },
+        { error: "El SKU no puede contener espacios" },
         { status: 400 }
       );
     }
 
-    // Verificar que el ID no exista
-    const { count } = await supabaseServer
+    // Validar nombre
+    if (!productData.name) {
+      return NextResponse.json(
+        { error: "El nombre del producto es obligatorio" },
+        { status: 400 }
+      );
+    }
+
+    // Verificar que el SKU no exista
+    const { count: skuCount } = await supabaseServer
       .from(TABLE)
       .select("*", { count: "exact" })
-      .eq("id", productData.id);
+      .eq("sku", productData.sku);
 
-    if (count && count > 0) {
+    if (skuCount && skuCount > 0) {
       return NextResponse.json(
-        { error: "El ID ya está en uso" },
+        { error: "Ya existe un producto con ese SKU" },
         { status: 400 }
       );
     }
+
+    // Verificar que el nombre no exista
+    const { count: nameCount } = await supabaseServer
+      .from(TABLE)
+      .select("*", { count: "exact" })
+      .eq("name", productData.name);
+
+    if (nameCount && nameCount > 0) {
+      return NextResponse.json(
+        { error: "Ya existe un producto con ese nombre" },
+        { status: 400 }
+      );
+    }
+
+    const { ...dataWithoutId } = productData;
 
     const { data, error } = await supabaseServer
       .from(TABLE)
-      .insert([productData])
+      .insert([dataWithoutId])
       .select()
       .single();
 

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Fragment } from "react";
-import { footerItems } from "../config/footerItems";
+import { footerItems, ItemType } from "../config/footerItems";
 
 export default function Footer() {
   return (
@@ -9,12 +9,16 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row items-center text-base">
           {footerItems.map((item, index) => (
             <Fragment key={index}>
-              <Link
-                href={item.href ?? "/"}
-                className={`${item.className} py-0`}
-              >
-                {item.text}
-              </Link>
+              {item.type === ItemType.Link ? (
+                <Link
+                  href={item.href ?? "/"}
+                  className={`${item.className} py-0`}
+                >
+                  {item.text}
+                </Link>
+              ) : (
+                <span className={item.className}>{item.text}</span>
+              )}
               {index < footerItems.length - 1 && (
                 <span className="px-2 hidden md:inline">|</span>
               )}
