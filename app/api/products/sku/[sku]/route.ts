@@ -1,4 +1,4 @@
-import { supabaseServer, TABLE } from "../../../supabase-server";
+import { supabaseServer } from "../../../supabase-server";
 import { Product } from "@/features/producto/types/product";
 import { NextResponse } from "next/server";
 
@@ -11,7 +11,7 @@ export async function GET(
     const { sku } = await params;
 
     const { data: product, error } = await supabaseServer
-      .from(TABLE)
+      .from("products")
       .select("*")
       .eq("sku", sku)
       .single();

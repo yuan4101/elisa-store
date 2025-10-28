@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { supabaseServer, TABLE } from "../supabase-server";
+import { supabaseServer } from "../supabase-server";
 import { errorMessage } from "@/utils/errorMessage";
 
 // GET /api/products
 export async function GET() {
   try {
-    const { data, error } = await supabaseServer.from(TABLE).select("*");
+    const { data, error } = await supabaseServer.from("products").select("*");
     if (error) throw error;
     return NextResponse.json(data);
   } catch (error) {
@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
 
     // Verificar que el SKU no exista
     const { count: skuCount } = await supabaseServer
-      .from(TABLE)
+      .from("products")
       .select("*", { count: "exact" })
       .eq("sku", productData.sku);
 
@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
 
     // Verificar que el nombre no exista
     const { count: nameCount } = await supabaseServer
-      .from(TABLE)
+      .from("products")
       .select("*", { count: "exact" })
       .eq("name", productData.name);
 
@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
     const { ...dataWithoutId } = productData;
 
     const { data, error } = await supabaseServer
-      .from(TABLE)
+      .from("products")
       .insert([dataWithoutId])
       .select()
       .single();

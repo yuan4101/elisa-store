@@ -1,4 +1,4 @@
-import { supabaseServer, TABLE } from "../../supabase-server";
+import { supabaseServer} from "../../supabase-server";
 import { Product } from "@/features/producto/types/product";
 import { NextRequest, NextResponse } from "next/server";
 import { errorMessage } from "@/utils/errorMessage";
@@ -22,7 +22,7 @@ export async function PATCH(
 
     // Actualizar el producto
     const { data, error } = await supabaseServer
-      .from(TABLE)
+      .from("products")
       .update(updates)
       .eq("id", id)
       .select()
@@ -51,7 +51,7 @@ export async function DELETE(
   try {
     const { id } = await params;
 
-    const { error } = await supabaseServer.from(TABLE).delete().eq("id", id);
+    const { error } = await supabaseServer.from("products").delete().eq("id", id);
 
     if (error) throw error;
 
@@ -72,7 +72,7 @@ export async function GET(
     const { id } = await params;
 
     const { data: product, error } = await supabaseServer
-      .from(TABLE)
+      .from("products")
       .select("*")
       .eq("id", id)
       .single();
