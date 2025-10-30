@@ -1,5 +1,7 @@
-export enum ImageSize {
-  Small = "small",
-  Medium = "medium",
-  Large = "large",
-}
+export const ImageSize = {
+  SMALL: 'small',
+  MEDIUM: 'medium',
+  LARGE: 'large',
+} as const;
+
+export type ImageSizeValue = (typeof ImageSize)[keyof typeof ImageSize];

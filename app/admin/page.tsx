@@ -12,7 +12,6 @@ import { NotificationType } from "@/features/notification/types/notification";
 export default function AdminPage() {
   const [password, setPassword] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-
   const {
     products,
     loading,
@@ -22,6 +21,7 @@ export default function AdminPage() {
     handleCreateProduct,
     handleUpdateProduct,
     handleDeleteProduct,
+    handleStockChange,
   } = useAdminProducts();
 
   const { showNotification } = useNotification();
@@ -62,28 +62,22 @@ export default function AdminPage() {
         // Actualizar producto existente
         await handleUpdateProduct(editingProduct.id, productData);
       } else {
-        // Crear nuevo producto (excluir id e imagePath)
+        // Crear nuevo producto
         const { ...createData } = productData;
         await handleCreateProduct(
           createData as Omit<Product, "id" | "imagePath">
         );
       }
 
-      // Si llegamos aquí, el guardado fue exitoso
-      // NO cerrar el modal aquí - retornar true para que el modal maneje el cierre
       return true;
     } catch (error) {
       console.error("Error al guardar producto:", error);
-
-      // Mostrar notificación de error
       showNotification({
         message: `Error al ${
           editingProduct ? "actualizar" : "crear"
         } el producto`,
         type: NotificationType.Error,
       });
-
-      // Retornar false para indicar que falló
       return false;
     }
   };
@@ -91,12 +85,14 @@ export default function AdminPage() {
   // Pantalla de login
   if (!isAuthenticated) {
     return (
-      <div className="pt-25 pb-40 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
         <form
           onSubmit={handleLogin}
-          className="bg-[var(--color-card-bg)] p-8 rounded shadow-md w-80"
+          className="bg-white p-8 rounded-lg shadow-md w-96"
         >
-          <h2 className="text-2xl mb-4 text-center">Acceso Administrador</h2>
+          <h2 className="text-2xl font-bold mb-6 text-center">
+            Acceso Administrador
+          </h2>
           <input
             type="password"
             value={password}
@@ -107,7 +103,7 @@ export default function AdminPage() {
           />
           <button
             type="submit"
-            className="w-full bg-[var(--color-badge-light)] text-white p-2 rounded hover:bg-[var(--color-badge)] transition"
+            className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition"
           >
             Ingresar
           </button>
@@ -118,61 +114,68 @@ export default function AdminPage() {
 
   if (loading) {
     return (
-      <div className="pt-40 pb-60 text-xl flex items-center justify-center">
-        <p>Cargando productos...</p>
+      <div className="flex items-center justify-center min-h-screen">
+        <p className="text-xl">Cargando productos...</p>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-red-500">
-        <p>Error: {error}</p>
+      <div className="flex items-center justify-center min-h-screen">
+        <p className="text-xl text-red-500">Error: {error}</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen sm:p-4 md:p-8">
-      <div className="max-w-6xl mx-auto">
-        <div className="flex flex-col sm:flex-row justify-between items-center mb-5">
-          <h1 className="text-3xl font-bold pb-2">Administrar Stock</h1>
-          <div className="pb-3">
-            <SearchBox
-              searchQuery={searchQuery}
-              setSearchQuery={setSearchQuery}
-            />
-          </div>
-          <div className="flex justify-right gap-4">
-            <button
-              onClick={() => setShowForm(true)}
-              className="bg-[var(--color-badge-light)] text-white px-4 py-2 rounded hover:bg-[var(--color-badge)] transition"
-            >
-              Agregar producto
-            </button>
-            <button
-              onClick={() => setIsAuthenticated(false)}
-              className="bg-[var(--color-button-pink-light)] text-white px-4 py-2 rounded hover:bg-[var(--color-button-pink)] transition"
-            >
-              Cerrar sesión
-            </button>
-          </div>
+    <div className="container mx-auto px-4 py-8">
+      {/* Header con título y botones de acción */}
+      <div className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
+        <h1 className="text-3xl font-bold text-gray-800">Administrar Stock</h1>
+
+        <div className="flex gap-3">
+          <button
+            onClick={() => {
+              setEditingProduct(null);
+              setShowForm(true);
+            }}
+            className="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors shadow-md"
+          >
+            + Nuevo Producto
+          </button>
+
+          <button
+            onClick={() => setIsAuthenticated(false)}
+            className="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors shadow-md"
+          >
+            Cerrar sesión
+          </button>
         </div>
-
-        <ProductList
-          products={products}
-          onEdit={handleEdit}
-          onDelete={handleDeleteProduct}
-        />
-
-        {showForm && (
-          <ProductFormModal
-            product={editingProduct}
-            onSubmit={handleSubmit}
-            onClose={handleCloseForm}
-          />
-        )}
       </div>
+
+      {/* Buscador */}
+      <div className="mb-6">
+        <SearchBox searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+      </div>
+
+      {/* Lista de productos */}
+      <ProductList
+        products={products}
+        onEdit={handleEdit}
+        onStockChange={handleStockChange}
+      />
+
+      {/* Modal de formulario con botón eliminar */}
+      {showForm && (
+        <ProductFormModal
+          isOpen={showForm}
+          onClose={handleCloseForm}
+          onSubmit={handleSubmit}
+          onDelete={handleDeleteProduct}
+          product={editingProduct}
+        />
+      )}
     </div>
   );
 }

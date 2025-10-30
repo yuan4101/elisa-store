@@ -53,8 +53,6 @@ export function useAdminProducts() {
   };
 
   const handleDeleteProduct = async (id: string) => {
-    if (!confirm("¿Estás seguro de eliminar este producto?")) return;
-
     try {
       await deleteProduct(id);
       showNotification({
@@ -70,9 +68,29 @@ export function useAdminProducts() {
     }
   };
 
-  const filteredProducts = products.filter((product: Product) =>
-    product.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // ✅ Función para actualizar solo el stock
+  const handleStockChange = async (productId: string, newStock: number) => {
+    try {
+      await updateProduct(productId, { stock: newStock });
+      showNotification({
+        message: `Stock actualizado a ${newStock}`,
+        type: NotificationType.Success,
+      });
+      await refetch();
+    } catch (err) {
+      showNotification({
+        message: errorMessage(err),
+        type: NotificationType.Error,
+      });
+    }
+  };
+
+  // ✅ Filtrar y ordenar alfabéticamente A-Z
+  const filteredProducts = products
+    .filter((product) =>
+      product.name.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+    .sort((a, b) => a.name.localeCompare(b.name, "es", { sensitivity: "base" }));
 
   return {
     products: filteredProducts,
@@ -83,5 +101,6 @@ export function useAdminProducts() {
     handleCreateProduct,
     handleUpdateProduct,
     handleDeleteProduct,
+    handleStockChange, // ✅ Exportar la función
   };
 }

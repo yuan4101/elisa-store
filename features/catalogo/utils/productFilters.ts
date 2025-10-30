@@ -1,35 +1,33 @@
 import { Product } from "../../producto/types/product";
-import {
-  ProductFilters,
-  GripFilter,
-  PriceSort,
-  AlphabetSort,
-} from "../types/filters";
+import { GripFilterValue, GripFilter } from "../types/grip-filter";
+import { PriceSortValue, PriceSort } from "../types/price-filter";
+import { AlphabetSortValue, AlphabetSort } from "../types/alphabet-filter";
+import {ProductFilters} from "../types/product-filters";
 
 function filterByAvailable(products: Product[]): Product[] {
   return products.filter((product: Product) => product.visible === true);
 }
 
-function filterByGrip(products: Product[], gripFilter: GripFilter): Product[] {
-  if (gripFilter === GripFilter.All) {
+function filterByGrip(products: Product[], gripFilter: GripFilterValue): Product[] {
+  if (gripFilter === GripFilter.TODOS) {
     return products;
   }
 
   return products.filter((product) => product.grip === (gripFilter as string));
 }
 
-function sortByPrice(products: Product[], sortOrder: PriceSort): Product[] {
-  if (sortOrder === PriceSort.None) {
+function sortByPrice(products: Product[], sortOrder: PriceSortValue): Product[] {
+  if (sortOrder === PriceSort.NONE) {
     return products;
   }
 
   const sorted = [...products];
 
-  if (sortOrder === PriceSort.LowToHigh) {
+  if (sortOrder === PriceSort.LOW_HIGH) {
     return sorted.sort((a, b) => a.price - b.price);
   }
 
-  if (sortOrder === PriceSort.HighToLow) {
+  if (sortOrder === PriceSort.HIGH_LOW) {
     return sorted.sort((a, b) => b.price - a.price);
   }
 
@@ -38,21 +36,21 @@ function sortByPrice(products: Product[], sortOrder: PriceSort): Product[] {
 
 function sortByAlphabet(
   products: Product[],
-  sortOrder: AlphabetSort
+  sortOrder: AlphabetSortValue
 ): Product[] {
-  if (sortOrder === AlphabetSort.None) {
+  if (sortOrder === AlphabetSort.NONE) {
     return products;
   }
 
   const sorted = [...products];
 
-  if (sortOrder === AlphabetSort.AToZ) {
+  if (sortOrder === AlphabetSort.A_Z) {
     return sorted.sort((a: Product, b: Product) =>
       a.name.localeCompare(b.name)
     );
   }
 
-  if (sortOrder === AlphabetSort.ZToA) {
+  if (sortOrder === AlphabetSort.Z_A) {
     return sorted.sort((a: Product, b: Product) =>
       b.name.localeCompare(a.name)
     );
@@ -68,7 +66,7 @@ export function applyFilters(
   let result = filterByAvailable(products);
   result = filterByGrip(result, filters.grip);
   result =
-    filters.priceSort === PriceSort.None
+    filters.priceSort === PriceSort.NONE
       ? sortByAlphabet(result, filters.alphabetSort)
       : sortByPrice(result, filters.priceSort);
   return result;

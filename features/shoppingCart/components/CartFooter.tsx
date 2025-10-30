@@ -22,6 +22,8 @@ const CartFooter = ({
       <div className="mt-3">
         <a
           href={whatsappLink}
+          target="_blank"
+          rel="noopener noreferrer"
           className="flex items-center justify-center rounded-md border border-transparent bg-[var(--color-badge)] px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-[var(--color-badge)]"
         >
           Ordenar

@@ -9,7 +9,7 @@ export default function Navbar() {
 
   return (
     <nav
-      className="text-[var(--color-navbar-text)] text-lg flex space-x-6"
+      className="text-[var(--color-navbar-text)] text-lg md:text-xl flex space-x-4 md:space-x-6"
       aria-label="Navegación principal"
     >
       {navItems.map((item) => (

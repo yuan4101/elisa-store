@@ -2,13 +2,22 @@
 
 import { FilterDropdown } from "./FilterDropdown";
 import { ClearFiltersButton } from "./ClearFiltersButton";
-import { GripFilter, PriceSort } from "../types/filters";
+import {
+  GripFilterValue,
+  GripFilter,
+  GripFilterOptions,
+} from "../types/grip-filter";
+import {
+  PriceSortValue,
+  PriceSort,
+  PriceSortOptions,
+} from "../types/price-filter";
 
 interface CatalogFiltersProps {
   gripFilter: string;
   priceSort: string;
-  onGripChange: (value: GripFilter) => void;
-  onPriceChange: (value: PriceSort) => void;
+  onGripChange: (value: GripFilterValue) => void;
+  onPriceChange: (value: PriceSortValue) => void;
   onClear: () => void;
   hasActiveFilters: boolean;
 }
@@ -21,31 +30,47 @@ export function CatalogFilters({
   onClear,
   hasActiveFilters,
 }: CatalogFiltersProps) {
-  const gripOptions = Object.values(GripFilter);
-  const priceOptions = Object.values(PriceSort);
-  const displayGripValue = gripFilter === GripFilter.All ? "" : gripFilter;
-  const displayPriceValue = priceSort === PriceSort.None ? "" : priceSort;
+  const displayGripValue = gripFilter === GripFilter.TODOS ? "" : gripFilter;
+  const displayPriceValue = priceSort === PriceSort.NONE ? "" : priceSort;
 
   return (
-    <div className="flex flex-col sm:flex-row items-start sm:items-center mb-4 gap-2">
-      <div className="whitespace-nowrap">Filtrar por:</div>
+    <div className="sticky top-[128px] md:top-[168px] z-50 bg-white shadow-lg rounded-xl p-1 md:p-3 w-full md:w-fit border border-[var(--color-navbar-bg)]/60 transition-all duration-300 ease-in-out">
+      <div className="flex flex-col md:flex-row md:items-center gap-1 md:gap-4 pb-1 md:pb-0 pl-2 pr-2">
+        <div className="whitespace-nowrap">Filtrar por:</div>
 
-      <div className="flex flex-wrap gap-2 w-full sm:w-auto">
-        <FilterDropdown
-          currentValue={displayGripValue}
-          options={gripOptions}
-          onSelect={(value) => onGripChange(value as GripFilter)}
-          placeholder="Agarre"
-        />
+        <div className="flex flex-row w-full">
+          <div className="flex-1" style={{ minWidth: "96px" }}>
+            <FilterDropdown
+              currentValue={displayGripValue}
+              options={GripFilterOptions}
+              onSelect={(value) => {
+                onGripChange(value as GripFilterValue);
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
+              placeholder="Agarre"
+            />
+          </div>
 
-        <FilterDropdown
-          currentValue={displayPriceValue}
-          options={priceOptions}
-          onSelect={(value) => onPriceChange(value as PriceSort)}
-          placeholder="Precio"
-        />
+          <div className="flex-1 ml-2 md:ml-4" style={{ minWidth: "160px" }}>
+            <FilterDropdown
+              currentValue={displayPriceValue}
+              options={PriceSortOptions}
+              onSelect={(value) => {
+                onPriceChange(value as PriceSortValue);
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
+              placeholder="Precio"
+            />
+          </div>
 
-        {hasActiveFilters && <ClearFiltersButton onClick={onClear} />}
+          <ClearFiltersButton
+            isVisible={hasActiveFilters}
+            onClick={() => {
+              onClear();
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
+          />
+        </div>
       </div>
     </div>
   );

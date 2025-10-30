@@ -3,11 +3,10 @@ import {
   getProductImageUrl,
   DEFAULT_PLACEHOLDER,
 } from "../utils/productImageUrl";
-import { ImageSize } from "../types/imageSize";
-
+import { ImageSizeValue } from "@/features/producto/types/imageSize";
 interface ProductImageProps {
   imagePath: string | null | undefined;
-  imageSize: ImageSize;
+  imageSize: ImageSizeValue;
   productName: string;
   priority?: boolean;
 }

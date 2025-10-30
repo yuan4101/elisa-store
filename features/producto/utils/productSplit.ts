@@ -1,4 +1,4 @@
-import { Product } from "../../producto/types/product";
+import { Product } from "../types/product";
 
 export function splitByStock(products: Product[]) {
   const [stockedProducts, unstockedProducts] = products.reduce(

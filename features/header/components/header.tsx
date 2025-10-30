@@ -1,5 +1,5 @@
-import Logo from './logo';
-import HeaderContent from './headerContent';
+import Logo from "./logo";
+import HeaderContent from "./headerContent";
 
 export default function Header() {
   return (

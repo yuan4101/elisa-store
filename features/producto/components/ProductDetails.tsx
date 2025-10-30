@@ -24,7 +24,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
         <div className="bg-[var(--color-card)] rounded-2xl overflow-hidden shadow-md">
           <ProductImage
             imagePath={product.imagePath}
-            imageSize={ImageSize.Large}
+            imageSize={ImageSize.LARGE}
             productName={product.name}
             priority={true}
           />

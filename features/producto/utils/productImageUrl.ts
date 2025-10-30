@@ -1,16 +1,16 @@
-import { ImageSize } from "../types/imageSize";
+import { ImageSizeValue, ImageSize } from "../types/imageSize";
 
 const IMAGE_SIZE_URLS = {
-  [ImageSize.Small]: process.env.NEXT_PUBLIC_SUPABASE_STORAGE_SMALL_IMAGES,
-  [ImageSize.Medium]: process.env.NEXT_PUBLIC_SUPABASE_STORAGE_MEDIUM_IMAGES,
-  [ImageSize.Large]: process.env.NEXT_PUBLIC_SUPABASE_STORAGE_LARGE_IMAGES,
+  [ImageSize.SMALL]: `${process.env.NEXT_PUBLIC_SUPABASE_STORAGE}/sm`,
+  [ImageSize.MEDIUM]: `${process.env.NEXT_PUBLIC_SUPABASE_STORAGE}/md`,
+  [ImageSize.LARGE]: `${process.env.NEXT_PUBLIC_SUPABASE_STORAGE}/lg`,
 } as const;
 
 export const DEFAULT_PLACEHOLDER = "/icons/file.svg";
 
 export function getProductImageUrl(
   imagePath: string | null | undefined,
-  size: ImageSize
+  size: ImageSizeValue
 ): string {
   if (!imagePath) {
     return DEFAULT_PLACEHOLDER;

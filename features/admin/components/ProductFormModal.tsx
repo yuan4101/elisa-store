@@ -8,17 +8,22 @@ import { Modal } from "./Modal";
 import { useProductForm } from "../hooks/useProductForm";
 import { ProductForm } from "./ProductForm";
 import { ImageCropUpload, ImageCropUploadRef } from "./ImageCropUpload";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 interface ProductFormModalProps {
   product: Product | null;
   onSubmit: (productData: Partial<Product>) => Promise<boolean>;
   onClose: () => void;
+  onDelete?: (id: string) => void; // ✅ Nueva prop para eliminar
+  isOpen: boolean;
 }
 
 export function ProductFormModal({
   product,
   onSubmit,
   onClose,
+  onDelete, // ✅ Nueva prop
+  isOpen,
 }: ProductFormModalProps) {
   const isEditing = product !== null;
   const { formData, updateField, buildProductData } = useProductForm({
@@ -29,111 +34,70 @@ export function ProductFormModal({
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
-    console.log("🔵 INICIO - handleSubmit");
 
     try {
-      // Guardar referencia al componente de imágenes al inicio
       const imageComponent = imageCropRef.current;
-      console.log("🔵 imageComponent guardado:", imageComponent);
 
-      // 1. Si no estamos editando, verificar si hay imagen con recorte válido y guardado
+      // Si es creación, validar imágenes
       if (!isEditing) {
-        console.log("🔵 Es creación, verificando imágenes...");
-        console.log("🔵 imageComponent:", imageComponent);
-        console.log("🔵 hasImages:", imageComponent?.hasImages());
-
         if (imageComponent?.hasImages()) {
-          console.log("🔵 Hay imágenes, verificando validez...");
-
           if (!imageComponent.isCropValid()) {
-            console.log("❌ Recorte no válido");
             alert(
               "Por favor asegúrate de que el recorte sea válido (mínimo 600x600)"
             );
             setIsSubmitting(false);
             return;
           }
-          console.log("✅ Recorte válido");
 
           if (!imageComponent.isCropSaved()) {
-            console.log("❌ Recorte no guardado");
             alert("Por favor guarda el recorte antes de continuar");
             setIsSubmitting(false);
             return;
           }
-          console.log("✅ Recorte guardado");
         } else {
-          console.log("❌ No hay imágenes");
           alert("Por favor selecciona y recorta una imagen para el producto");
           setIsSubmitting(false);
           return;
         }
       }
 
-      // 2. Intentar guardar el producto en la base de datos
-      console.log("🔵 Guardando producto en BD...");
+      // Guardar producto en BD
       const productData = buildProductData();
-      console.log("🔵 productData:", productData);
       const productSaved = await onSubmit(productData);
-      console.log("🔵 productSaved:", productSaved);
 
-      // 3. Si el producto NO se guardó, detener aquí
       if (!productSaved) {
-        console.log("❌ Producto NO guardado en BD");
         alert("Error al guardar el producto en la base de datos");
         setIsSubmitting(false);
         return;
       }
-      console.log("✅ Producto guardado en BD");
 
-      // 4. Si es edición, cerrar modal inmediatamente (sin subir imágenes)
+      // Si es edición, cerrar modal
       if (isEditing) {
-        console.log("🔵 Es edición, cerrando modal...");
         alert("Producto actualizado exitosamente");
         onClose();
         return;
       }
 
-      // 5. Si es creación y hay imágenes, subirlas DESPUÉS de guardar el producto
-      console.log(
-        "🔵 Verificando si hay imágenes para subir (usando referencia guardada)..."
-      );
-      console.log("🔵 imageComponent antes de subir:", imageComponent);
-      console.log(
-        "🔵 imageComponent?.hasImages():",
-        imageComponent?.hasImages()
-      );
-
+      // Si es creación, subir imágenes
       if (imageComponent?.hasImages()) {
-        console.log("✅ Hay imágenes, iniciando subida...");
         try {
-          console.log("🔵 Llamando a uploadImages()...");
           await imageComponent.uploadImages();
-          console.log("✅ Imágenes subidas exitosamente");
           alert("Producto e imágenes guardados exitosamente");
           onClose();
         } catch (imageError) {
-          console.error("❌ Error al subir imágenes:", imageError);
           alert(
             `Producto guardado en base de datos, pero error al subir imágenes: ${
               imageError instanceof Error
                 ? imageError.message
                 : "Error desconocido"
-            }. Por favor, contacta al administrador.`
+            }`
           );
         }
       } else {
-        console.log("⚠️ No hay imágenes para subir");
-        console.log(
-          "⚠️ Verificación: imageCropRef.current:",
-          imageCropRef.current
-        );
-        console.log("⚠️ Verificación: imageComponent:", imageComponent);
         alert("Producto guardado exitosamente (sin imágenes)");
         onClose();
       }
     } catch (error) {
-      console.error("❌ Error inesperado:", error);
       alert(
         `Error inesperado: ${
           error instanceof Error ? error.message : "Error desconocido"
@@ -141,53 +105,80 @@ export function ProductFormModal({
       );
     } finally {
       setIsSubmitting(false);
-      console.log("🔵 FIN - handleSubmit");
+    }
+  };
+
+  // ✅ Handler para eliminar producto
+  const handleDelete = () => {
+    if (!product || !onDelete) return;
+
+    const confirmed = confirm(
+      `¿Estás seguro de que deseas eliminar el producto "${product.name}"? Esta acción no se puede deshacer.`
+    );
+
+    if (confirmed) {
+      onDelete(product.id);
+      onClose();
     }
   };
 
   return (
-    <Modal isOpen={true} onClose={onClose}>
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="font-bold text-xl flex-shrink-0">
-          {isEditing ? "Editando producto" : "Creando producto"}
-        </h3>
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <div className="space-y-4">
+        {/* Título y botón eliminar */}
+        <div className="flex justify-between items-center border-b pb-3">
+          <h2 className="text-2xl font-bold">
+            {isEditing ? "Editar producto" : "Crear producto"}
+          </h2>
+
+          {/* ✅ Botón eliminar (solo si es edición) */}
+          {isEditing && onDelete && (
+            <button
+              onClick={handleDelete}
+              className="flex items-center gap-2 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors font-medium"
+            >
+              <DeleteIcon sx={{ fontSize: 18 }} />
+              Eliminar
+            </button>
+          )}
+        </div>
+
+        {/* Imagen actual (solo en edición) */}
         {isEditing && product && (
-          <div className="w-20 h-20 overflow-hidden rounded-xl">
+          <div className="flex justify-center">
             <ProductImage
               imagePath={product.imagePath}
-              imageSize={ImageSize.Small}
               productName={product.name}
-              priority={true}
+              imageSize={ImageSize.MEDIUM}
             />
           </div>
         )}
-      </div>
-      <div className="h-0.5 bg-[var(--color-navbar-bg)] self-stretch mt-1 mb-3"></div>
 
-      {/* Mostrar componente de recorte solo al crear producto y cuando tenga SKU */}
-      {!isEditing && formData.sku && (
-        <div className="mb-6">
+        {/* Formulario */}
+        <ProductForm formData={formData} onFieldChange={updateField} />
+
+        {/* Upload de imagen (solo en creación) */}
+        {!isEditing && formData.sku && (
           <ImageCropUpload ref={imageCropRef} sku={formData.sku} />
+        )}
+
+        {/* Botones de acción */}
+        <div className="flex gap-3 pt-4 border-t">
+          <button
+            onClick={onClose}
+            className="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+            disabled={isSubmitting}
+          >
+            Cancelar
+          </button>
+          <button
+            onClick={handleSubmit}
+            disabled={isSubmitting}
+            className="flex-1 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg disabled:bg-gray-300 transition-colors font-medium"
+          >
+            {isSubmitting ? "Guardando..." : "Guardar"}
+          </button>
         </div>
-      )}
-
-      <ProductForm formData={formData} onFieldChange={updateField} />
-
-      <div className="flex justify-end space-x-2 pt-4">
-        <button
-          onClick={onClose}
-          disabled={isSubmitting}
-          className="px-4 py-2 text-white border rounded-lg bg-[var(--color-button-pink-light)] hover:bg-[var(--color-button-pink)] disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          Cancelar
-        </button>
-        <button
-          onClick={handleSubmit}
-          disabled={isSubmitting}
-          className="px-4 py-2 bg-[var(--color-badge-light)] text-white rounded-lg hover:bg-[var(--color-badge)] disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {isSubmitting ? "Guardando..." : "Guardar"}
-        </button>
       </div>
     </Modal>
   );

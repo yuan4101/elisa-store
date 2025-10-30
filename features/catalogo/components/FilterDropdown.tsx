@@ -28,13 +28,13 @@ export function FilterDropdown({
   const currentLabel = currentValue || placeholder;
 
   return (
-    <Menu as="div" className="relative flex-1 min-w-[160px]">
+    <Menu as="div" className="relative w-full">
       {({ open }) => (
         <>
           <MenuButton
             disabled={disabled}
             aria-label={`Filtrar por: ${currentLabel}`}
-            className="w-full px-3 py-2 border rounded text-[var(--color-navbar-bg)] border-[var(--color-navbar-bg)] hover:border-[var(--color-select)] hover:bg-transparent transition-colors focus:outline-none text-left flex justify-between items-center disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full px-3 py-1 md:py-2 border rounded text-[var(--color-navbar-bg)] border-[var(--color-navbar-bg)] hover:border-[var(--color-select)] hover:bg-transparent transition-colors focus:outline-none text-left flex justify-between items-center disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <span>{currentLabel}</span>
             <ChevronIcon isExpanded={open} />

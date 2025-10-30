@@ -1,4 +1,4 @@
-import { Product } from "../../producto/types/product";
+import { Product } from "../types/product";
 
 export function sortByStock(products: Product[]): Product[] {
   const withStock = products.filter((product) => product.stock > 0);
