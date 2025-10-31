@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { Product } from "@/features/producto/types/product";
 import { ProductItem } from "./ProductItem";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -5,24 +6,52 @@ import { EmptyState } from "@/components/ui/EmptyState";
 interface ProductListProps {
   products: Product[];
   onEdit: (product: Product) => void;
-  onDelete: (id: string) => void;
+  onStockChange: (productId: string, newStock: number) => void;
 }
 
-export function ProductList({ products, onEdit, onDelete }: ProductListProps) {
+function ProductListComponent({
+  products,
+  onEdit,
+  onStockChange,
+}: ProductListProps) {
   if (products.length === 0) {
-    return <EmptyState message="No se encontraron productos" />;
+    return <EmptyState />;
   }
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-3">
+    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
       {products.map((product) => (
         <ProductItem
           key={product.id}
           product={product}
           onEdit={() => onEdit(product)}
-          onDelete={() => onDelete(product.id)}
+          onStockChange={onStockChange}
         />
       ))}
     </div>
   );
 }
+
+function arePropsEqual(
+  prevProps: ProductListProps,
+  nextProps: ProductListProps
+) {
+  // Comparar longitud y referencias de productos
+  if (prevProps.products.length !== nextProps.products.length) {
+    return false;
+  }
+
+  // Comparar cada producto
+  return prevProps.products.every((prevProduct, index) => {
+    const nextProduct = nextProps.products[index];
+    return (
+      prevProduct.id === nextProduct.id &&
+      prevProduct.stock === nextProduct.stock &&
+      prevProduct.visible === nextProduct.visible &&
+      prevProduct.name === nextProduct.name &&
+      prevProduct.imagePath === nextProduct.imagePath
+    );
+  });
+}
+
+export const ProductList = memo(ProductListComponent, arePropsEqual);

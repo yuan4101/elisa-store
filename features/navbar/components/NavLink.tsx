@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { useState, useEffect } from "react";
 
 interface NavLinkProps {
   href: string;
@@ -9,9 +11,24 @@ interface NavLinkProps {
 }
 
 export default function NavLink({ href, label, isActive }: NavLinkProps) {
+  const searchParams = useSearchParams();
+  const [finalHref, setFinalHref] = useState(href);
+
+  useEffect(() => {
+    if (href === "/catalogo") {
+      let query = searchParams.toString();
+
+      if (!query) {
+        query = localStorage.getItem("catalogFilters") || "";
+      }
+
+      setFinalHref(query ? `${href}?${query}` : href);
+    }
+  }, [href, searchParams]);
+
   return (
     <Link
-      href={href}
+      href={finalHref}
       className={`relative group hover:text-[var(--color-select)] transition-colors ${
         isActive ? "text-[var(--color-select)]" : ""
       }`}

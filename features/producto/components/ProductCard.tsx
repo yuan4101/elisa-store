@@ -28,7 +28,7 @@ export function ProductCard({ product, index }: ProductCardProps) {
       <div className="flex-1">
         <ProductImage
           imagePath={product.imagePath}
-          imageSize={ImageSize.Medium}
+          imageSize={ImageSize.MEDIUM}
           productName={product.name}
           priority={isPriority}
         />

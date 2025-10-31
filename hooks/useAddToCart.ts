@@ -30,7 +30,7 @@ export function useAddToCart() {
       id: product.id,
       name: product.name,
       price: product.price,
-      image: getProductImageUrl(product.imagePath, ImageSize.Small),
+      image: getProductImageUrl(product.imagePath, ImageSize.SMALL),
       stock: product.stock,
     });
 

@@ -56,8 +56,10 @@ export default function RootLayout({
         <NotificationProvider>
           <CartProvider>
             <Header />
-            <main className="max-w-6xl mx-auto px-5 py-3 flex-grow w-full">
-              {children}
+            <main className="flex-grow w-full flex flex-col">
+              <div className="max-w-6xl mx-auto px-2 py-2 md:py-3 w-full flex-grow flex flex-col">
+                {children}
+              </div>
             </main>
             <Footer />
           </CartProvider>

@@ -11,7 +11,7 @@ export function generateProductMetadata(product: Product | null): Metadata {
     };
   }
 
-  const imageUrl = getProductImageUrl(product.imagePath, ImageSize.Medium);
+  const imageUrl = getProductImageUrl(product.imagePath, ImageSize.MEDIUM);
 
   return {
     title: product.name,

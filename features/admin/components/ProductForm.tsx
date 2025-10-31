@@ -1,10 +1,7 @@
-import {
-  GripType,
-  GripValues,
-  SeasonType,
-  SeasonValues,
-  Product,
-} from "@/features/producto/types/product";
+import { Product } from "@/features/producto/types/product";
+import { Grip, GripEnumOptions } from "@/types/grip";
+import { Season, SeasonEnumOptions } from "@/types/season";
+
 import {
   TextInput,
   SelectInput,
@@ -50,14 +47,14 @@ export function ProductForm({ formData, onFieldChange }: ProductFormProps) {
           <SelectInput
             label="Agarre"
             value={formData.grip}
-            onChange={(value) => onFieldChange("grip", value as GripType)}
-            options={GripValues}
+            onChange={(value) => onFieldChange("grip", value as Grip)}
+            options={GripEnumOptions}
           />
           <SelectInput
             label="Temporada"
             value={formData.season}
-            onChange={(value) => onFieldChange("season", value as SeasonType)}
-            options={SeasonValues}
+            onChange={(value) => onFieldChange("season", value as Season)}
+            options={SeasonEnumOptions}
           />
         </div>
         <div className="flex items-center justify-between gap-5">

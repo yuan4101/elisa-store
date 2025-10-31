@@ -1,9 +1,7 @@
 import { useState } from "react";
-import {
-  Product,
-  GripType,
-  SeasonType,
-} from "@/features/producto/types/product";
+import {Product} from "@/features/producto/types/product";
+import { GripEnum } from "@/types/grip";
+import { SeasonEnum } from "@/types/season";
 
 interface UseProductFormProps {
   product: Product | null;
@@ -16,8 +14,8 @@ export function useProductForm({ product }: UseProductFormProps) {
     description: product?.description || "",
     price: product?.price || 0,
     stock: product?.stock || 0,
-    grip: product?.grip || GripType.NoEspecificado,
-    season: product?.season || SeasonType.NoEspecificado,
+    grip: product?.grip || GripEnum.SIN_DEFINIR,
+    season: product?.season || SeasonEnum.SIN_DEFINIR,
     visible: product?.visible ?? false,
   });
 
@@ -31,10 +29,9 @@ export function useProductForm({ product }: UseProductFormProps) {
   const buildProductData = (): Partial<Product> => {
     const data: Partial<Product> = {
       ...formData,
-      imagePath: `/${formData.sku}.webp`, // Usar SKU para el nombre de imagen
+      imagePath: `/${formData.sku}.webp`,
     };
 
-    // Si estamos editando, incluir el ID
     if (product) {
       data.id = product.id;
     }

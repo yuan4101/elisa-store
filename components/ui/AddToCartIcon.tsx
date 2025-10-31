@@ -1,3 +1,5 @@
+import { Badge } from "@/components/ui/badge";
+
 interface AddToCartIconProps {
   quantity?: number;
 }
@@ -6,9 +8,10 @@ export function AddToCartIcon({ quantity = 0 }: AddToCartIconProps) {
   return (
     <div className="relative">
       {quantity > 0 && (
-        <span className="absolute -top-2 -right-2 bg-[var(--color-badge)] text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-          {quantity}
-        </span>
+        <Badge
+          count={quantity}
+          classname="absolute -top-2 -right-2 bg-[var(--color-badge)] text-[var(--color-navbar-text)] text-xs font-bold rounded-sm h-4 w-4 flex items-center justify-center"
+        />
       )}
       <svg
         xmlns="http://www.w3.org/2000/svg"

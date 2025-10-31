@@ -7,7 +7,7 @@ import {
   Warning as WarningIcon,
   Info as InfoIcon,
 } from "@mui/icons-material";
-import { Snackbar, Alert } from "@mui/material";
+import { Snackbar, Alert, Slide } from "@mui/material";
 import { NotificationType } from "../context/NotificationContext";
 
 interface NotifyProps {
@@ -17,6 +17,20 @@ interface NotifyProps {
   onClose?: () => void;
 }
 
+// Hook para detectar si es móvil
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  return isMobile;
+}
+
 export default function Notify({
   message,
   type = NotificationType.Success,
@@ -24,6 +38,7 @@ export default function Notify({
   onClose,
 }: NotifyProps) {
   const [open, setOpen] = useState(false);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     if (message) {
@@ -50,15 +65,25 @@ export default function Notify({
       open={open}
       autoHideDuration={duration}
       onClose={() => setOpen(false)}
-      anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      sx={{
-        mt: {
-          xs: "145px",
-          md: "130px",
+      anchorOrigin={{
+        vertical: isMobile ? "bottom" : "top",
+        horizontal: isMobile ? "center" : "right",
+      }}
+      slots={{
+        transition: Slide,
+      }}
+      slotProps={{
+        transition: {
+          direction: isMobile ? "up" : "left",
         },
+      }}
+      sx={{
+        mb: { xs: 2, md: 0 },
+        mt: { xs: 0, md: "150px" },
         "& .MuiAlert-root": {
-          borderRadius: "6px",
+          borderRadius: "8px",
           alignItems: "center",
+          boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
         },
       }}
     >
@@ -66,7 +91,7 @@ export default function Notify({
         severity={type}
         icon={iconMap[type]}
         onClose={() => setOpen(false)}
-        sx={{ width: "100%", borderRadius: "6px" }}
+        sx={{ width: "100%", borderRadius: "8px" }}
       >
         {message}
       </Alert>
