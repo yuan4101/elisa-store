@@ -1,11 +1,9 @@
 "use client";
 
-import { useState } from "react";
-import { Product } from "@/features/producto/types/product";
+import { useState, useCallback, useEffect } from "react";
 import { useAdminProducts } from "@/features/admin/hooks/useAdminProducts";
 import { SearchBox } from "@/features/admin/components/SearchBox";
 import { ProductList } from "@/features/admin/components/ProductList";
-import { ProductFormModal } from "@/features/admin/components/ProductFormModal";
 import { useNotification } from "@/features/notification/hooks/useNotification";
 import { NotificationType } from "@/features/notification/types/notification";
 
@@ -18,15 +16,28 @@ export default function AdminPage() {
     error,
     searchQuery,
     setSearchQuery,
-    handleCreateProduct,
-    handleUpdateProduct,
-    handleDeleteProduct,
-    handleStockChange,
+    handleStockChange: originalHandleStockChange,
   } = useAdminProducts();
 
   const { showNotification } = useNotification();
-  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
-  const [showForm, setShowForm] = useState(false);
+
+  // ✅ Scroll al inicio cuando se autentica
+  useEffect(() => {
+    if (isAuthenticated) {
+      window.scrollTo(0, 0);
+    }
+  }, [isAuthenticated]);
+
+  // Optimizar handleStockChange con useCallback
+  const handleStockChange = useCallback(
+    (productId: string, newStock: number) => {
+      originalHandleStockChange(productId, newStock);
+    },
+    [originalHandleStockChange]
+  );
+
+  // Optimizar handleEdit con useCallback
+  const handleEdit = useCallback(() => {}, []);
 
   const handleLogin = (formEvent: React.FormEvent) => {
     formEvent.preventDefault();
@@ -44,51 +55,13 @@ export default function AdminPage() {
     }
   };
 
-  const handleEdit = (product: Product) => {
-    setEditingProduct(product);
-    setShowForm(true);
-  };
-
-  const handleCloseForm = () => {
-    setEditingProduct(null);
-    setShowForm(false);
-  };
-
-  const handleSubmit = async (
-    productData: Partial<Product>
-  ): Promise<boolean> => {
-    try {
-      if (editingProduct) {
-        // Actualizar producto existente
-        await handleUpdateProduct(editingProduct.id, productData);
-      } else {
-        // Crear nuevo producto
-        const { ...createData } = productData;
-        await handleCreateProduct(
-          createData as Omit<Product, "id" | "imagePath">
-        );
-      }
-
-      return true;
-    } catch (error) {
-      console.error("Error al guardar producto:", error);
-      showNotification({
-        message: `Error al ${
-          editingProduct ? "actualizar" : "crear"
-        } el producto`,
-        type: NotificationType.Error,
-      });
-      return false;
-    }
-  };
-
   // Pantalla de login
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="flex items-center justify-center container flex-grow ">
         <form
           onSubmit={handleLogin}
-          className="bg-white p-8 rounded-lg shadow-md w-96"
+          className="bg-white p-8 rounded-lg shadow-xl w-96"
         >
           <h2 className="text-2xl font-bold mb-6 text-center">
             Acceso Administrador
@@ -129,29 +102,19 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-4 md:py-8">
       {/* Header con título y botones de acción */}
-      <div className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
-        <h1 className="text-3xl font-bold text-gray-800">Administrar Stock</h1>
+      <div className="flex justify-between items-center mb-5 gap-2">
+        <span className="text-2xl md:text-3xl font-bold text-gray-800">
+          Administrar Stock
+        </span>
 
-        <div className="flex gap-3">
-          <button
-            onClick={() => {
-              setEditingProduct(null);
-              setShowForm(true);
-            }}
-            className="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors shadow-md"
-          >
-            + Nuevo Producto
-          </button>
-
-          <button
-            onClick={() => setIsAuthenticated(false)}
-            className="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors shadow-md"
-          >
-            Cerrar sesión
-          </button>
-        </div>
+        <button
+          onClick={() => setIsAuthenticated(false)}
+          className="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg font-semibold transition-colors shadow-md"
+        >
+          Cerrar sesión
+        </button>
       </div>
 
       {/* Buscador */}
@@ -165,17 +128,6 @@ export default function AdminPage() {
         onEdit={handleEdit}
         onStockChange={handleStockChange}
       />
-
-      {/* Modal de formulario con botón eliminar */}
-      {showForm && (
-        <ProductFormModal
-          isOpen={showForm}
-          onClose={handleCloseForm}
-          onSubmit={handleSubmit}
-          onDelete={handleDeleteProduct}
-          product={editingProduct}
-        />
-      )}
     </div>
   );
 }

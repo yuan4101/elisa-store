@@ -45,7 +45,7 @@ export function CatalogFilters({
               options={GripFilterOptions}
               onSelect={(value) => {
                 onGripChange(value as GripFilterValue);
-                window.scrollTo({ top: 0, behavior: "smooth" });
+                window.scrollTo({ top: -20, behavior: "smooth" });
               }}
               placeholder="Agarre"
             />
@@ -57,7 +57,7 @@ export function CatalogFilters({
               options={PriceSortOptions}
               onSelect={(value) => {
                 onPriceChange(value as PriceSortValue);
-                window.scrollTo({ top: 0, behavior: "smooth" });
+                window.scrollTo({ top: -20, behavior: "smooth" });
               }}
               placeholder="Precio"
             />
@@ -67,7 +67,7 @@ export function CatalogFilters({
             isVisible={hasActiveFilters}
             onClick={() => {
               onClear();
-              window.scrollTo({ top: 0, behavior: "smooth" });
+              window.scrollTo({ top: -20, behavior: "smooth" });
             }}
           />
         </div>

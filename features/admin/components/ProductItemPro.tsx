@@ -1,8 +1,7 @@
-import { memo } from "react";
 import { Product } from "@/features/producto/types/product";
 import { ProductImage } from "@/features/producto/components/ProductImage";
 import { ImageSize } from "@/features/producto/types/imageSize";
-import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
+import { PencilIcon, MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
 
 interface ProductItemProps {
   product: Product;
@@ -10,7 +9,11 @@ interface ProductItemProps {
   onStockChange: (productId: string, newStock: number) => void;
 }
 
-function ProductItemComponent({ product, onStockChange }: ProductItemProps) {
+export function ProductItem({
+  product,
+  onEdit,
+  onStockChange,
+}: ProductItemProps) {
   const handleIncrement = () => {
     onStockChange(product.id, product.stock + 1);
   };
@@ -38,6 +41,14 @@ function ProductItemComponent({ product, onStockChange }: ProductItemProps) {
         }
       `}
     >
+      {/* Botón de editar superpuesto en esquina superior derecha */}
+      <button
+        onClick={onEdit}
+        className="absolute top-2 right-2 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-[var(--color-select)] hover:bg-[var(--color-button-pink)] text-[var(--color-text)] shadow-lg transition-all duration-200 hover:scale-110"
+      >
+        <PencilIcon className="w-4 h-4" />
+      </button>
+
       {/* Imagen cuadrada */}
       <div className="relative aspect-square">
         <ProductImage
@@ -54,11 +65,11 @@ function ProductItemComponent({ product, onStockChange }: ProductItemProps) {
       </div>
 
       {/* Footer compacto */}
-      <div className="p-2">
+      <div className="p-2.5 space-y-2">
         {/* Nombre del producto */}
-        <span className="font-bold text-s text-[var(--color-text)] line-clamp-2 min-h-[2rem] leading-tight">
+        <h3 className="font-bold text-s text-[var(--color-text)] line-clamp-2 min-h-[2rem] leading-tight">
           {product.name}
-        </span>
+        </h3>
 
         {/* Separador */}
         <div className="h-px bg-gradient-to-r from-transparent via-[var(--color-select)] to-transparent"></div>
@@ -85,23 +96,9 @@ function ProductItemComponent({ product, onStockChange }: ProductItemProps) {
           </button>
         </div>
       </div>
+
+      {/* Barra decorativa inferior */}
+      <div className="h-1 bg-gradient-to-r from-[var(--color-navbar-bg)] via-[var(--color-badge)] to-[var(--color-select)]"></div>
     </div>
   );
 }
-
-// Comparador personalizado para React.memo
-function arePropsEqual(
-  prevProps: ProductItemProps,
-  nextProps: ProductItemProps
-) {
-  return (
-    prevProps.product.id === nextProps.product.id &&
-    prevProps.product.stock === nextProps.product.stock &&
-    prevProps.product.visible === nextProps.product.visible &&
-    prevProps.product.name === nextProps.product.name &&
-    prevProps.product.imagePath === nextProps.product.imagePath &&
-    prevProps.onStockChange === nextProps.onStockChange
-  );
-}
-
-export const ProductItem = memo(ProductItemComponent, arePropsEqual);
