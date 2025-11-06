@@ -103,7 +103,7 @@ export function Catalog() {
               />
             )}
 
-            {christmas.length < 0 && (
+            {christmas.length > 0 && (
               <ProductSection
                 products={christmas}
                 title="Navidad"
