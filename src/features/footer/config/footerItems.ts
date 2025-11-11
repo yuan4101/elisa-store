@@ -1,25 +1,14 @@
-export enum ItemType {
-  Text = "text",
-  Link = "link",
-}
-
-interface FooterItem {
-  type: ItemType;
-  href?: string;
-  text?: string;
-  className?: string;
-}
+import { FooterType, FooterItem } from "../types/FooterType";
 
 export const footerItems: FooterItem[] = [
   {
-    type: ItemType.Link,
-    href: "/about",
+    type: FooterType.Text,
     text: "Elisa&CO Hairclips",
     className: "font-bold",
   },
-  { type: ItemType.Link, href: "/contacto", text: "Contacto" },
+  { type: FooterType.Text, text: "Contacto" },
   {
-    type: ItemType.Text,
+    type: FooterType.Text,
     text: `© ${new Date().getFullYear()} All rights reserved`,
   },
 ];

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Fragment } from "react";
-import { footerItems, ItemType } from "../config/footerItems";
+import { FooterType } from "../types/FooterType";
+import { footerItems } from "../config/footerItems";
 
 export default function Footer() {
   return (
@@ -9,7 +10,7 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row items-center text-base">
           {footerItems.map((item, index) => (
             <Fragment key={index}>
-              {item.type === ItemType.Link ? (
+              {item.type === FooterType.Link ? (
                 <Link
                   href={item.href ?? "/"}
                   className={`${item.className} py-0`}
