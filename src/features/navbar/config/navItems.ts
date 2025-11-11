@@ -6,4 +6,5 @@ interface NavItem {
 export const navItems: NavItem[] = [
   { href: "/admin", label: "Admin" },
   { href: "/stock", label: "Stock" },
+  //
 ];
