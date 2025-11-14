@@ -1,6 +1,7 @@
 "use client";
 
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect, useRef } from "react";
+import { useProducts } from "@/features/producto/hooks/useProducts";
 
 export interface CartItem {
   id: string;
@@ -38,19 +39,69 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
     try {
       const savedCart = localStorage.getItem(CART_STORAGE_KEY);
       return savedCart ? JSON.parse(savedCart) : [];
-    } catch (error) {
-      console.error("Error loading cart from localStorage:", error);
+    } catch {
       return [];
     }
   });
 
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const hasValidated = useRef(false);
+  const { products } = useProducts();
+
+  useEffect(() => {
+    if (
+      !products ||
+      products.length === 0 ||
+      cartItems.length === 0 ||
+      hasValidated.current
+    )
+      return;
+
+    const productMap = new Map(products.map((p) => [p.id, p]));
+
+    const validatedCart = cartItems
+      .map((cartItem) => {
+        const currentProduct = productMap.get(cartItem.id);
+
+        if (!currentProduct) {
+          return null;
+        }
+
+        if (currentProduct.stock === 0) {
+          return null;
+        }
+
+        if (cartItem.quantity > currentProduct.stock) {
+          return {
+            ...cartItem,
+            quantity: currentProduct.stock,
+            stock: currentProduct.stock,
+          };
+        }
+
+        if (cartItem.stock !== currentProduct.stock) {
+          return {
+            ...cartItem,
+            stock: currentProduct.stock,
+          };
+        }
+
+        return cartItem;
+      })
+      .filter((item): item is CartItem => item !== null);
+
+    if (JSON.stringify(validatedCart) !== JSON.stringify(cartItems)) {
+      setCartItems(validatedCart);
+    }
+
+    hasValidated.current = true;
+  }, [products, cartItems]);
 
   useEffect(() => {
     try {
       localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
-    } catch (error) {
-      console.error("Error saving cart to localStorage:", error);
+    } catch {
+      return;
     }
   }, [cartItems]);
 
