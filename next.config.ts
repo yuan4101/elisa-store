@@ -13,7 +13,7 @@ const nextConfig: NextConfig = {
         pathname: "/storage/v1/object/public/product-images/**",
       },
     ],
-    minimumCacheTTL: 2678400, // 31 días
+    //minimumCacheTTL: 2678400, // 31 días
     formats: ["image/webp"],
   },
 };
