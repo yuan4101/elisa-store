@@ -13,6 +13,7 @@ export function useProductForm({ product }: UseProductFormProps) {
     name: product?.name || "",
     description: product?.description || "",
     price: product?.price || 0,
+    discountedPrice: product?.discountedPrice || undefined || 0,
     stock: product?.stock || 0,
     grip: product?.grip || GripEnum.SIN_DEFINIR,
     season: product?.season || SeasonEnum.SIN_DEFINIR,
