@@ -87,7 +87,7 @@ export function Catalog() {
           <div className="px-5 pt-1">
             {regular.length > 0 && <ProductGrid products={regular} />}
 
-            {love.length > 0 && (
+            {love.length < 0 && (
               <ProductSection
                 products={love}
                 title="Amor y amistad"
