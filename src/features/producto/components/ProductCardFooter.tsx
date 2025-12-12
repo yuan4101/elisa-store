@@ -4,6 +4,8 @@ import { formatPriceCOP } from "@/utils/formatters";
 interface ProductCardFooterProps {
   stock: number;
   price: number;
+  hasDiscount?: boolean | 0 | null | undefined;
+  discountedPrice: number;
   quantity: number;
   onAddToCart: (e: React.MouseEvent) => void;
 }
@@ -11,6 +13,8 @@ interface ProductCardFooterProps {
 export function ProductCardFooter({
   stock,
   price,
+  hasDiscount,
+  discountedPrice,
   quantity,
   onAddToCart,
 }: ProductCardFooterProps) {
@@ -29,7 +33,20 @@ export function ProductCardFooter({
   return (
     <div className="pl-4 pr-2 mt-auto">
       <div className="flex items-center justify-between gap-2">
-        <span>{formatPriceCOP(price)}</span>
+        <div className="flex flex-col">
+          {hasDiscount ? (
+            <div className="flex flex-col gap-0 pb-1">
+              <span className="text-xs text-gray-500 line-through">
+                {formatPriceCOP(price)}
+              </span>
+              <span className="text-base text-[var(--color-button-pink)]">
+                {formatPriceCOP(discountedPrice)}
+              </span>
+            </div>
+          ) : (
+            <span>{formatPriceCOP(price)}</span>
+          )}
+        </div>
         <button
           onClick={onAddToCart}
           className="p-2 rounded-full hover:bg-[var(--color-select)]"

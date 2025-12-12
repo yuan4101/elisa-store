@@ -8,6 +8,7 @@ export interface Product {
   description: string;
   grip: Grip;
   price: number;
+  discountedPrice: number;
   stock: number;
   imagePath: string;
   season: Season;

@@ -20,28 +20,44 @@ export function ProductCard({ product, index }: ProductCardProps) {
   const quantity = getProductQuantity(product.id);
   const isPriority = index < 15;
 
+  const discountPercentage = product.discountedPrice
+    ? Math.round(
+        ((product.price - product.discountedPrice) / product.price) * 100
+      )
+    : 0;
+  const hasDiscount =
+    product.discountedPrice && product.discountedPrice < product.price;
+
   return (
     <div
       onClick={() => goProduct(product.sku)}
-      className="lg:w-[190px] group bg-[var(--color-card-bg)] rounded-xl overflow-hidden shadow-md hover:shadow-xl hover:text-[var(--color-navbar-bg)] transition transform hover:-translate-y-1 cursor-pointer flex flex-col h-full"
+      className="relative transition transform hover:-translate-y-1 cursor-pointer"
     >
-      <div className="flex-1">
-        <ProductImage
-          imagePath={product.imagePath}
-          imageSize={ImageSize.MEDIUM}
-          productName={product.name}
-          priority={isPriority}
+      {hasDiscount && (
+        <div className="absolute top-2 right-3 z-10 bg-[var(--color-button-pink)] text-white px-2 py-1 rounded-lg text-sm font-bold shadow-md hover:opacity-90 transition-opacity">
+          -{discountPercentage}%
+        </div>
+      )}
+      <div className="lg:w-[190px] group bg-[var(--color-card-bg)] rounded-xl overflow-hidden shadow-md hover:shadow-xl hover:text-[var(--color-navbar-bg)] flex flex-col h-full">
+        <div className="flex-1">
+          <ProductImage
+            imagePath={product.imagePath}
+            imageSize={ImageSize.MEDIUM}
+            productName={product.name}
+            priority={isPriority}
+          />
+          <ProductCardTitle name={product.name} />
+        </div>
+
+        <ProductCardFooter
+          stock={product.stock}
+          price={product.price}
+          hasDiscount={hasDiscount}
+          discountedPrice={product.discountedPrice}
+          quantity={quantity}
+          onAddToCart={(e) => handleAddToCart(e, product)}
         />
-
-        <ProductCardTitle name={product.name} />
       </div>
-
-      <ProductCardFooter
-        stock={product.stock}
-        price={product.price}
-        quantity={quantity}
-        onAddToCart={(e) => handleAddToCart(e, product)}
-      />
     </div>
   );
 }
