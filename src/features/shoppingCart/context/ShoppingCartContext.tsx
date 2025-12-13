@@ -7,6 +7,7 @@ export interface CartItem {
   id: string;
   name: string;
   price: number;
+  originalPrice?: number;
   image: string;
   quantity: number;
   stock: number;
@@ -71,22 +72,22 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
           return null;
         }
 
-        if (cartItem.quantity > currentProduct.stock) {
-          return {
-            ...cartItem,
-            quantity: currentProduct.stock,
-            stock: currentProduct.stock,
-          };
-        }
+        const hasDiscount =
+          currentProduct.discountedPrice &&
+          currentProduct.discountedPrice < currentProduct.price;
+        const finalPrice = hasDiscount
+          ? currentProduct.discountedPrice
+          : currentProduct.price;
 
-        if (cartItem.stock !== currentProduct.stock) {
-          return {
-            ...cartItem,
-            stock: currentProduct.stock,
-          };
-        }
+        const updatedItem: CartItem = {
+          ...cartItem,
+          price: finalPrice,
+          originalPrice: hasDiscount ? currentProduct.price : undefined,
+          stock: currentProduct.stock,
+          quantity: Math.min(cartItem.quantity, currentProduct.stock),
+        };
 
-        return cartItem;
+        return updatedItem;
       })
       .filter((item): item is CartItem => item !== null);
 

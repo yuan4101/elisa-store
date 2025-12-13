@@ -18,10 +18,23 @@ export function ProductDetails({ product }: ProductDetailsProps) {
 
   const isOutOfStock = product.stock <= 0;
 
+  const hasDiscount =
+    product.discountedPrice && product.discountedPrice < product.price;
+  const discountPercentage = hasDiscount
+    ? Math.round(
+        ((product.price - product.discountedPrice) / product.price) * 100
+      )
+    : 0;
+
   return (
     <div className="max-w-7xl mx-auto px-3 pt-1">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-10">
-        <div className="bg-[var(--color-card)] rounded-2xl overflow-hidden shadow-md">
+        <div className="bg-[var(--color-card)] rounded-2xl overflow-hidden shadow-md relative">
+          {hasDiscount && (
+            <div className="absolute top-4 right-4 z-10 bg-[var(--color-button-pink)] text-white px-4 py-2 rounded-lg text-lg font-bold shadow-md">
+              -{discountPercentage}%
+            </div>
+          )}
           <ProductImage
             imagePath={product.imagePath}
             imageSize={ImageSize.LARGE}
@@ -40,12 +53,26 @@ export function ProductDetails({ product }: ProductDetailsProps) {
           </p>
 
           <div className="space-y-2">
-            <p className="text-xl font-semibold">
-              Precio:{" "}
-              <span className="text-[var(--color-navbar-bg)]">
-                {formatPriceCOP(product.price)}
-              </span>
-            </p>
+            <div>
+              <p className="text-xl font-semibold">Precio:</p>
+              {hasDiscount ? (
+                <div className="flex items-center gap-3 mt-1">
+                  <span className="text-lg text-gray-500 line-through">
+                    {formatPriceCOP(product.price)}
+                  </span>
+                  <span className="text-2xl font-bold text-[var(--color-button-pink)]">
+                    {formatPriceCOP(product.discountedPrice)}
+                  </span>
+                  <span className="bg-[var(--color-button-pink)] text-white px-2 py-1 rounded text-sm font-bold">
+                    -{discountPercentage}%
+                  </span>
+                </div>
+              ) : (
+                <span className="text-2xl font-bold text-[var(--color-navbar-bg)]">
+                  {formatPriceCOP(product.price)}
+                </span>
+              )}
+            </div>
             <p>Disponibles: {product.stock}</p>
             {product.grip && <p>Agarre: {product.grip}</p>}
           </div>

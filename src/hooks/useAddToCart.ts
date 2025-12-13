@@ -26,14 +26,14 @@ export function useAddToCart() {
       return;
     }
 
-    const finalPrice = product.discountedPrice && product.discountedPrice < product.price 
-      ? product.discountedPrice 
-      : product.price;
+    const hasDiscount = product.discountedPrice && product.discountedPrice < product.price;
+    const finalPrice = hasDiscount ? product.discountedPrice : product.price;
 
     addToCart({
       id: product.id,
       name: product.name,
       price: finalPrice,
+      originalPrice: hasDiscount ? product.price : undefined,
       image: getProductImageUrl(product.imagePath, ImageSize.SMALL),
       stock: product.stock,
     });

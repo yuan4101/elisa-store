@@ -16,6 +16,12 @@ function filterByGrip(products: Product[], gripFilter: GripFilterValue): Product
   return products.filter((product) => product.grip === (gripFilter as string));
 }
 
+function getFinalPrice(product: Product): number {
+  return product.discountedPrice && product.discountedPrice < product.price
+    ? product.discountedPrice
+    : product.price;
+}
+
 function sortByPrice(products: Product[], sortOrder: PriceSortValue): Product[] {
   if (sortOrder === PriceSort.NONE) {
     return products;
@@ -24,11 +30,11 @@ function sortByPrice(products: Product[], sortOrder: PriceSortValue): Product[] 
   const sorted = [...products];
 
   if (sortOrder === PriceSort.LOW_HIGH) {
-    return sorted.sort((a, b) => a.price - b.price);
+    return sorted.sort((a, b) => getFinalPrice(a) - getFinalPrice(b));
   }
 
   if (sortOrder === PriceSort.HIGH_LOW) {
-    return sorted.sort((a, b) => b.price - a.price);
+    return sorted.sort((a, b) => getFinalPrice(b) - getFinalPrice(a));
   }
 
   return sorted;

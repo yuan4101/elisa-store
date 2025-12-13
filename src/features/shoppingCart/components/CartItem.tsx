@@ -20,9 +20,21 @@ const CartItem = ({ item, updateQuantity, toggleCart }: cartItemProps) => {
     router.push(`/producto/${item.id}`);
   };
 
+  const discountPercentage =
+    item.originalPrice && item.originalPrice > item.price
+      ? Math.round(
+          ((item.originalPrice - item.price) / item.originalPrice) * 100
+        )
+      : null;
+
   return (
     <li className="flex py-3">
-      <div className="h-21 w-21 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+      <div className="h-21 w-21 flex-shrink-0 overflow-hidden rounded-md border border-gray-200 relative">
+        {discountPercentage && (
+          <div className="absolute top-1 right-1 bg-[var(--color-button-pink)] text-white px-1.5 py-0.5 rounded text-xs font-bold z-10">
+            -{discountPercentage}%
+          </div>
+        )}
         <div
           className="block h-full w-full cursor-pointer"
           onClick={handleImageClick}
@@ -45,7 +57,14 @@ const CartItem = ({ item, updateQuantity, toggleCart }: cartItemProps) => {
             <p className="ml-4">{formatPriceCOP(item.price * item.quantity)}</p>
           </div>
           <p className="text-sm text-[var(--color-text)]">
-            {formatPriceCOP(item.price)} x {item.quantity}
+            <span
+              className={
+                discountPercentage ? "text-[var(--color-button-pink)]" : ""
+              }
+            >
+              {formatPriceCOP(item.price)}
+            </span>{" "}
+            x {item.quantity}
           </p>
         </div>
         <div className="flex flex-1 justify-between text-sm">
