@@ -12,14 +12,12 @@ export async function createProduct(
   const response = await fetch(`${getBaseUrl()}/api/products`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(productData),
+    body: JSON.stringify({...productData, discountedPrice: null}),
   });
-
   if (!response.ok) {
     const errorData = await response.json();
     throw new Error(errorData.error || "Error al crear el producto");
   }
-
   return response.json();
 }
 
