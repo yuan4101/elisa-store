@@ -7,7 +7,7 @@ import { getBaseUrl } from "@/services/baseUrl";
  * @returns {Promise<Product>} Producto creado
  */
 export async function createProduct(
-  productData: Omit<Product, "id" | "imagePath">
+  productData: Omit<Product, "id" | "imagePath" | "discountedPrice">
 ): Promise<Product> {
   const response = await fetch(`${getBaseUrl()}/api/products`, {
     method: "POST",
