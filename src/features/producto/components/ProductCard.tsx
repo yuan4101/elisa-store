@@ -27,13 +27,14 @@ export function ProductCard({ product, index }: ProductCardProps) {
     : 0;
   const hasDiscount =
     product.discountedPrice && product.discountedPrice < product.price;
+  const hasStock = product.stock > 0 ? true : false;
 
   return (
     <div
       onClick={() => goProduct(product.sku)}
       className="relative transition transform hover:-translate-y-1 cursor-pointer"
     >
-      {hasDiscount && (
+      {hasDiscount && hasStock && (
         <div className="absolute top-2 right-3 z-10 bg-[var(--color-button-pink)] text-white px-2 py-1 rounded-lg text-sm font-bold shadow-md hover:opacity-90 transition-opacity">
           -{discountPercentage}%
         </div>
