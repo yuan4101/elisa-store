@@ -30,7 +30,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
     <div className="max-w-7xl mx-auto px-3 pt-1">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-10">
         <div className="bg-[var(--color-card)] rounded-2xl overflow-hidden shadow-md relative">
-          {hasDiscount && (
+          {hasDiscount && !isOutOfStock && (
             <div className="absolute top-4 right-4 z-10 bg-[var(--color-button-pink)] text-white px-4 py-2 rounded-lg text-lg font-bold shadow-md">
               -{discountPercentage}%
             </div>
@@ -55,7 +55,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
           <div className="space-y-2">
             <div>
               <p className="text-xl font-semibold">Precio:</p>
-              {hasDiscount ? (
+              {hasDiscount && !isOutOfStock ? (
                 <div className="flex items-center gap-3 mt-1">
                   <span className="text-lg text-gray-500 line-through">
                     {formatPriceCOP(product.price)}
