@@ -13,4 +13,5 @@ export interface Product {
   imagePath: string;
   season: Season;
   visible: boolean;
+  creationDate: string;
 }

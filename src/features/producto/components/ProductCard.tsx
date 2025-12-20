@@ -28,6 +28,28 @@ export function ProductCard({ product, index }: ProductCardProps) {
   const hasDiscount =
     product.discountedPrice && product.discountedPrice < product.price;
   const hasStock = product.stock > 0 ? true : false;
+  function isNewProduct(
+    creationDate: string,
+    diasParaSerNuevo: number = 30
+  ): boolean {
+    // Separar la fecha en partes
+    const [year, month, day] = creationDate.split("-").map(Number);
+
+    // Crear fecha en zona horaria local (mes es 0-indexado)
+    const fechaCreacion = new Date(year, month - 1, day);
+    const fechaActual = new Date();
+
+    // Normalizar a medianoche para comparar solo días
+    fechaCreacion.setHours(0, 0, 0, 0);
+    fechaActual.setHours(0, 0, 0, 0);
+
+    const diffEnMilisegundos = fechaActual.getTime() - fechaCreacion.getTime();
+    const diffEnDias = Math.floor(diffEnMilisegundos / (1000 * 60 * 60 * 24));
+
+    return diffEnDias < diasParaSerNuevo;
+  }
+
+  const isNew = isNewProduct(product.creationDate, 30);
 
   return (
     <div
@@ -35,8 +57,13 @@ export function ProductCard({ product, index }: ProductCardProps) {
       className="relative transition transform hover:-translate-y-1 cursor-pointer"
     >
       {hasDiscount && hasStock && (
-        <div className="absolute top-2 right-3 z-10 bg-[var(--color-button-pink)] text-white px-2 py-1 rounded-lg text-sm font-bold shadow-md hover:opacity-90 transition-opacity">
+        <div className="absolute top-3 right-3 z-10 bg-[var(--color-button-pink)] text-white px-2 py-1 rounded-lg text-sm font-bold shadow-md hover:opacity-90 transition-opacity">
           -{discountPercentage}%
+        </div>
+      )}
+      {isNew && hasStock && (
+        <div className="absolute top-3 left-0 z-10 bg-[var(--color-navbar-bg)] text-white px-2 py-1 rounded-e-lg text-sm font-bold shadow-md hover:opacity-90 transition-opacity">
+          Nuevo
         </div>
       )}
       <div className="lg:w-[190px] group bg-[var(--color-card-bg)] rounded-xl overflow-hidden shadow-md hover:shadow-xl hover:text-[var(--color-navbar-bg)] flex flex-col h-full">

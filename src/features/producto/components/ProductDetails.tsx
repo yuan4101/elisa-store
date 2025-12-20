@@ -26,6 +26,29 @@ export function ProductDetails({ product }: ProductDetailsProps) {
       )
     : 0;
 
+  function isNewProduct(
+    creationDate: string,
+    diasParaSerNuevo: number = 30
+  ): boolean {
+    // Separar la fecha en partes
+    const [year, month, day] = creationDate.split("-").map(Number);
+
+    // Crear fecha en zona horaria local (mes es 0-indexado)
+    const fechaCreacion = new Date(year, month - 1, day);
+    const fechaActual = new Date();
+
+    // Normalizar a medianoche para comparar solo días
+    fechaCreacion.setHours(0, 0, 0, 0);
+    fechaActual.setHours(0, 0, 0, 0);
+
+    const diffEnMilisegundos = fechaActual.getTime() - fechaCreacion.getTime();
+    const diffEnDias = Math.floor(diffEnMilisegundos / (1000 * 60 * 60 * 24));
+
+    return diffEnDias < diasParaSerNuevo;
+  }
+
+  const isNew = isNewProduct(product.creationDate, 30);
+
   return (
     <div className="max-w-7xl mx-auto px-3 pt-1">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-10">
@@ -33,6 +56,11 @@ export function ProductDetails({ product }: ProductDetailsProps) {
           {hasDiscount && !isOutOfStock && (
             <div className="absolute top-4 right-4 z-10 bg-[var(--color-button-pink)] text-white px-4 py-2 rounded-lg text-lg font-bold shadow-md">
               -{discountPercentage}%
+            </div>
+          )}
+          {isNew && !isOutOfStock && (
+            <div className="absolute top-5 left-0 z-10 bg-[var(--color-navbar-bg)] text-white px-2 py-1 rounded-e-lg text-sm font-bold shadow-md hover:opacity-90 transition-opacity">
+              Nueva referencia
             </div>
           )}
           <ProductImage

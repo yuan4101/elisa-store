@@ -16,7 +16,7 @@ export function useAdminProducts() {
   const { showNotification } = useNotification();
 
   const handleCreateProduct = async (
-    productData: Omit<Product, "id" | "imagePath" | "discountedPrice">
+    productData: Omit<Product, "id" | "imagePath" | "discountedPrice" | "creationDate">
   ) => {
     try {
       await createProduct(productData);
