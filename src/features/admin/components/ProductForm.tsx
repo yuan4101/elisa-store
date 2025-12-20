@@ -13,8 +13,16 @@ import { formatPriceCOP, sanitizeProductId } from "@/utils/formatters";
 import { getStockMessage } from "@/utils/stockMessages";
 
 interface ProductFormProps {
-  formData: Omit<Product, "id" | "imagePath">;
-  onFieldChange: <K extends keyof Omit<Product, "id" | "imagePath">>(
+  formData: Omit<
+    Product,
+    "id" | "imagePath" | "discountedPrice" | "creationDate"
+  >;
+  onFieldChange: <
+    K extends keyof Omit<
+      Product,
+      "id" | "imagePath" | "discountedPrice" | "creationDate"
+    >
+  >(
     field: K,
     value: Omit<Product, "id" | "imagePath">[K]
   ) => void;

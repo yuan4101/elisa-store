@@ -8,7 +8,7 @@ interface UseProductFormProps {
 }
 
 export function useProductForm({ product }: UseProductFormProps) {
-  const [formData, setFormData] = useState<Omit<Product, "id" | "imagePath">>({
+  const [formData, setFormData] = useState<Omit<Product, "id" | "imagePath" | "creationDate">>({
     sku: product?.sku || "",
     name: product?.name || "",
     description: product?.description || "",

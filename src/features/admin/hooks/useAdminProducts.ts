@@ -22,7 +22,7 @@ export function useAdminProducts() {
   }
 
   const handleCreateProduct = useCallback(
-    async (productData: Omit<Product, "id" | "imagePath">) => {
+    async (productData: Omit<Product, "id" | "imagePath" | "discountedPrice" | "creationDate">) => {
       try {
         await createProduct(productData);
         showNotification({
