@@ -1,39 +1,62 @@
-"use client";
+import { Metadata } from "next";
+import ProductPageClient from "./ProductPageClient";
 
-import { notFound } from "next/navigation";
-import { ProductDetails } from "@/features/producto/components/ProductDetails";
-import { useProducts } from "@/features/producto/hooks/useProducts";
-import { Product } from "@/features/producto/types/product";
-import { useParams } from "next/navigation";
+type Props = {
+  params: Promise<{ sku: string }>;
+};
 
-export default function ProductPage() {
-  const params = useParams();
-  const sku = params.sku as string;
-  const { products, loading, error } = useProducts();
+// ✅ generateMetadata - Server Component
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { sku } = await params;
 
-  if (loading) {
-    return (
-      <div className="max-w-7xl mx-auto px-3 pt-1 min-h-screen flex items-center justify-center">
-        <div className="text-[var(--color-text)]">Cargando...</div>
-      </div>
-    );
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+    const response = await fetch(`${baseUrl}/api/products/sku/${sku}`, {
+      next: { revalidate: 3600 },
+    });
+
+    if (!response.ok) {
+      return {
+        title: "Producto no encontrado",
+        description: "Este producto no existe en el catálogo",
+      };
+    }
+
+    const product = await response.json();
+
+    const imageUrl = product.image_path
+      ? `${process.env.NEXT_PUBLIC_SUPABASE_STORAGE}/md/${product.image_path}`
+      : "/icons/file.svg";
+
+    return {
+      title: `${product.name} - Elisa & CO`,
+      description: product.description,
+      openGraph: {
+        title: product.name,
+        description: product.description,
+        images: [
+          {
+            url: imageUrl,
+            width: 1200,
+            height: 630,
+          },
+        ],
+        type: "website",
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: product.name,
+        description: product.description,
+        images: [imageUrl],
+      },
+    };
+  } catch {
+    return {
+      title: "Error",
+      description: "Error al cargar el producto",
+    };
   }
-
-  if (error) {
-    return (
-      <div className="max-w-7xl mx-auto px-3 pt-1 min-h-screen flex items-center justify-center">
-        <div className="text-center text-red-500">
-          Error al cargar el producto
-        </div>
-      </div>
-    );
-  }
-
-  const product = products.find((p: Product) => p.sku === sku);
-
-  if (!product) {
-    notFound();
-  }
-
-  return <ProductDetails product={product} />;
 }
+
+// ✅ Exporta el Client Component
+export default ProductPageClient;
