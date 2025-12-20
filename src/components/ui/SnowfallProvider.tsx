@@ -10,7 +10,7 @@ export default function SnowfallProvider({
   return (
     <>
       <Snowfall
-        color="#e6f2ff"
+        color="#d0e8f2"
         snowflakeCount={50}
         speed={[1, 2]}
         style={{
@@ -19,6 +19,7 @@ export default function SnowfallProvider({
           height: "100vh",
           zIndex: 9999,
           pointerEvents: "none",
+          filter: "drop-shadow(0px 0px 1px rgba(0, 0, 0, 0.15))",
         }}
       />
       {children}
