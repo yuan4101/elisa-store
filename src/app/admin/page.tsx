@@ -58,7 +58,7 @@ export default function AdminPage() {
   // Pantalla de login
   if (!isAuthenticated) {
     return (
-      <div className="flex items-center justify-center container flex-grow ">
+      <div className="flex items-center justify-center container grow ">
         <form
           onSubmit={handleLogin}
           className="bg-white p-8 rounded-lg shadow-xl w-96"
