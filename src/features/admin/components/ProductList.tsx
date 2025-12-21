@@ -5,14 +5,16 @@ import { EmptyState } from "@/components/ui/EmptyState";
 
 interface ProductListProps {
   products: Product[];
-  onEdit: (product: Product) => void;
+  onEdit?: (product: Product) => void;
   onStockChange: (productId: string, newStock: number) => void;
+  showEditButton?: boolean;
 }
 
 function ProductListComponent({
   products,
   onEdit,
   onStockChange,
+  showEditButton = true,
 }: ProductListProps) {
   if (products.length === 0) {
     return <EmptyState />;
@@ -24,7 +26,7 @@ function ProductListComponent({
         <ProductItem
           key={product.id}
           product={product}
-          onEdit={() => onEdit(product)}
+          onEdit={showEditButton && onEdit ? () => onEdit(product) : undefined}
           onStockChange={onStockChange}
         />
       ))}
@@ -36,12 +38,10 @@ function arePropsEqual(
   prevProps: ProductListProps,
   nextProps: ProductListProps
 ) {
-  // Comparar longitud y referencias de productos
   if (prevProps.products.length !== nextProps.products.length) {
     return false;
   }
 
-  // Comparar cada producto
   return prevProps.products.every((prevProduct, index) => {
     const nextProduct = nextProps.products[index];
     return (

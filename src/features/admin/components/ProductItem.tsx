@@ -2,15 +2,19 @@ import { memo } from "react";
 import { Product } from "@/features/producto/types/product";
 import { ProductImage } from "@/features/producto/components/ProductImage";
 import { ImageSize } from "@/features/producto/types/imageSize";
-import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
+import { MinusIcon, PlusIcon, PencilIcon } from "@heroicons/react/24/outline";
 
 interface ProductItemProps {
   product: Product;
-  onEdit: () => void;
+  onEdit?: () => void;
   onStockChange: (productId: string, newStock: number) => void;
 }
 
-function ProductItemComponent({ product, onStockChange }: ProductItemProps) {
+function ProductItemComponent({
+  product,
+  onEdit,
+  onStockChange,
+}: ProductItemProps) {
   const handleIncrement = () => {
     onStockChange(product.id, product.stock + 1);
   };
@@ -50,6 +54,17 @@ function ProductItemComponent({ product, onStockChange }: ProductItemProps) {
           <div className="absolute top-2 left-2 bg-[var(--color-navbar-bg)] text-white text-[10px] px-2 py-1 rounded-full font-semibold shadow-lg">
             Oculto
           </div>
+        )}
+
+        {/* Botón editar */}
+        {onEdit && (
+          <button
+            onClick={onEdit}
+            className="absolute top-2 right-2 w-8 h-8 flex items-center justify-center rounded-full bg-blue-500 hover:bg-blue-600 text-white transition-all duration-200 shadow-md hover:shadow-lg"
+            aria-label="Editar producto"
+          >
+            <PencilIcon className="w-4 h-4" />
+          </button>
         )}
       </div>
 

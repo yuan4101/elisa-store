@@ -4,14 +4,12 @@ import { useState } from "react";
 import { Product } from "@/features/producto/types/product";
 import { useAdminProducts } from "@/features/admin/hooks/useAdminProductsPro";
 import { SearchBox } from "@/features/admin/components/SearchBox";
-import { ProductList } from "@/features/admin/components/ProductListPro";
+import { ProductList } from "@/features/admin/components/ProductList";
 import { ProductFormModal } from "@/features/admin/components/ProductFormModal";
 import { useNotification } from "@/features/notification/hooks/useNotification";
 import { NotificationType } from "@/features/notification/types/notification";
 
-export default function AdminPage() {
-  const [password, setPassword] = useState("");
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+export default function AdminDashboardPage() {
   const {
     products,
     loading,
@@ -27,22 +25,6 @@ export default function AdminPage() {
   const { showNotification } = useNotification();
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [showForm, setShowForm] = useState(false);
-
-  const handleLogin = (formEvent: React.FormEvent) => {
-    formEvent.preventDefault();
-    if (password === "camila29") {
-      setIsAuthenticated(true);
-      showNotification({
-        message: "Inicio de sesión con éxito",
-        type: NotificationType.Success,
-      });
-    } else {
-      showNotification({
-        message: "Contraseña incorrecta",
-        type: NotificationType.Error,
-      });
-    }
-  };
 
   const handleEdit = (product: Product) => {
     setEditingProduct(product);
@@ -70,8 +52,7 @@ export default function AdminPage() {
       }
 
       return true;
-    } catch (error) {
-      console.error("Error al guardar producto:", error);
+    } catch {
       showNotification({
         message: `Error al ${
           editingProduct ? "actualizar" : "crear"
@@ -81,36 +62,6 @@ export default function AdminPage() {
       return false;
     }
   };
-
-  // Pantalla de login
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
-        <form
-          onSubmit={handleLogin}
-          className="bg-white p-8 rounded-lg shadow-md w-96"
-        >
-          <h2 className="text-2xl font-bold mb-6 text-center">
-            Acceso Administrador
-          </h2>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Contraseña"
-            className="w-full p-2 mb-4 border rounded"
-            required
-          />
-          <button
-            type="submit"
-            className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition"
-          >
-            Ingresar
-          </button>
-        </form>
-      </div>
-    );
-  }
 
   if (loading) {
     return (
@@ -143,13 +94,6 @@ export default function AdminPage() {
             className="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors shadow-md"
           >
             + Nuevo Producto
-          </button>
-
-          <button
-            onClick={() => setIsAuthenticated(false)}
-            className="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors shadow-md"
-          >
-            Cerrar sesión
           </button>
         </div>
       </div>
