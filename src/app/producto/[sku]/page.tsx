@@ -24,8 +24,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
     const product = await response.json();
 
-    const imageUrl = product.image_path
-      ? `${process.env.NEXT_PUBLIC_SUPABASE_STORAGE}/md/${product.image_path}`
+    const imageUrl = product.imagePath
+      ? `${process.env.NEXT_PUBLIC_SUPABASE_STORAGE}/md/${product.imagePath}`
       : "/icons/file.svg";
 
     return {
