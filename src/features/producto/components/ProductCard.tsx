@@ -1,7 +1,5 @@
 import { Product } from "../types/product";
 import { useNavigation } from "@/hooks/useNavigation";
-import { useAddToCart } from "@/hooks/useAddToCart";
-import { useCart } from "@/features/shoppingCart/hooks/useCart";
 import { ProductImage } from "./ProductImage";
 import { ImageSize } from "../types/imageSize";
 import { ProductCardTitle } from "./ProductCardTitle";
@@ -14,10 +12,7 @@ interface ProductCardProps {
 
 export function ProductCard({ product, index }: ProductCardProps) {
   const { goProduct } = useNavigation();
-  const { handleAddToCart } = useAddToCart();
-  const { getProductQuantity } = useCart();
 
-  const quantity = getProductQuantity(product.id);
   const isPriority = index < 15;
 
   return (
@@ -36,12 +31,7 @@ export function ProductCard({ product, index }: ProductCardProps) {
         <ProductCardTitle name={product.name} />
       </div>
 
-      <ProductCardFooter
-        stock={product.stock}
-        price={product.price}
-        quantity={quantity}
-        onAddToCart={(e) => handleAddToCart(e, product)}
-      />
+      <ProductCardFooter stock={product.stock} price={product.price} />
     </div>
   );
 }
