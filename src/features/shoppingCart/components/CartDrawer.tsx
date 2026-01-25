@@ -23,7 +23,7 @@ const CartDrawer = ({
   clearCart,
 }: cartDrawerProps) => {
   return (
-    <Dialog as="div" className="relative z-50" onClose={toggleCart}>
+    <Dialog as="div" className="relative z-70" onClose={toggleCart}>
       <TransitionChild as="div" {...fadeTransition}>
         <div className="fixed inset-0 bg-black/30" />
       </TransitionChild>

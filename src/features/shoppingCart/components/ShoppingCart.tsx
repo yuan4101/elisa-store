@@ -12,7 +12,7 @@ export default function ShoppingCart() {
 
   const precioTotal = cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
-    0
+    0,
   );
   const whatsappLink = generateWhatsAppMessage(cartItems, precioTotal);
 

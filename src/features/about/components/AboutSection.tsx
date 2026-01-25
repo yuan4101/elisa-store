@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import { useImageLoader } from "../hooks/useImageLoader";
+import { AboutTitle } from "@/components/ui/AboutTitle";
 
 interface AboutSectionProps {
   content: string[];
@@ -13,16 +14,7 @@ export default function AboutSection({ content }: AboutSectionProps) {
     <div className="pb-8 py-2 md:pt-5">
       <div className="flex flex-col lg:flex-row md:items-start gap-7 lg:gap-30">
         <div className="flex flex-col items-center gap-3">
-          <div>
-            <Image
-              src={"/aboutTitle.webp"}
-              alt="About Title"
-              width={700}
-              height={260}
-              priority={true}
-              className="object-contain w-auto max-h-[130px]"
-            />
-          </div>
+          <AboutTitle />
           <div className="text-lg space-y-4">
             {content.map((paragraph, index) => (
               <p key={index}>{paragraph}</p>

@@ -1,5 +1,5 @@
-import { redirect } from "next/navigation";
+import HomeSection from "@/features/Home/components/HomeSection";
 
 export default function Home() {
-    redirect("/catalogo");
+  return <HomeSection />;
 }

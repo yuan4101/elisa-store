@@ -15,16 +15,16 @@ import { getStockMessage } from "@/utils/stockMessages";
 interface ProductFormProps {
   formData: Omit<
     Product,
-    "id" | "imagePath" | "discountedPrice" | "creationDate"
+    "id" | "imagePath" | "discountedPrice" | "creationDate" | "type"
   >;
   onFieldChange: <
     K extends keyof Omit<
       Product,
-      "id" | "imagePath" | "discountedPrice" | "creationDate"
-    >
+      "id" | "imagePath" | "discountedPrice" | "creationDate" | "type"
+    >,
   >(
     field: K,
-    value: Omit<Product, "id" | "imagePath">[K]
+    value: Omit<Product, "id" | "imagePath" | "type">[K],
   ) => void;
 }
 

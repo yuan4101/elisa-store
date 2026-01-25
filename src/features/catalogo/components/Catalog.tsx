@@ -1,7 +1,5 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
 import { useProducts } from "../../producto/hooks/useProducts";
 import { useProductsByCategory } from "../hooks/useProductsByCategory";
 import { useProductFiltersWithURL } from "../hooks/useProductFiltersWithURL";
@@ -12,14 +10,26 @@ import { ProductSection } from "./ProductSection";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { CatalogLoading } from "./CatalogLoading";
 import { CatalogError } from "./CatalogError";
+import { Product } from "../../producto/types/product";
 
-export function Catalog() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
+interface CatalogProps {
+  productType: "Hairclip" | "Peineta" | "all";
+  showSeasons: boolean;
+  showGripFilter: boolean;
+  showPriceFilter: boolean;
+}
+
+export function Catalog({
+  productType,
+  showSeasons,
+  showGripFilter,
+  showPriceFilter,
+}: CatalogProps) {
   const { products, loading, error, refetch } = useProducts();
 
-  // ✅ useRef para ejecutar solo una vez
-  const hasRestoredFilters = useRef(false);
+  // Key única para localStorage según tipo de producto
+  const filterStorageKey =
+    productType === "all" ? "catalogFilters" : `catalogFilters_${productType}`;
 
   const {
     filters,
@@ -27,33 +37,18 @@ export function Catalog() {
     updatePriceSortFilter,
     clearFilters,
     hasActiveFilters,
-  } = useProductFiltersWithURL();
+  } = useProductFiltersWithURL(filterStorageKey);
 
-  const filteredProducts = applyFilters(products, filters);
+  // Filtrar productos por tipo (si no es "all")
+  const productsByType =
+    productType === "all"
+      ? products
+      : products.filter((product: Product) => product.type === productType);
+
+  const filteredProducts = applyFilters(productsByType, filters);
 
   const { regular, love, halloween, christmas } =
     useProductsByCategory(filteredProducts);
-
-  // ✅ Restaurar filtros desde localStorage al cargar la página
-  useEffect(() => {
-    // Solo ejecutar si aún no hemos restaurado
-    if (!hasRestoredFilters.current) {
-      const currentQuery = searchParams.toString();
-
-      // Solo si NO hay query params en la URL actual
-      if (!currentQuery) {
-        const savedFilters = localStorage.getItem("catalogFilters");
-
-        // Si hay filtros guardados, redirigir a la URL con filtros
-        if (savedFilters) {
-          router.replace(`/catalogo?${savedFilters}`);
-        }
-      }
-
-      // Marcar como completado para evitar ejecuciones futuras
-      hasRestoredFilters.current = true;
-    }
-  }, [router, searchParams]); // ✅ Incluye dependencias, sin warning
 
   if (loading) {
     return <CatalogLoading />;
@@ -78,6 +73,8 @@ export function Catalog() {
         onPriceChange={updatePriceSortFilter}
         onClear={clearFilters}
         hasActiveFilters={hasActiveFilters}
+        showGripFilter={showGripFilter}
+        showPriceFilter={showPriceFilter}
       />
 
       {hasNoResults ? (
@@ -85,30 +82,38 @@ export function Catalog() {
       ) : (
         <>
           <div className="px-5 pt-1">
-            {regular.length > 0 && <ProductGrid products={regular} />}
+            {/* Si showSeasons es false, mostrar todo junto */}
+            {!showSeasons ? (
+              <ProductGrid products={filteredProducts} />
+            ) : (
+              <>
+                {/* Si showSeasons es true, separar por temporadas */}
+                {regular.length > 0 && <ProductGrid products={regular} />}
 
-            {love.length < 0 && (
-              <ProductSection
-                products={love}
-                title="Amor y amistad"
-                defaultExpanded={false}
-              />
-            )}
+                {love.length > 0 && (
+                  <ProductSection
+                    products={love}
+                    title="Amor y amistad"
+                    defaultExpanded={false}
+                  />
+                )}
 
-            {halloween.length > 0 && (
-              <ProductSection
-                products={halloween}
-                title="Halloween"
-                defaultExpanded={false}
-              />
-            )}
+                {halloween.length > 0 && (
+                  <ProductSection
+                    products={halloween}
+                    title="Halloween"
+                    defaultExpanded={false}
+                  />
+                )}
 
-            {christmas.length > 0 && (
-              <ProductSection
-                products={christmas}
-                title="Navidad"
-                defaultExpanded={false}
-              />
+                {christmas.length > 0 && (
+                  <ProductSection
+                    products={christmas}
+                    title="Navidad"
+                    defaultExpanded={false}
+                  />
+                )}
+              </>
             )}
           </div>
         </>
