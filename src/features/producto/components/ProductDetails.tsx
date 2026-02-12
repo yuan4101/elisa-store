@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { Product } from "@/features/producto/types/product";
 import { ProductImage } from "@/features/producto/components/ProductImage";
 import { ImageSize } from "../types/imageSize";
@@ -22,13 +21,13 @@ export function ProductDetails({ product }: ProductDetailsProps) {
     product.discountedPrice && product.discountedPrice < product.price;
   const discountPercentage = hasDiscount
     ? Math.round(
-        ((product.price - product.discountedPrice) / product.price) * 100
+        ((product.price - product.discountedPrice) / product.price) * 100,
       )
     : 0;
 
   function isNewProduct(
     creationDate: string,
-    diasParaSerNuevo: number = 30
+    diasParaSerNuevo: number = 30,
   ): boolean {
     // Separar la fecha en partes
     const [year, month, day] = creationDate.split("-").map(Number);
@@ -50,9 +49,9 @@ export function ProductDetails({ product }: ProductDetailsProps) {
   const isNew = isNewProduct(product.creationDate, 30);
 
   return (
-    <div className="max-w-7xl mx-auto px-3 pt-1">
+    <div className="max-w-7xl mx-auto w-full px-3 pt-1">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-10">
-        <div className="bg-[var(--color-card)] rounded-2xl overflow-hidden shadow-md relative">
+        <div className="bg-[var(--color-card)] rounded-2xl overflow-hidden shadow-md relative aspect-square max-w-[600px] mx-auto w-full">
           {hasDiscount && !isOutOfStock && (
             <div className="absolute top-4 right-4 z-10 bg-[var(--color-button-pink)] text-white px-4 py-2 rounded-lg text-lg font-bold shadow-md">
               -{discountPercentage}%
@@ -71,12 +70,12 @@ export function ProductDetails({ product }: ProductDetailsProps) {
           />
         </div>
 
-        <div className="space-y-6 md:pt-8">
-          <h1 className="text-3xl font-bold text-[var(--color-text)]">
+        <div className="space-y-6 md:pt-8 min-w-0">
+          <h1 className="text-3xl font-bold text-[var(--color-text)] break-words">
             {product.name}
           </h1>
 
-          <p className="text-lg text-[var(--color-text)]">
+          <p className="text-lg text-[var(--color-text)] break-words">
             {product.description}
           </p>
 
