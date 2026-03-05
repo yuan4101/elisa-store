@@ -6,12 +6,14 @@ import {
   PaintBrushIcon,
   ScaleIcon,
 } from "@heroicons/react/24/outline";
+import { FavoriteProductsSection } from "./FavoriteProductsSection";
+import { FavoritesTitle } from "@/components/ui/FavoritesTitle";
 
 export default function HomeSection() {
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen w-full pt-10 pb-4 md:px-40">
       {/* Hero Section */}
-      <section className="relative px-6 py-16 md:py-24 bg-gradient-to-b from-white to-[#f9f9f9]">
+      <section className="relative px-6 py-16 md:py-10 rounded-xl bg-gradient-to-b from-white to-[#f9f9f9]">
         <div className="max-w-6xl mx-auto text-center">
           <h1
             className="text-4xl md:text-6xl font-medium italic mb-6"
@@ -24,7 +26,14 @@ export default function HomeSection() {
             <strong>acetato de celulosa</strong>, un material excepcional que
             combina elegancia, durabilidad y responsabilidad ambiental.
           </p>
-          <div className="glow-effect"></div>
+        </div>
+      </section>
+
+      {/* Favorites */}
+      <section className="w-full md:p-4">
+        <div>
+          <FavoritesTitle className="relative z-50" />
+          <FavoriteProductsSection />
         </div>
       </section>
 

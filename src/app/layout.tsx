@@ -57,7 +57,7 @@ export default function RootLayout({
           <CartProvider>
             <Header />
             <main className="grow w-full flex flex-col">
-              <div className="max-w-6xl mx-auto px-2 py-2 md:py-3 w-full grow flex flex-col">
+              <div className="max-w-8xl p-2 md:p-4 w-full grow flex flex-col md:flex-row md:justify-center">
                 {children}
               </div>
             </main>

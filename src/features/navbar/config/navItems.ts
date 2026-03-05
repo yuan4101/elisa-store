@@ -37,6 +37,7 @@ export const navItems: NavItem[] = [
     items: [
       { label: "Hairclips", href: "/catalogo/hairclips" },
       { label: "Peinetas", href: "/catalogo/peinetas" },
+      { label: "Todos", href: "/catalogo" },
       //{ label: "Pañoletas", href: "/catalogo/pañoletas" },
       //{ label: "Cosmetiqueras", href: "/catalogo/cosmetiqueras" },
     ],

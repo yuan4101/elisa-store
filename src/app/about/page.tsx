@@ -10,7 +10,7 @@ export default function AboutPage() {
       " sin necesidad de esfuerzo.",
   ];
   return (
-    <div>
+    <div className="max-w-6xl">
       <AboutSection content={content} />
     </div>
   );

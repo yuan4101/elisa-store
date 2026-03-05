@@ -1,13 +1,14 @@
 interface ProductCardTitleProps {
   name: string;
+  size?: string;
 }
 
-export function ProductCardTitle({ name }: ProductCardTitleProps) {
+export function ProductCardTitle({ name, size = "md" }: ProductCardTitleProps) {
   return (
-    <div className="pt-2 px-4">
-      <h2 className="text-md font-normal text-[var(--color-text)] group-hover:text-[var(--color-navbar-bg)] text-left">
-        {name}
-      </h2>
-    </div>
+    <h2
+      className={`h-full text-${size} font-normal text-[var(--color-text)] group-hover:text-[var(--color-navbar-bg)] text-left`}
+    >
+      {name}
+    </h2>
   );
 }
