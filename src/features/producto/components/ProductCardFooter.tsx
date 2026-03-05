@@ -5,7 +5,7 @@ interface ProductCardFooterProps {
   stock: number;
   price: number;
   hasDiscount?: boolean | 0 | null | undefined;
-  discountedPrice: number;
+  discountedPrice: number | null;
   quantity: number;
   onAddToCart: (e: React.MouseEvent) => void;
 }

@@ -21,7 +21,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
     product.discountedPrice && product.discountedPrice < product.price;
   const discountPercentage = hasDiscount
     ? Math.round(
-        ((product.price - product.discountedPrice) / product.price) * 100,
+        ((product.price - product.discountedPrice!) / product.price) * 100,
       )
     : 0;
 

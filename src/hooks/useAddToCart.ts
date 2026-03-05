@@ -32,7 +32,7 @@ export function useAddToCart() {
     addToCart({
       id: product.id,
       name: product.name,
-      price: finalPrice,
+      price: finalPrice!,
       originalPrice: hasDiscount ? product.price : undefined,
       image: getProductImageUrl(product.imagePath, ImageSize.SMALL),
       stock: product.stock,
