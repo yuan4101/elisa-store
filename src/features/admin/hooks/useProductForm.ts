@@ -13,7 +13,7 @@ export function useProductForm({ product }: UseProductFormProps) {
     name: product?.name || "",
     description: product?.description || "",
     price: product?.price || 0,
-    discountedPrice: product?.discountedPrice || undefined || 0,
+    discountedPrice: product?.discountedPrice ?? null,
     stock: product?.stock || 0,
     grip: product?.grip || GripEnum.SIN_DEFINIR,
     season: product?.season || SeasonEnum.SIN_DEFINIR,
@@ -28,8 +28,10 @@ export function useProductForm({ product }: UseProductFormProps) {
   };
 
   const buildProductData = (): Partial<Product> => {
+    const { discountedPrice: _discountedPrice, ...rest } = formData;
+    void _discountedPrice; // ✅ suprimir el warning
     const data: Partial<Product> = {
-      ...formData,
+      ...rest,
       imagePath: `/${formData.sku}.webp`,
     };
 
