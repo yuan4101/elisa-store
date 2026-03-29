@@ -7,32 +7,33 @@ import {
   ScaleIcon,
 } from "@heroicons/react/24/outline";
 import { FavoriteProductsSection } from "./FavoriteProductsSection";
-import { FavoritesTitle } from "@/components/ui/FavoritesTitle";
+import { FavoritesTitle } from "@/components/ui/home/FavoritesTitle";
+import HeroTitle from "@/components/ui/home/HeroTitle";
 
 export default function HomeSection() {
   return (
-    <main className="min-h-screen w-full pt-10 pb-4 md:px-40">
+    <main className="min-h-screen w-full pb-4 md:px-40">
       {/* Hero Section */}
-      <section className="relative px-6 py-16 md:py-10 rounded-xl bg-gradient-to-b from-white to-[#f9f9f9]">
-        <div className="max-w-6xl mx-auto text-center">
-          <h1
-            className="text-4xl md:text-6xl font-medium italic mb-6"
-            style={{ color: "var(--color-text)" }}
-          >
-            Belleza Natural, Cuidado Sostenible
-          </h1>
-          <p className="text-lg md:text-xl max-w-3xl mx-auto mb-4 font-light">
-            Descubre nuestros accesorios para el cabello hechos en{" "}
-            <strong>acetato de celulosa</strong>, un material excepcional que
-            combina elegancia, durabilidad y responsabilidad ambiental.
+      <section className="p-4 flex justify-center">
+        <div className="py-2 px-6 rounded-4xl w-fit flex flex-col items-center">
+          <div className="h-30 md:h-44 flex justify-center">
+            <HeroTitle />
+          </div>
+          <p className="text-center text-lg md:text-xl max-w-3xl mx-auto mb-4 font-light">
+            Hairclips, hairclaws, accesorios y complementos con personalidad
+            para acompañar tu mood.
+            <br />
+            Diseñados con materiales amigables con el medio ambiente.
           </p>
         </div>
       </section>
 
       {/* Favorites */}
       <section className="w-full md:p-4">
-        <div>
-          <FavoritesTitle className="relative z-50" />
+        <div className="flex justify-center h-25 md:h-36">
+          <FavoritesTitle className="relative z-50 " />
+        </div>
+        <div className="pt-2">
           <FavoriteProductsSection />
         </div>
       </section>
