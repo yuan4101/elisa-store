@@ -1,4 +1,5 @@
-export function formatPriceCOP(price: number): string {
+export function formatPriceCOP(price: number | null): string {
+  if (price === null) return "";
   return new Intl.NumberFormat("es-CO", {
     style: "currency",
     currency: "COP",

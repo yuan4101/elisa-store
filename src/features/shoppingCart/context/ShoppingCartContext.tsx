@@ -26,7 +26,7 @@ export interface CartContextProps {
 }
 
 export const CartContext = createContext<CartContextProps | undefined>(
-  undefined
+  undefined,
 );
 
 const CART_STORAGE_KEY = "shoppingCart";
@@ -81,7 +81,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
 
         const updatedItem: CartItem = {
           ...cartItem,
-          price: finalPrice,
+          price: finalPrice!,
           originalPrice: hasDiscount ? currentProduct.price : undefined,
           stock: currentProduct.stock,
           quantity: Math.min(cartItem.quantity, currentProduct.stock),
@@ -126,7 +126,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
           ...prev[itemIndex],
           quantity: Math.min(
             prev[itemIndex].quantity + 1,
-            prev[itemIndex].stock
+            prev[itemIndex].stock,
           ),
         };
         return updatedCart;
