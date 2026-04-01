@@ -13,7 +13,7 @@ import { CatalogError } from "./CatalogError";
 import { Product } from "../../producto/types/product";
 
 interface CatalogProps {
-  productType: "Hairclip" | "Peineta" | "all";
+  productType: "Hairclip" | "Peineta" | "Hairstick" | "Pinza" | "all";
   showSeasons: boolean;
   showGripFilter: boolean;
   showPriceFilter: boolean;

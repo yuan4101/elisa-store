@@ -4,7 +4,7 @@ const { hostname } = new URL(process.env.NEXT_PUBLIC_SUPABASE_URL || "");
 
 const nextConfig: NextConfig = {
   reactCompiler: false,
-  allowedDevOrigins: [`${process.env.IP}`, "localhost", "127.0.0.1"],
+  allowedDevOrigins: [`${process.env.IP}`, "localhost", "127.0.0.1", "192.168.40.51"],
   images: {
     unoptimized: true,
     remotePatterns: [
