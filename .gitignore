@@ -51,3 +51,4 @@ node_modules/
 
 # Supabase
 /supabase
+.env*.local
