@@ -18,6 +18,7 @@ export function useProductForm({ product }: UseProductFormProps) {
     grip: product?.grip || GripEnum.SIN_DEFINIR,
     season: product?.season || SeasonEnum.SIN_DEFINIR,
     visible: product?.visible ?? false,
+    type: product?.type || "Hairclip",
   });
 
   const updateField = <K extends keyof typeof formData>(

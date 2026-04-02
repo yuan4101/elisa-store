@@ -1,11 +1,9 @@
 import { Product } from "../types/product";
-import { useNavigation } from "@/hooks/useNavigation";
-import { useAddToCart } from "@/hooks/useAddToCart";
-import { useCart } from "@/features/shoppingCart/hooks/useCart";
 import { ProductImage } from "./ProductImage";
 import { ImageSize } from "../types/imageSize";
 import { ProductCardTitle } from "./ProductCardTitle";
 import { ProductCardFooter } from "./ProductCardFooter";
+import { useProductCard } from "../hooks/useProductCard";
 
 interface ProductCardProps {
   product: Product;
@@ -13,47 +11,20 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product, index }: ProductCardProps) {
-  const { goProduct } = useNavigation();
-  const { handleAddToCart } = useAddToCart();
-  const { getProductQuantity } = useCart();
-
-  const quantity = getProductQuantity(product.id);
-  const isPriority = index < 15;
-
-  const discountPercentage = product.discountedPrice
-    ? Math.round(
-        ((product.price - product.discountedPrice) / product.price) * 100
-      )
-    : 0;
-  const hasDiscount =
-    product.discountedPrice && product.discountedPrice < product.price;
-  const hasStock = product.stock > 0 ? true : false;
-  function isNewProduct(
-    creationDate: string,
-    diasParaSerNuevo: number = 30
-  ): boolean {
-    // Separar la fecha en partes
-    const [year, month, day] = creationDate.split("-").map(Number);
-
-    // Crear fecha en zona horaria local (mes es 0-indexado)
-    const fechaCreacion = new Date(year, month - 1, day);
-    const fechaActual = new Date();
-
-    // Normalizar a medianoche para comparar solo días
-    fechaCreacion.setHours(0, 0, 0, 0);
-    fechaActual.setHours(0, 0, 0, 0);
-
-    const diffEnMilisegundos = fechaActual.getTime() - fechaCreacion.getTime();
-    const diffEnDias = Math.floor(diffEnMilisegundos / (1000 * 60 * 60 * 24));
-
-    return diffEnDias < diasParaSerNuevo;
-  }
-
-  const isNew = isNewProduct(product.creationDate, 30);
+  const {
+    quantity,
+    isPriority,
+    discountPercentage,
+    hasDiscount,
+    hasStock,
+    isNew,
+    goProduct,
+    addToCart,
+  } = useProductCard(product, index);
 
   return (
     <div
-      onClick={() => goProduct(product.sku)}
+      onClick={goProduct}
       className="relative transition transform hover:-translate-y-1 cursor-pointer"
     >
       {hasDiscount && hasStock && (
@@ -74,6 +45,8 @@ export function ProductCard({ product, index }: ProductCardProps) {
             productName={product.name}
             priority={isPriority}
           />
+        </div>
+        <div className="flex-1 pt-1 px-4">
           <ProductCardTitle name={product.name} />
         </div>
 
@@ -83,7 +56,7 @@ export function ProductCard({ product, index }: ProductCardProps) {
           hasDiscount={hasDiscount}
           discountedPrice={product.discountedPrice}
           quantity={quantity}
-          onAddToCart={(e) => handleAddToCart(e, product)}
+          onAddToCart={addToCart}
         />
       </div>
     </div>

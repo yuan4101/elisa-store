@@ -10,6 +10,7 @@ export interface Product {
   price: number;
   discountedPrice: number | null;
   stock: number;
+  type: string;
   imagePath: string;
   season: Season;
   visible: boolean;

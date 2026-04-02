@@ -1,4 +1,4 @@
-import AboutSection from "../../features/about/components/AboutSection";
+import AboutContent from "../../features/about/components/AboutContent";
 
 export default function AboutPage() {
   const content = [
@@ -10,8 +10,8 @@ export default function AboutPage() {
       " sin necesidad de esfuerzo.",
   ];
   return (
-    <div>
-      <AboutSection content={content} />
+    <div className="max-w-6xl">
+      <AboutContent content={content} />
     </div>
   );
 }

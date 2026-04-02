@@ -4,7 +4,7 @@ import { footerItems, ItemType } from "../config/footerItems";
 
 export default function Footer() {
   return (
-    <footer className="bg-[var(--color-bg)] md:p-6 mt-auto">
+    <footer className="md:p-6 mt-auto">
       <div className="container mx-auto">
         <div className="flex flex-col md:flex-row items-center text-base">
           {footerItems.map((item, index) => (

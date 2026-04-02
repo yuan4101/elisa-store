@@ -1,5 +1,6 @@
 import { Product } from "@/features/producto/types/product";
 import { Grip, GripEnumOptions } from "@/types/grip";
+import { Type, TypeEnumOptions } from "@/types/type";
 import { Season, SeasonEnumOptions } from "@/types/season";
 
 import {
@@ -21,10 +22,10 @@ interface ProductFormProps {
     K extends keyof Omit<
       Product,
       "id" | "imagePath" | "discountedPrice" | "creationDate"
-    >
+    >,
   >(
     field: K,
-    value: Omit<Product, "id" | "imagePath">[K]
+    value: Omit<Product, "id" | "imagePath">[K],
   ) => void;
 }
 
@@ -58,6 +59,14 @@ export function ProductForm({ formData, onFieldChange }: ProductFormProps) {
             onChange={(value) => onFieldChange("grip", value as Grip)}
             options={GripEnumOptions}
           />
+          <SelectInput
+            label="Tipo"
+            value={formData.type}
+            onChange={(value) => onFieldChange("type", value as Type)}
+            options={TypeEnumOptions}
+          />
+        </div>
+        <div>
           <SelectInput
             label="Temporada"
             value={formData.season}

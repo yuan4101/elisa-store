@@ -53,11 +53,22 @@ export default function RootLayout({
   return (
     <html lang="es" className={`${interFont.variable}`}>
       <body className="min-h-screen flex flex-col">
+        {/* En el layout: */}
+        <div
+          className="fixed inset-0 -z-10 pointer-events-none"
+          style={{
+            backgroundImage: "url('/assets/bg-pattern.svg')",
+            backgroundSize: "600px 600px",
+            backgroundRepeat: "repeat",
+            opacity: 0.12,
+          }}
+        />
+
         <NotificationProvider>
           <CartProvider>
             <Header />
             <main className="grow w-full flex flex-col">
-              <div className="max-w-6xl mx-auto px-2 py-2 md:py-3 w-full grow flex flex-col">
+              <div className="max-w-8xl p-2 md:p-4 w-full grow flex flex-col md:flex-row md:justify-center">
                 {children}
               </div>
             </main>

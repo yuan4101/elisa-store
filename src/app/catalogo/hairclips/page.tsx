@@ -1,9 +1,9 @@
 import { Catalog } from "@/features/catalogo/components/Catalog";
 
-export default function CatalogPage() {
+export default function HairclipsPage() {
   return (
     <Catalog
-      productType="all"
+      productType="Hairclip"
       showSeasons={true}
       showGripFilter={true}
       showPriceFilter={true}

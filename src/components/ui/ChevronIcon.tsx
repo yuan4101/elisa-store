@@ -1,14 +1,15 @@
 interface ChevronIconProps {
   isExpanded: boolean;
+  className?: string;
 }
 
-export function ChevronIcon({ isExpanded }: ChevronIconProps) {
+export function ChevronIcon({ isExpanded, className }: ChevronIconProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className={`h-5 w-5 text-[var(--color-navbar-bg)] transition-transform duration-300 ${
+      className={`h-5 w-5 transition-transform duration-300 ${
         isExpanded ? "rotate-180" : "rotate-0"
-      }`}
+      } ${className}`}
       viewBox="0 0 20 20"
       fill="currentColor"
     >
