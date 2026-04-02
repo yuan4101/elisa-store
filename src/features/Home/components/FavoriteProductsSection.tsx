@@ -11,7 +11,7 @@ export function FavoriteProductsSection() {
   const isTransitioning = useRef(false);
   const trackRef = useRef<HTMLDivElement>(null);
 
-  const allowedSkus = ["iguania", "megaptera", "aurelia", "lybica"];
+  const allowedSkus = ["aurelia", "amanita", "citrullus", "testudo-verde"];
   const selected = products.filter((p) => allowedSkus.includes(p.sku));
 
   const slides =
@@ -112,7 +112,7 @@ export function FavoriteProductsSection() {
             onTransitionEnd={handleTransitionEnd}
           >
             {slides.map((product, index) => (
-              <div key={index} className="w-full flex-shrink-0 px-2">
+              <div key={index} className="w-full shrink-0 px-2">
                 <FavoriteProductCard
                   product={product}
                   index={index}
@@ -131,7 +131,7 @@ export function FavoriteProductsSection() {
               onClick={() => goTo(i + 1)}
               className={`h-2 rounded-full transition-all duration-300 ${
                 i === activeDot
-                  ? "bg-[var(--color-navbar-bg)] w-4"
+                  ? "bg-(--color-navbar-bg) w-4"
                   : "bg-gray-300 w-2"
               }`}
             />
