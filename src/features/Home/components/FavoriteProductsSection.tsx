@@ -11,8 +11,10 @@ export function FavoriteProductsSection() {
   const isTransitioning = useRef(false);
   const trackRef = useRef<HTMLDivElement>(null);
 
-  const allowedSkus = ["aurelia", "amanita", "citrullus", "testudo-verde"];
-  const selected = products.filter((p) => allowedSkus.includes(p.sku));
+  const allowedSkus = ["fragaria", "amanita", "aurelia", "citrullus"];
+  const selected = allowedSkus
+    .map((sku) => products.find((p) => p.sku === sku))
+    .filter(Boolean) as typeof products;
 
   const slides =
     selected.length > 0

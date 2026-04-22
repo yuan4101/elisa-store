@@ -8,7 +8,7 @@ import Header from "../features/header/components/header";
 import Footer from "../features/footer/components/footer";
 
 const interFont = Inter({
-  weight: ["300", "500"],
+  weight: ["300", "500", "600", "700"],
   style: ["normal", "italic"],
   subsets: ["latin"],
   variable: "--font-inter",

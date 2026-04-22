@@ -19,11 +19,17 @@ export default function HomeSection() {
           <div className="h-30 md:h-44 flex justify-center">
             <HeroTitle />
           </div>
-          <p className="text-center text-lg md:text-xl max-w-3xl mx-auto mb-4 font-light">
-            Hairclips, hairclaws, accesorios y complementos con personalidad
-            para acompañar tu mood.
+          <p className="text-center text-lg md:text-xl max-w-4xl mx-auto font-light">
+            <strong className="font-semibold">
+              Hairclips, hairclaws, accesorios y complementos
+            </strong>{" "}
+            con personalidad para{" "}
+            <span className="font-semibold">acompañar tu mood.</span>
             <br />
-            Diseñados con materiales amigables con el medio ambiente.
+            Diseñados con{" "}
+            <strong className="font-semibold">
+              materiales amigables con el medio ambiente.
+            </strong>
           </p>
         </div>
       </section>
