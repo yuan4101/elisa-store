@@ -124,7 +124,7 @@ export default function AdminPage() {
 
       {/* Lista de productos */}
       <ProductList
-        products={products}
+        products={products.filter((product) => product.visible !== false)}
         onEdit={handleEdit}
         onStockChange={handleStockChange}
       />
