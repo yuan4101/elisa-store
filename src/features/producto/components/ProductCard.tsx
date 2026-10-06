@@ -37,13 +37,14 @@ export function ProductCard({ product, index }: ProductCardProps) {
           Nuevo
         </div>
       )}
-      <div className="lg:w-[190px] group bg-[var(--color-card-bg)] rounded-xl overflow-hidden shadow-md hover:shadow-xl hover:text-[var(--color-navbar-bg)] flex flex-col h-full">
+      <div className="w-full lg:w-[calc(190px*var(--font-scale,1))] group bg-[var(--color-card-bg)] rounded-xl shadow-md hover:shadow-xl hover:text-[var(--color-navbar-bg)] flex flex-col h-full">
         <div className="flex-1">
           <ProductImage
             imagePath={product.imagePath}
             imageSize={ImageSize.MEDIUM}
             productName={product.name}
             priority={isPriority}
+            className="rounded-t-xl overflow-hidden"
           />
         </div>
         <div className="flex-1 pt-1 px-4">

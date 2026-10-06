@@ -18,6 +18,9 @@ export const config = {
 
 export async function proxy(req: NextRequest) {
   try {
+    if (!process.env.EDGE_CONFIG) {
+      return NextResponse.next();
+    }
     const isInMaintenanceMode = await get<boolean>("isInMaintenanceMode");
 
     if (isInMaintenanceMode) {

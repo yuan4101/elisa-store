@@ -6,6 +6,7 @@ import { CartProvider } from "@/features/shoppingCart/context/ShoppingCartContex
 import NotificationProvider from "@/features/notification/context/NotificationContext";
 import Header from "../features/header/components/header";
 import Footer from "../features/footer/components/footer";
+import AccessibilityWrapper from "@/features/accessibility/providers/AccessibilityWrapper";
 
 const interFont = Inter({
   weight: ["300", "500", "600", "700"],
@@ -64,17 +65,19 @@ export default function RootLayout({
           }}
         />
 
-        <NotificationProvider>
-          <CartProvider>
-            <Header />
-            <main className="grow w-full flex flex-col">
-              <div className="max-w-8xl p-2 md:p-4 w-full grow flex flex-col md:flex-row md:justify-center">
-                {children}
-              </div>
-            </main>
-            <Footer />
-          </CartProvider>
-        </NotificationProvider>
+        <AccessibilityWrapper>
+          <NotificationProvider>
+            <CartProvider>
+              <Header />
+              <main className="grow w-full flex flex-col">
+                <div className="max-w-8xl p-2 md:p-4 w-full grow flex flex-col md:flex-row md:justify-center">
+                  {children}
+                </div>
+              </main>
+              <Footer />
+            </CartProvider>
+          </NotificationProvider>
+        </AccessibilityWrapper>
         <Analytics />
       </body>
     </html>

@@ -6,16 +6,16 @@ interface AddToCartIconProps {
 
 export function AddToCartIcon({ quantity = 0 }: AddToCartIconProps) {
   return (
-    <div className="relative">
+    <div className="relative transition-transform" style={{ transform: "scale(var(--font-scale, 1))", transformOrigin: "center" }}>
       {quantity > 0 && (
         <Badge
           count={quantity}
-          classname="absolute -top-2 -right-2 bg-[var(--color-badge)] text-[var(--color-navbar-text)] text-xs font-bold rounded-sm h-4 w-4 flex items-center justify-center"
+          className="absolute -top-2 -right-2 bg-[var(--color-badge)] text-[var(--color-navbar-text)] text-[12px] font-bold rounded-sm h-4 w-4 flex items-center justify-center"
         />
       )}
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        className="h-6 w-6 text-[var(--color-navbar-bg)]"
+        className="h-6 w-6 text-[var(--color-button-pink)]"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"

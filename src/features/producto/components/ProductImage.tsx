@@ -14,6 +14,7 @@ interface ProductImageProps {
   imageSize: ImageSizeValue;
   productName: string;
   priority?: boolean;
+  className?: string;
 }
 
 export function ProductImage({
@@ -21,6 +22,7 @@ export function ProductImage({
   imageSize,
   productName,
   priority = false,
+  className = "",
 }: ProductImageProps) {
   const [imageUrl, setImageUrl] = useState(() =>
     getProductImageUrl(imagePath, imageSize),
@@ -57,7 +59,7 @@ export function ProductImage({
   };
 
   return (
-    <div className="relative w-full aspect-square bg-[var(--color-card-bg)]">
+    <div className={`relative w-full aspect-square bg-[var(--color-card-bg)] ${className}`}>
       {isLoading && (
         <div className="absolute inset-0 bg-gray-100 flex items-center justify-center">
           <LoadingSpinner />

@@ -58,7 +58,7 @@ export function ProductItem({
         />
 
         {!product.visible && (
-          <div className="absolute top-2 left-2 bg-[var(--color-navbar-bg)] text-white text-[10px] px-2 py-1 rounded-full font-semibold shadow-lg">
+          <div className="absolute top-2 left-2 bg-[var(--color-navbar-bg)] text-white text-xs px-2 py-1 rounded-full font-semibold shadow-lg">
             Oculto
           </div>
         )}
@@ -67,7 +67,7 @@ export function ProductItem({
       {/* Footer compacto */}
       <div className="p-2.5 space-y-2">
         {/* Nombre del producto */}
-        <h3 className="font-bold text-s text-[var(--color-text)] line-clamp-2 min-h-[2rem] leading-tight">
+        <h3 className="font-bold text-sm text-[var(--color-text)] line-clamp-2 min-h-[2rem] leading-tight">
           {product.name}
         </h3>
 

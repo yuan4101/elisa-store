@@ -45,7 +45,7 @@ export function CatalogFilters({
   return (
     <div className="sticky top-[128px] md:top-[168px] z-50 bg-white shadow-lg rounded-xl p-1 md:p-3 w-full md:w-fit border border-[var(--color-navbar-bg)]/60 transition-all duration-300 ease-in-out">
       <div className="flex flex-col md:flex-row md:items-center gap-1 md:gap-4 pb-1 md:pb-0 pl-2 pr-2">
-        <div className="whitespace-nowrap">Filtrar por:</div>
+        <div className="whitespace-nowrap text-base text-[var(--color-text)]">Filtrar por:</div>
 
         <div className="flex flex-row w-full">
           {showGripFilter && (

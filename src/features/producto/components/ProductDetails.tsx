@@ -100,8 +100,8 @@ export function ProductDetails({ product }: ProductDetailsProps) {
                 </span>
               )}
             </div>
-            <p>Disponibles: {product.stock}</p>
-            {product.grip && <p>Agarre: {product.grip}</p>}
+            <p className="text-base">Disponibles: {product.stock}</p>
+            {product.grip && <p className="text-base">Agarre: {product.grip}</p>}
           </div>
 
           <div className="flex flex-col gap-4 pt-2">
@@ -114,7 +114,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
               </button>
             ) : (
               <button
-                className="shadow-sm bg-[var(--color-badge-light)] text-white px-6 py-3 rounded-lg hover:bg-[var(--color-badge)] transition cursor-pointer"
+                className="shadow-sm bg-[var(--color-badge-light)] text-white text-base px-6 py-3 rounded-lg hover:bg-[var(--color-badge)] transition cursor-pointer"
                 onClick={(e) => handleAddToCart(e, product)}
               >
                 Agregar al carrito
@@ -123,7 +123,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
 
             <button
               onClick={goCatalog}
-              className="shadow-sm bg-[var(--color-button-pink-light)] text-white px-3 py-3 rounded-lg hover:bg-[var(--color-button-pink)] transition cursor-pointer"
+              className="shadow-sm bg-[var(--color-button-pink-light)] text-white text-base px-3 py-3 rounded-lg hover:bg-[var(--color-button-pink)] transition cursor-pointer"
             >
               ← Volver al catálogo
             </button>

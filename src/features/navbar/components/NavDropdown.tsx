@@ -61,7 +61,7 @@ export default function NavDropdown({
             leaveFrom="opacity-100 translate-y-0"
             leaveTo="opacity-0 -translate-y-2"
           >
-            <MenuItems className="absolute md:-left-1 -left-3 mt-2 w-29 bg-[var(--color-navbar-bg)] rounded-b-xl shadow-lg focus:outline-none overflow-hidden">
+            <MenuItems className="absolute md:-left-1 -left-3 mt-2 w-[calc(116px*var(--font-scale,1))] min-w-max bg-[var(--color-navbar-bg)] rounded-b-xl shadow-lg focus:outline-none overflow-hidden">
               <div className="py-0">
                 {items.map((item) => {
                   const isItemActive = currentPath === item.href;
@@ -71,7 +71,7 @@ export default function NavDropdown({
                       {({ focus }) => (
                         <Link
                           href={item.href}
-                          className={`block px-4 py-2.5 text-base md:text-lg transition-colors relative ${
+                          className={`block px-4 py-2.5 text-base md:text-lg transition-colors relative whitespace-nowrap ${
                             focus
                               ? "text-[var(--color-select)]"
                               : isItemActive

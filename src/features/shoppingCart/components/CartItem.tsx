@@ -29,7 +29,7 @@ const CartItem = ({ item, updateQuantity, toggleCart }: cartItemProps) => {
 
   return (
     <li className="flex py-3">
-      <div className="h-21 w-21 flex-shrink-0 overflow-hidden rounded-md border border-gray-200 relative">
+      <div className="h-[calc(84px*(1+(var(--font-scale,1)-1)*0.5))] w-[calc(84px*(1+(var(--font-scale,1)-1)*0.5))] flex-shrink-0 overflow-hidden rounded-md border border-gray-200 relative">
         {discountPercentage && (
           <div className="absolute top-1 right-1 bg-[var(--color-button-pink)] text-white px-1.5 py-0.5 rounded text-xs font-bold z-10">
             -{discountPercentage}%

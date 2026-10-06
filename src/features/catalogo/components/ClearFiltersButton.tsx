@@ -23,7 +23,7 @@ export function ClearFiltersButton({
           <div className="w-0.5 bg-[var(--color-navbar-bg)] self-stretch hidden sm:block" />
           <button
             onClick={onClick}
-            className="w-full block px-4 py-2 border rounded text-[var(--color-navbar-bg)] border-[var(--color-navbar-bg)] hover:border-[var(--color-select)] hover:bg-transparent transition-colors focus:outline-none whitespace-nowrap"
+            className="w-full block px-4 py-2 border rounded text-base text-[var(--color-navbar-bg)] border-[var(--color-navbar-bg)] hover:border-[var(--color-select)] hover:bg-transparent transition-colors focus:outline-none whitespace-nowrap"
           >
             Limpiar filtros
           </button>

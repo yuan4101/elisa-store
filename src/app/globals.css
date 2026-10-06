@@ -1,6 +1,25 @@
 @import "tailwindcss";
 
+@theme {
+  --text-xs: calc(0.75rem * var(--font-scale, 1));
+  --text-sm: calc(0.875rem * var(--font-scale, 1));
+  --text-base: calc(1rem * var(--font-scale, 1));
+  --text-lg: calc(1.125rem * var(--font-scale, 1));
+  --text-xl: calc(1.25rem * var(--font-scale, 1));
+  --text-2xl: calc(1.5rem * var(--font-scale, 1));
+  --text-3xl: calc(1.875rem * var(--font-scale, 1));
+  --text-4xl: calc(2.25rem * var(--font-scale, 1));
+  --text-5xl: calc(3rem * var(--font-scale, 1));
+  --text-6xl: calc(3.75rem * var(--font-scale, 1));
+  --text-7xl: calc(4.5rem * var(--font-scale, 1));
+  --text-8xl: calc(6rem * var(--font-scale, 1));
+  --text-9xl: calc(8rem * var(--font-scale, 1));
+}
+
 :root {
+  --font-scale: 1;
+  --line-height: 1.2;
+  --letter-spacing: 0em;
   --header-logo-height: 90px;
   --header-navbar-height: 56px;
   --header-height: calc(
@@ -26,6 +45,101 @@
   --color-badge-light: #f0773f;
   --color-button-pink: #ff1764;
   --color-button-pink-light: #ff368a;
+}
+
+* {
+  line-height: var(--line-height) !important;
+  letter-spacing: var(--letter-spacing) !important;
+}
+
+html.accessibility-grayscale {
+  filter: grayscale(100%) !important;
+}
+
+/* 
+  ALTO CONTRASTE (OSCURO) BASADO EN COLORES EXISTENTES
+  - Fondo negro profundo, textos blancos muy puros
+  - Acentos rosados reemplazados por un fucsia vibrante de muy alto contraste 
+*/
+html.accessibility-high-contrast {
+  --color-bg: #000000 !important;
+  --color-navbar-bg: #000000 !important;
+  --color-navbar-text: #ffffff !important;
+  
+  --color-card-bg: #000000 !important;
+  --color-card-bg-unavailable: #2a000b !important; /* Rojo ultra oscuro */
+  
+  --color-select: #ff0055 !important;
+  --color-text: #ffffff !important;
+  
+  /* Naranja brillante súper contrastado para el carrito/badge */
+  --color-badge: #ffb84d !important;
+  --color-badge-light: #ffb84d !important;
+  
+  /* Rosado/Fucsia brillante súper contrastado para botones secundarios */
+  --color-button-pink: #ff99cc !important;
+  --color-button-pink-light: #ff99cc !important;
+}
+
+/* Forzar que los textos sobre estos fondos claros sean negros para máximo contraste AAA */
+html.accessibility-high-contrast .bg-\[var\(--color-badge-light\)\],
+html.accessibility-high-contrast .bg-\[var\(--color-badge\)\],
+html.accessibility-high-contrast .bg-\[var\(--color-button-pink-light\)\],
+html.accessibility-high-contrast .bg-\[var\(--color-button-pink\)\] {
+  color: #000000 !important;
+  font-weight: 900 !important;
+}
+
+/* 
+  Aplanar diseño: quitar sombras, desenfoques y forzar bordes 
+  para evitar que los componentes negros se mezclen con el fondo negro
+*/
+html.accessibility-high-contrast * {
+  box-shadow: none !important;
+  text-shadow: none !important;
+  backdrop-filter: none !important;
+  border-color: #ffffff !important;
+  background-image: none !important;
+}
+
+/* Forzar que el texto no desaparezca al hacer hover en las tarjetas */
+html.accessibility-high-contrast .hover\:text-\[var\(--color-navbar-bg\)\]:hover {
+  color: var(--color-text) !important;
+}
+
+/* Saturar y aumentar el contraste de las imágenes para que resalten más */
+html.accessibility-high-contrast img,
+html.accessibility-high-contrast svg {
+  filter: contrast(130%) saturate(130%) !important;
+}
+
+/* Forzar clases hardcodeadas de Tailwind para que obedezcan al modo de alto contraste */
+html.accessibility-high-contrast .bg-white {
+  background-color: var(--color-bg) !important;
+}
+html.accessibility-high-contrast .text-gray-400,
+html.accessibility-high-contrast .text-gray-500,
+html.accessibility-high-contrast .text-gray-600,
+html.accessibility-high-contrast .text-gray-700,
+html.accessibility-high-contrast .text-gray-800,
+html.accessibility-high-contrast .text-gray-900,
+html.accessibility-high-contrast .text-black {
+  color: var(--color-text) !important;
+}
+
+/* Forzar bordes visibles para separar secciones del mismo color oscuro */
+html.accessibility-high-contrast header,
+html.accessibility-high-contrast nav,
+html.accessibility-high-contrast .sticky {
+  border-bottom: 2px solid #ffffff !important;
+}
+
+/* Forzar bordes visibles en contenedores clave para separarlos del fondo oscuro */
+html.accessibility-high-contrast button,
+html.accessibility-high-contrast input,
+html.accessibility-high-contrast select,
+html.accessibility-high-contrast .group {
+  border: 1px solid #ffffff !important;
 }
 
 .glow-effect {

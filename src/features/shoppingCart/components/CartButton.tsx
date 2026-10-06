@@ -18,7 +18,10 @@ export default function CartButton() {
       onClick={toggleCart}
       className="py-1 px-1 -mx-1 md:py-2 md:px-2 rounded-md hover:bg-[var(--color-button-pink)] text-[var(--color-navbar-text)]"
     >
-      <div className="relative">
+      <div
+        className="relative flex items-center justify-center transition-transform"
+        style={{ transform: "scale(var(--font-scale, 1))", transformOrigin: "center" }}
+      >
         <ShoppingCartIcon className="h-6 w-6" />
         {mounted && cartCount > 0 && <Badge count={cartCount} />}
       </div>

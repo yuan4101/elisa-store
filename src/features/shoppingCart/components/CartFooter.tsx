@@ -29,10 +29,10 @@ const CartFooter = ({
           Ordenar
         </a>
       </div>
-      <div className="mt-4 mb-1 flex justify-center text-center text-md text-gray-500">
+      <div className="mt-4 mb-1 flex justify-center text-center text-base text-gray-500">
         <button
           type="button"
-          className="font-medium text-[var(--color-navbar-bg)] hover:text-[var(--color-badge)]"
+          className="font-medium text-[var(--color-text)] hover:text-[var(--color-button-pink)]"
           onClick={clearCart}
         >
           Limpiar carrito

@@ -20,9 +20,9 @@ export function ProductCardFooter({
 }: ProductCardFooterProps) {
   if (stock === 0) {
     return (
-      <div className="pl-4 pr-2 mt-auto">
+      <div className="pl-4 mt-auto" style={{ paddingRight: "calc(0.5rem * var(--font-scale, 1))" }}>
         <div className="flex items-center justify-between gap-2">
-          <span className="pr-4 text-[var(--color-badge)] text-md flex items-center h-[40px]">
+          <span className="pr-4 text-[var(--color-badge)] text-base flex items-center h-[40px]">
             Agotado
           </span>
         </div>
@@ -31,7 +31,7 @@ export function ProductCardFooter({
   }
 
   return (
-    <div className="pl-4 pr-2 mt-auto">
+    <div className="pl-4 mt-auto" style={{ paddingRight: "calc(0.5rem * var(--font-scale, 1))" }}>
       <div className="flex items-center justify-between gap-2">
         <div className="flex flex-col">
           {hasDiscount ? (
@@ -44,7 +44,7 @@ export function ProductCardFooter({
               </span>
             </div>
           ) : (
-            <span>{formatPriceCOP(price)}</span>
+            <span className="text-base">{formatPriceCOP(price)}</span>
           )}
         </div>
         <button
