@@ -66,7 +66,7 @@ export default function Notify({
       autoHideDuration={duration}
       onClose={() => setOpen(false)}
       anchorOrigin={{
-        vertical: isMobile ? "bottom" : "top",
+        vertical: "top",
         horizontal: isMobile ? "center" : "right",
       }}
       slots={{
@@ -74,24 +74,39 @@ export default function Notify({
       }}
       slotProps={{
         transition: {
-          direction: isMobile ? "up" : "left",
+          direction: isMobile ? "down" : "left",
         },
       }}
       sx={{
-        mb: { xs: 2, md: 0 },
+        mb: 0,
         mt: { xs: 0, md: "150px" },
+        top: isMobile ? "0 !important" : undefined,
+        left: isMobile ? "0 !important" : undefined,
+        right: isMobile ? "0 !important" : undefined,
+        transform: "scale(var(--font-scale, 1))",
+        transformOrigin: isMobile ? "top left" : "top right",
+        maxWidth: isMobile ? "calc(100vw / var(--font-scale, 1))" : "calc(100vw / var(--font-scale, 1) - 32px)",
+        width: isMobile ? "calc(100vw / var(--font-scale, 1))" : undefined,
         "& .MuiAlert-root": {
-          borderRadius: "8px",
+          borderRadius: isMobile ? "0px" : "8px",
           alignItems: "center",
           boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+          cursor: "pointer",
+          width: "100%",
         },
+        "& .MuiAlert-message": {
+          wordBreak: "break-word",
+        }
       }}
     >
       <Alert
         severity={type}
         icon={iconMap[type]}
-        onClose={() => setOpen(false)}
-        sx={{ width: "100%", borderRadius: "8px" }}
+        onClick={() => {
+          setOpen(false);
+          onClose?.();
+        }}
+        sx={{ width: "100%", borderRadius: isMobile ? "0px" : "8px" }}
       >
         {message}
       </Alert>

@@ -1,6 +1,5 @@
 "use client";
 
-import { Transition } from "@headlessui/react";
 import { useCart } from "../hooks/useCart";
 import { generateWhatsAppMessage } from "../utils/cartHelpers";
 import CartButton from "./CartButton";
@@ -19,16 +18,15 @@ export default function ShoppingCart() {
   return (
     <div className="flex items-center">
       <CartButton />
-      <Transition show={isCartOpen} as="div">
-        <CartDrawer
-          cartItems={cartItems}
-          precioTotal={precioTotal}
-          whatsappLink={whatsappLink}
-          updateQuantity={updateQuantity}
-          toggleCart={toggleCart}
-          clearCart={clearCart}
-        />
-      </Transition>
+      <CartDrawer
+        isOpen={isCartOpen}
+        cartItems={cartItems}
+        precioTotal={precioTotal}
+        whatsappLink={whatsappLink}
+        updateQuantity={updateQuantity}
+        toggleCart={toggleCart}
+        clearCart={clearCart}
+      />
     </div>
   );
 }

@@ -65,6 +65,14 @@ export default function RootLayout({
           }}
         />
 
+        {process.env.NEXT_PUBLIC_DEBUG_LAYOUT === "true" && (
+          <style
+            dangerouslySetInnerHTML={{
+              __html: `* { outline: 1px solid rgba(255, 0, 0, 0.5) !important; }`,
+            }}
+          />
+        )}
+
         <AccessibilityWrapper>
           <NotificationProvider>
             <CartProvider>

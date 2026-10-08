@@ -65,17 +65,17 @@ html.accessibility-high-contrast {
   --color-bg: #000000 !important;
   --color-navbar-bg: #000000 !important;
   --color-navbar-text: #ffffff !important;
-  
+
   --color-card-bg: #000000 !important;
   --color-card-bg-unavailable: #2a000b !important; /* Rojo ultra oscuro */
-  
+
   --color-select: #ff0055 !important;
   --color-text: #ffffff !important;
-  
+
   /* Naranja brillante súper contrastado para el carrito/badge */
   --color-badge: #ffb84d !important;
   --color-badge-light: #ffb84d !important;
-  
+
   /* Rosado/Fucsia brillante súper contrastado para botones secundarios */
   --color-button-pink: #ff99cc !important;
   --color-button-pink-light: #ff99cc !important;
@@ -94,7 +94,7 @@ html.accessibility-high-contrast .bg-\[var\(--color-button-pink\)\] {
   Aplanar diseño: quitar sombras, desenfoques y forzar bordes 
   para evitar que los componentes negros se mezclen con el fondo negro
 */
-html.accessibility-high-contrast * {
+html.accessibility-high-contrast *:not(.a11y-slider) {
   box-shadow: none !important;
   text-shadow: none !important;
   backdrop-filter: none !important;
@@ -102,8 +102,15 @@ html.accessibility-high-contrast * {
   background-image: none !important;
 }
 
+/* Fix selected buttons in high contrast */
+html.accessibility-high-contrast button.is-selected-filter {
+  background-color: var(--color-select) !important;
+  color: #000000 !important;
+}
+
 /* Forzar que el texto no desaparezca al hacer hover en las tarjetas */
-html.accessibility-high-contrast .hover\:text-\[var\(--color-navbar-bg\)\]:hover {
+html.accessibility-high-contrast
+  .hover\:text-\[var\(--color-navbar-bg\)\]:hover {
   color: var(--color-text) !important;
 }
 
@@ -113,9 +120,37 @@ html.accessibility-high-contrast svg {
   filter: contrast(130%) saturate(130%) !important;
 }
 
+/* Invertir el logo SOLO cuando ambos modos (Alto Contraste y Monocromático) están activos al mismo tiempo */
+html.accessibility-high-contrast.accessibility-grayscale
+  img[alt="Logo Elisa & Co"] {
+  filter: invert(1) contrast(130%) saturate(130%) !important;
+}
+
 /* Forzar clases hardcodeadas de Tailwind para que obedezcan al modo de alto contraste */
 html.accessibility-high-contrast .bg-white {
   background-color: var(--color-bg) !important;
+}
+
+/* Forzar colores de texto originales a que usen el color de texto de alto contraste */
+html.accessibility-high-contrast .text-\[var\(--color-navbar-bg\)\] {
+  color: var(--color-text) !important;
+}
+
+/* Modo pantalla completa para el panel de accesibilidad en móviles */
+@media (max-width: 767px) {
+  #accessibility-panel {
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    max-width: 100vw !important;
+    border-radius: 0 !important;
+    transform: none !important;
+    z-index: 10000 !important;
+  }
 }
 html.accessibility-high-contrast .text-gray-400,
 html.accessibility-high-contrast .text-gray-500,
@@ -236,4 +271,48 @@ body {
 
 .animate-fade-in-scale {
   animation: fadeInScale 0.3s ease-out forwards;
+}
+
+/* Custom slider thumb for accessibility controls */
+input[type="range"].a11y-slider {
+  -webkit-appearance: none;
+  height: 40px;
+  background: transparent !important;
+  cursor: pointer;
+}
+
+input[type="range"].a11y-slider::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(to right, var(--color-badge) var(--slider-perc, 0%), #e5e7eb var(--slider-perc, 0%));
+}
+
+input[type="range"].a11y-slider::-moz-range-track {
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(to right, var(--color-badge) var(--slider-perc, 0%), #e5e7eb var(--slider-perc, 0%));
+}
+
+input[type="range"].a11y-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--color-badge);
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  margin-top: -9px;
+}
+input[type="range"].a11y-slider::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--color-badge);
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  border: none;
+  margin-top: -9px;
 }

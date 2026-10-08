@@ -1,6 +1,7 @@
 "use client";
 
 import { useAccessibility } from "../../../context/AccessibilityContext";
+import { useSliderPointerEvents } from "../../../hooks/useSliderPointerEvents";
 import { LETTER_SPACING_CONFIG } from "../types/letterSpacing.types";
 
 export default function LetterSpacingControl() {
@@ -14,8 +15,16 @@ export default function LetterSpacingControl() {
     });
   };
 
+  const { value: localLetterSpacing, pointerProps } = useSliderPointerEvents(
+    letterSpacing,
+    LETTER_SPACING_CONFIG.MIN,
+    LETTER_SPACING_CONFIG.MAX,
+    LETTER_SPACING_CONFIG.STEP,
+    handleLetterSpacingChange
+  );
+
   return (
-    <div>
+    <div className="overflow-hidden w-full">
       <label
         htmlFor="letter-spacing-input"
         className="block text-[18px] font-medium mb-2"
@@ -36,21 +45,23 @@ export default function LetterSpacingControl() {
           AA
         </span>
         <input
+          {...pointerProps}
           id="letter-spacing-input"
           type="range"
           min={LETTER_SPACING_CONFIG.MIN}
           max={LETTER_SPACING_CONFIG.MAX}
           step={LETTER_SPACING_CONFIG.STEP}
-          value={letterSpacing}
-          onChange={(e) =>
-            handleLetterSpacingChange(Number.parseFloat(e.currentTarget.value))
-          }
-          className="flex-1 cursor-pointer"
-          style={{ accentColor: "var(--color-badge)" }}
+          value={localLetterSpacing}
+          className="flex-1 cursor-pointer a11y-slider"
+          style={{ 
+            ...pointerProps.style,
+            accentColor: "var(--color-badge)",
+            "--slider-perc": `${((localLetterSpacing - LETTER_SPACING_CONFIG.MIN) / (LETTER_SPACING_CONFIG.MAX - LETTER_SPACING_CONFIG.MIN)) * 100}%`
+          } as React.CSSProperties}
           aria-label="Ajustar espaciado de letras"
           aria-valuemin={LETTER_SPACING_CONFIG.MIN}
           aria-valuemax={LETTER_SPACING_CONFIG.MAX}
-          aria-valuenow={letterSpacing}
+          aria-valuenow={localLetterSpacing}
         />
         <span
           className="text-[20px] opacity-70 font-mono"
@@ -69,7 +80,7 @@ export default function LetterSpacingControl() {
         className="text-[16px] mt-2 opacity-70"
         style={{ color: "var(--color-text)" }}
       >
-        Espaciado: +{(letterSpacing * 100).toFixed(0)}%
+        Espaciado: +{(localLetterSpacing * 100).toFixed(0)}%
       </p>
     </div>
   );

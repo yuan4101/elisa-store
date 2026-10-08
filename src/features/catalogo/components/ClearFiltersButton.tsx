@@ -15,7 +15,7 @@ export function ClearFiltersButton({
       <div
         className={`hidden md:block overflow-hidden transition-all duration-300 ease-out ${
           isVisible
-            ? "max-w-[200px] opacity-100 ml-2 md:ml-4"
+            ? "max-w-[600px] opacity-100 ml-2 md:ml-4"
             : "max-w-0 opacity-0 ml-0"
         }`}
       >
@@ -40,10 +40,10 @@ export function ClearFiltersButton({
       >
         <button
           onClick={onClick}
-          className="flex items-center justify-center w-8 h-8 rounded-full bg-[var(--color-navbar-bg)]/80 text-white shadow-lg hover:scale-110 transition-transform duration-200"
+          className="flex items-center justify-center w-10 h-10 rounded-full bg-[var(--color-navbar-bg)] text-white shadow-md hover:bg-[var(--color-select)] transition-colors focus:outline-none"
           aria-label="Limpiar filtros"
         >
-          <XMarkIcon className="w-5 h-5" />
+          <XMarkIcon className="w-6 h-6" />
         </button>
       </div>
     </>

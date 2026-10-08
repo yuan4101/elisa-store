@@ -25,29 +25,27 @@ export default function NavDropdown({
   items,
   currentPath,
 }: NavDropdownProps) {
-  const isActive = items.some((item) => currentPath.startsWith(item.href));
-
   return (
     <Menu as="div" className="relative z-[60]">
       {({ open }) => (
         <>
           <MenuButton
-            className="relative group hover:text-[var(--color-select)] transition-colors flex items-center md:gap-1"
+            className="relative group md:hover:text-[var(--color-select)] transition-colors flex items-center gap-1 text-[var(--color-navbar-text)]"
             aria-label={`Menú de ${label}`}
           >
             {label}
             <ChevronIcon
               isExpanded={open}
               className={`transition-colors ${
-                open || isActive
+                open
                   ? "text-[var(--color-select)]"
-                  : "text-[var(--color-navbar-text)] group-hover:text-[var(--color-select)]"
+                  : "text-[var(--color-navbar-text)] md:group-hover:text-[var(--color-select)]"
               }`}
             />
 
             <span
               className={`absolute left-0 bottom-0 h-0.5 bg-[var(--color-select)] transition-all duration-300 ${
-                isActive ? "w-full" : "w-0 group-hover:w-full"
+                open ? "w-full" : "w-0 md:group-hover:w-full"
               }`}
             ></span>
           </MenuButton>

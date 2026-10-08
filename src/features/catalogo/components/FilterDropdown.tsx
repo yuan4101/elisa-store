@@ -34,12 +34,12 @@ export function FilterDropdown({
           <MenuButton
             disabled={disabled}
             aria-label={`Filtrar por: ${currentLabel}`}
-            className="w-full px-3 py-1 md:py-2 border rounded text-base text-[var(--color-text)] border-[var(--color-text)] hover:border-[var(--color-button-pink)] hover:bg-transparent transition-colors focus:outline-none text-left flex justify-between items-center disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full px-3 py-1 md:py-2 border rounded text-base text-[var(--color-text)] border-[var(--color-text)] hover:border-[var(--color-button-pink)] hover:bg-transparent transition-colors focus:outline-none text-left flex justify-between items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <span>{currentLabel}</span>
+            <span className="whitespace-nowrap">{currentLabel}</span>
             <ChevronIcon
               isExpanded={open}
-              className="text-[var(--color-text)]"
+              className="text-[var(--color-text)] flex-shrink-0"
             />
           </MenuButton>
 
@@ -52,8 +52,11 @@ export function FilterDropdown({
             leaveFrom="opacity-100 scale-100"
             leaveTo="opacity-0 scale-95"
           >
-            <MenuItems className="absolute left-0 sm:left-auto sm:right-0 z-10 mt-2 w-full sm:w-56 origin-top-right bg-white shadow-lg rounded-md focus:outline-none">
-              <div className="py-1 max-h-60 overflow-y-auto">
+            <MenuItems
+              anchor="bottom start"
+              className="z-[100] mt-1 w-max min-w-[200px] max-w-[90vw] origin-top-left bg-white shadow-lg rounded-md focus:outline-none"
+            >
+              <div className="py-1 max-h-[60vh] overflow-y-auto">
                 {options.map((option) => {
                   const isSelected = option === currentValue;
 
@@ -66,7 +69,7 @@ export function FilterDropdown({
                             focus
                               ? "bg-[var(--color-select)] text-white"
                               : isSelected
-                                ? "bg-[var(--color-card-hover)] text-[var(--color-navbar-bg)] font-medium"
+                                ? "is-selected-filter bg-[var(--color-card-hover)] text-[var(--color-navbar-bg)] font-medium"
                                 : "text-gray-900"
                           }`}
                           aria-current={isSelected ? "true" : undefined}

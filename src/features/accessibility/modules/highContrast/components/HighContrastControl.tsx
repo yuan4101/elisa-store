@@ -32,8 +32,8 @@ export default function HighContrastControl() {
         role="switch"
         aria-checked={isHighContrast}
         onClick={toggleHighContrast}
-        className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${
-          isHighContrast ? "bg-blue-600" : "bg-gray-300"
+        className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--color-badge)] ${
+          isHighContrast ? "bg-[var(--color-badge)]" : "bg-gray-300"
         }`}
       >
         <span

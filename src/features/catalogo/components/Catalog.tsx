@@ -65,7 +65,7 @@ export function Catalog({
     christmas.length === 0;
 
   return (
-    <div className="max-w-7xl mx-auto">
+    <div className="max-w-7xl mx-auto w-full">
       <CatalogFilters
         gripFilter={filters.grip}
         priceSort={filters.priceSort}

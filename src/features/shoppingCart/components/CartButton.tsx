@@ -16,12 +16,10 @@ export default function CartButton() {
   return (
     <button
       onClick={toggleCart}
-      className="py-1 px-1 -mx-1 md:py-2 md:px-2 rounded-md hover:bg-[var(--color-button-pink)] text-[var(--color-navbar-text)]"
+      className="py-1 px-1 -mx-1 md:py-2 md:px-2 mr-2 md:mr-0 rounded-md hover:bg-[var(--color-button-pink)] text-[var(--color-navbar-text)] transition-transform"
+      style={{ transform: "scale(var(--font-scale, 1))", transformOrigin: "right center" }}
     >
-      <div
-        className="relative flex items-center justify-center transition-transform"
-        style={{ transform: "scale(var(--font-scale, 1))", transformOrigin: "center" }}
-      >
+      <div className="relative flex items-center justify-center">
         <ShoppingCartIcon className="h-6 w-6" />
         {mounted && cartCount > 0 && <Badge count={cartCount} />}
       </div>

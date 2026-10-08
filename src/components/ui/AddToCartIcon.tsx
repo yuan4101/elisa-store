@@ -6,7 +6,13 @@ interface AddToCartIconProps {
 
 export function AddToCartIcon({ quantity = 0 }: AddToCartIconProps) {
   return (
-    <div className="relative transition-transform" style={{ transform: "scale(var(--font-scale, 1))", transformOrigin: "center" }}>
+    <div
+      className="relative transition-transform"
+      style={{
+        transform: "scale(var(--font-scale, 1))",
+        transformOrigin: "center",
+      }}
+    >
       {quantity > 0 && (
         <Badge
           count={quantity}
